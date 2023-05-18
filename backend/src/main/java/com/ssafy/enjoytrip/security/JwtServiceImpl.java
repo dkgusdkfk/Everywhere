@@ -4,6 +4,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -12,29 +13,28 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.Map;
 
 @Service
+@Slf4j
 public class JwtServiceImpl implements JwtService {
 
-	public static final Logger logger = LoggerFactory.getLogger(JwtServiceImpl.class);
 
 //	SALT는 토큰 유효성 확인 시 사용하기 때문에 외부에 노출되지 않게 주의해야 한다.
 	private static final String SALT = "ssafySecret";
 	
-	private static final int ACCESS_TOKEN_EXPIRE_MINUTES = 1; // 분단위
-	private static final int REFRESH_TOKEN_EXPIRE_MINUTES = 2; // 주단위
 
 	@Override
 	public <T> String createAccessToken(String key, T data) {
-		return create(key, data, "access-token", 1000 * 60 * 60 * ACCESS_TOKEN_EXPIRE_MINUTES);
+		return create(key, data, "access-token", 1_000L * 60 * 60);
 	}
 
 //	AccessToken에 비해 유효기간을 길게...
 	@Override
 	public <T> String createRefreshToken(String key, T data) {
-		return create(key, data, "refresh-token", 1000 * 60 * 60 * 24 * 7 * REFRESH_TOKEN_EXPIRE_MINUTES);
+		return create(key, data, "refresh-token", (long)1_000 * 60 * 60 * 24 * 7);
 	}
 
 	//Token 발급
@@ -61,31 +61,21 @@ public class JwtServiceImpl implements JwtService {
 		// 저장할 data의 key, value
 		claims.put(key, data);
 
-		String jwt = Jwts.builder()
+		return Jwts.builder()
 				// Header 설정 : 토큰의 타입, 해쉬 알고리즘 정보 세팅.
 				.setHeaderParam("typ", "JWT")
 				.setClaims(claims)
 				// Signature 설정 : secret key를 활용한 암호화.
 				.signWith(SignatureAlgorithm.HS256, this.generateKey())
 				.compact(); // 직렬화 처리.
-		
-		return jwt;
+
 	}
 
 	// Signature 설정에 들어갈 key 생성.
 	private byte[] generateKey() {
 		byte[] key = null;
-		try {
-			// charset 설정 안하면 사용자 플랫폼의 기본 인코딩 설정으로 인코딩 됨.
-			key = SALT.getBytes("UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			if (logger.isInfoEnabled()) {
-				e.printStackTrace();
-			} else {
-				logger.error("Making JWT Key Error ::: {}", e.getMessage());
-			}
-		}
-
+		// charset 설정 안하면 사용자 플랫폼의 기본 인코딩 설정으로 인코딩 됨.
+		key = SALT.getBytes(StandardCharsets.UTF_8);
 		return key;
 	}
 
@@ -98,13 +88,13 @@ public class JwtServiceImpl implements JwtService {
 //			parseClaimsJws : 파싱하여 원본 jws 만들기
 			Jws<Claims> claims = Jwts.parser().setSigningKey(this.generateKey()).parseClaimsJws(jwt);
 //			Claims 는 Map의 구현체 형태
-			logger.debug("claims: {}", claims);
+			log.debug("claims: {}", claims);
 			return true;
 		} catch (Exception e) {
-//			if (logger.isInfoEnabled()) {
+//			if (log.isInfoEnabled()) {
 //				e.printStackTrace();
 //			} else {
-			logger.error(e.getMessage());
+			log.error(e.getMessage());
 //			}
 //			throw new UnauthorizedException();
 //			개발환경
@@ -119,12 +109,12 @@ public class JwtServiceImpl implements JwtService {
 		String jwt = request.getHeader("access-token");
 		Jws<Claims> claims = null;
 		try {
-			claims = Jwts.parser().setSigningKey(SALT.getBytes("UTF-8")).parseClaimsJws(jwt);
+			claims = Jwts.parser().setSigningKey(SALT.getBytes(StandardCharsets.UTF_8)).parseClaimsJws(jwt);
 		} catch (Exception e) {
-//			if (logger.isInfoEnabled()) {
+//			if (log.isInfoEnabled()) {
 //				e.printStackTrace();
 //			} else {
-			logger.error(e.getMessage());
+			log.error(e.getMessage());
 //			}
 			throw new UnAuthorizedException();
 //			개발환경
@@ -133,7 +123,7 @@ public class JwtServiceImpl implements JwtService {
 //			return testMap;
 		}
 		Map<String, Object> value = claims.getBody();
-		logger.info("value : {}", value);
+		log.info("value : {}", value);
 		return value;
 	}
 
