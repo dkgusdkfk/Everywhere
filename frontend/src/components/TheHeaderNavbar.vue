@@ -1,11 +1,12 @@
 <template>
   <div>
-    <nav class="navbar navbar-default navbar-trans navbar-expand-lg fixed-top">
+    <nav class="navbar navbar-default navbar-trans navbar-expand-lg fixed-top" id="nav">
       <div class="container">
         <a class="navbar-brand text-brand">
           <router-link :to="{ name: 'main' }" class="link">
-            <span class="color-a">Enjoy</span>
-            <span class="color-b">Trip</span>
+            <img src="@/assets/img/logo.png" id="logo"/>
+            <!-- <span class="color-a">Enjoy</span>
+            <span class="color-b">Trip</span> -->
           </router-link>
         </a>
         <ul class="navbar-nav me-5 ms-5 d-flex w-75 align-items-center justify-content-center ">
@@ -79,5 +80,13 @@ export default {
 .link {
   text-decoration: none;
   color: black;
+}
+
+#logo {
+  width: 300px;
+}
+
+#nav {
+  height: 130px;
 }
 </style>
