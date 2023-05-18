@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ssafy.enjoytrip.user.model.dao.UserDao">
+    <select id="search" parameterType="string" resultType="User">
+        select *
+        from user
+        where id = #{id}
+    </select>
+
+    <insert id="regist" parameterType="User">
+        insert into user(id, password, name, email, address1, address2)
+        values(#{id}, #{password}, #{name}, #{email}, #{address1}, #{address2})
+    </insert>
+
+    <delete id="remove" parameterType="string">
+        delete from user where id = #{id}
+    </delete>
+
+    <update id="update" parameterType="User">
+        update user set password=#{password},
+                        name=#{name},
+                        email=#{email},
+                        address1=#{address1},
+                        address2=#{address2}
+        where id = #{id}
+    </update>
+
+    <select id="findPassword" parameterType="string" resultType="User">
+        select *
+        from user
+        where id=#{id} and email=#{email}
+    </select>
+</mapper>

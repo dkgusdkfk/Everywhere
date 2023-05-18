@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ssafy.enjoytrip.board.model.dao.BoardDao">
+    <sql id="searchCon">
+        <if test="word != null and word != ''">
+            <choose>
+                <when test="key == 'title'">
+                    title like concat('%', #{word}, '%')
+                </when>
+                <when test="key == 'userId'">
+                    user_id = #{word}
+                </when>
+            </choose>
+        </if>
+    </sql>
+
+    <insert id="writeArticle" parameterType="Board">
+        insert into board(user_id, title, content)
+        values (#{userId}, #{title}, #{content})
+    </insert>
+
+    <select id="listArticle" parameterType="PageBean" resultType="Board">
+        select board_id as boardId, user_id as userId, title, content, hit, register_time as registerTime
+        from board
+        <where>
+            <include refid="searchCon"/>
+        </where>
+        order by board_id
+        limit #{start}, #{interval}
+    </select>
+
+    <select id="getTotalArticleCount" parameterType="PageBean" resultType="int">
+        select count(*)
+        from board
+        <where>
+            <include refid="searchCon"></include>
+        </where>
+    </select>
+
+    <select id="getArticle" parameterType="int" resultType="Board">
+        select board_id as boardId, user_id as userId, title, content, hit, register_time as registerTime
+        from board
+        where board_id = #{boardId}
+    </select>
+
+
+    <update id="updateHit" parameterType="int">
+        update board
+        set hit = hit + 1
+        where board_id = #{boardId}
+    </update>
+
+    <update id="modifyArticle" parameterType="Board">
+        update board
+        set user_id=#{userId},
+            title=#{title},
+            content=#{content},
+            hit=#{hit},
+            register_time=#{registerTime}
+        where board_id = #{boardId}
+    </update>
+
+    <delete id="deleteArticle" parameterType="int">
+        delete
+        from board
+        where board_id = #{boardId}
+    </delete>
+
+    <select id="listComment" parameterType="int" resultType="Comment">
+        select board_id as boardId, user_id as userId, content, comment_id as commentId, register_time as registerTime
+        from comment
+        where board_id = #{boardId}
+        order by board_id
+    </select>
+
+    <insert id="writeComment" parameterType="Comment">
+        insert into comment(board_id, user_id, content)
+        values (#{boardId}, #{userId}, #{content})
+    </insert>
+
+    <select id="getComment" parameterType="int">
+        select *
+        where comment_id =#{commentId}
+    </select>
+
+    <update id="modifyComment" parameterType="Comment">
+        update comment
+        set content=#{content}
+        where comment_id = #{commentId}
+    </update>
+
+    <delete id="deleteComment" parameterType="int">
+        delete
+        from comment
+        where comment_id = #{commentId}
+    </delete>
+</mapper>
