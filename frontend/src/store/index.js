@@ -129,7 +129,7 @@ export default new Vuex.Store({
         })
     },
     getBoard(store, payload) {
-      http.get(`rest/board/${payload.isbn}`)
+      http.get(`rest/board/${payload.boardId}`)
         .then(({ data }) => {
           store.commit('setBoard', data);
         })
@@ -176,7 +176,7 @@ export default new Vuex.Store({
     getComments(store, payload) {
       http.get(`/rest/board/comment/${payload.boardId}`)
         .then(({ data }) => {
-          store.commit('setComments', data.comments);
+          store.commit('setComments', data);
         })
       .catch(({ response }) => {
         alert('오류 메세지: ' + response.data);

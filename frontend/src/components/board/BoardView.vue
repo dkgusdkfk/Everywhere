@@ -58,10 +58,12 @@
                     </div>
                     <div class="d-flex justify-content-end">
                         <b-button variant="outline-info" size="sm" @click="moveList" class="mr-2">목록</b-button>
-                        <c:if test="${userInfo.id eq board.userId}">
+                        <b-button variant="outline-primary" size="sm" @click="moveModifyBoard" class="mr-2">글수정</b-button>
+                        <b-button variant="outline-danger" size="sm" @click="deleteBoard">글삭제</b-button>
+                        <!-- <div v-if="userInfo.id == board.userId">
                             <b-button variant="outline-primary" size="sm" @click="moveModifyBoard" class="mr-2">글수정</b-button>
                             <b-button variant="outline-danger" size="sm" @click="deleteBoard">글삭제</b-button>
-                        </c:if>
+                        </div> -->
                     </div>
                     <div class="post-footer">
                         <div class="post-share d-flex justify-content-end">
@@ -119,11 +121,11 @@
                                                             <textarea id="content_update" class="ms-1 mt-0 mb-0"
                                                                 name="content" cols="45"
                                                                 style="border: 0; font-family: var(--bs-font-monospace); color: #555555; font-size: 20px;"
-                                                                rows="5" v-bind="comment.content"></textarea>
+                                                                rows="5"></textarea>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <c:if test="${userInfo.id eq comment.userId}">
+                                                <!-- <div v-if="userInfo.id eq comment.userId">
                                                     <div>
                                                         <button type="button" id="btn-mv-modify-comment"
                                                             class="btn btn-outline-success mb-3 ms-1" hidden>
@@ -135,7 +137,12 @@
                                                             댓글삭제
                                                         </button>
                                                     </div>
-                                                </c:if>
+                                                </div> -->
+                                                <button type="button" id="btn-delete-comment"
+                                                    class="btn btn-outline-danger mb-3 ms-1"
+                                                    @click="commentDelete(comment.commentId)">
+                                                    댓글삭제
+                                                </button>
                                             </div>
                                         </div>
                                     </tr>
@@ -150,7 +157,6 @@
                 <div class="title-box-d">
                     <h3 class="title-d"> Leave a Reply</h3>
                 </div>
-                <form class="form-a" action="${root}/board/writeComment" method="post">
                     <div class="row">
                         <div class="col-md-12 mb-3">
                             <div class="form-group">
@@ -158,14 +164,13 @@
                                 <input type="hidden" id="boardId" value="${board.boardId}" name="boardId">
                                 <label for="content">댓글을 입력하세요.</label>
                                 <textarea id="content" class="form-control" placeholder="Comment *" name="content" cols="45"
-                                    rows="8" required></textarea>
+                                    rows="8" v-model="comment" required></textarea>
                             </div>
                         </div>
                         <div class="col-md-12">
-                            <button type="submit" class="btn btn-a">댓글 달기</button>
+                            <button type="button" class="btn btn-a" @click="registComment()">댓글 달기</button>
                         </div>
                     </div>
-                </form>
             </div>
         </div>
     </b-container>
@@ -174,42 +179,45 @@
 <script>
 // import moment from "moment";
 import http from "@/api/http";
+import { mapActions, mapGetters } from "vuex";
 
 export default {
     name: "BoardView",
     data() {
         return {
-            board: {},
-            comments: {}
+            boardId: '',
+            // board: {},
+            // comments: {}
+            comment: '',
         };
     },
     computed: {
+        ...mapGetters(['board']),
+        ...mapGetters(['comments']),
         message() {
             if (this.board.content) return this.board.content.split("\n").join("<br>");
             return "";
         },
     },
     created() {
-        http.get(`/rest/board/${this.$route.params.boardId}`).then(({ data }) => {
-            this.board = data;
-        });
-        http.get(`/rest/board/comment/${this.$route.params.boardId}`).then(({ data }) => {
-            this.comments = data;
-        });
+        this.boardId = this.$route.params.boardId;
+        this.getBoard({ boardId: this.boardId });
+        this.getComments({ boardId: this.boardId });
     },
     methods: {
+        ...mapActions(['getBoard']),
+        ...mapActions(['getComments']),
         moveModifyBoard() {
             this.$router.replace({
                 name: "boardmodify",
-                params: { boardId: this.board.boardId },
+                params: { boardId: this.boardId },
             });
-            //   this.$router.push({ path: `/board/modify/${this.article.articleno}` });
         },
         deleteBoard() {
             if (confirm("정말로 삭제?")) {
                 this.$router.replace({
                     name: "boarddelete",
-                    params: { boardId: this.board.boardId },
+                    params: { boardId: this.boardId },
                 });
             }
         },
@@ -227,7 +235,22 @@ export default {
                     this.$router.go();
                     });
             }
-        }
+        },
+        registComment() {
+            http.post(`rest/board/writeComment`, {
+                userId: "admin",          // ------------------------------수정 필수--------------------------------
+                boardId: this.boardId,
+                content: this.comment,
+                })
+                .then(({ data }) => {
+                let msg = "등록 처리시 문제가 발생했습니다.";
+                if (data === "success") {
+                    msg = "등록이 완료되었습니다.";
+                }
+                alert(msg);
+                this.$router.go();
+                });
+        },
     },
     // filters: {
     //   dateFormat(regtime) {
