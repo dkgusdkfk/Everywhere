@@ -5,7 +5,6 @@ import lombok.*;
 import java.io.Serializable;
 
 @Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
@@ -16,4 +15,5 @@ public class User implements Serializable {
     private String email;
     private String address1; //특별시, 광역시, 도
     private String address2; //시, 군, 구
+    private String token = null;
 }

@@ -4,11 +4,11 @@ import com.ssafy.enjoytrip.board.model.dto.PageBean;
 import com.ssafy.enjoytrip.trip.model.dto.AddressResponse;
 import com.ssafy.enjoytrip.trip.model.dto.Sido;
 import com.ssafy.enjoytrip.trip.model.service.TripService;
+import com.ssafy.enjoytrip.user.model.dto.FindPasswordRequest;
 import com.ssafy.enjoytrip.user.model.dto.LoginRequest;
 import com.ssafy.enjoytrip.user.model.dto.User;
 import com.ssafy.enjoytrip.user.model.service.UserService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,13 +19,16 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/user")
+@Slf4j
 public class UserController {
-    private Logger logger = LoggerFactory.getLogger(UserController.class);
-    @Autowired
     private UserService userService;
-
-    @Autowired
     private TripService tripService;
+    @Autowired
+    public UserController(UserService userService,TripService tripService){
+        this.userService=userService;
+        this.tripService=tripService;
+    }
+
 
     @ExceptionHandler(Exception.class)
     public String handler(Exception ex, Model model) {
@@ -43,33 +46,32 @@ public class UserController {
 
     @GetMapping("/logout")
     public String logout(HttpSession session) {
-        logger.debug("User....................logout");
+        log.debug("User....................logout");
         session.invalidate();
         return "redirect:/index";
     }
 
-    @GetMapping("/regist")
-    public String regist(Model model) {
+    @GetMapping("/register")
+    public String register(Model model) {
         List<Sido> list = tripService.getSidoList();
         model.addAttribute("sidoList",list);
         return "user/SignUp";
     }
 
-    @PostMapping("/regist")
-    public String regist(User user) {
-        userService.regist(user);
+    @PostMapping("/register")
+    public String register(User user) {
+        userService.register(user);
         return "redirect:/index";
     }
 
     @GetMapping("/detail")
-    public String detail(@RequestParam("id") String id, Model model) {
+    public String search(@RequestParam("id") String id, Model model) {
         User user = userService.search(id);
         if (user.getAddress1() != null) {
             AddressResponse address = tripService.getAddress(Integer.parseInt(user.getAddress1()), Integer.parseInt(user.getAddress2()));
             model.addAttribute("address", address);
         }
         model.addAttribute("userInfo", user);
-
         return "user/MyPage";
     }
 
@@ -103,8 +105,8 @@ public class UserController {
     }
 
     @PostMapping("/findPassword")
-    public String findPassword(@RequestParam String id, @RequestParam String email, Model model) {
-        User user = userService.findPassword(id, email);
+    public String findPassword(FindPasswordRequest request, Model model) {
+        User user = userService.findPassword(request);
         model.addAttribute("findUser", user);
         return "user/findPwForm";
     }

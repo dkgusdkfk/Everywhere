@@ -9,7 +9,7 @@
         where id = #{id}
     </select>
 
-    <insert id="regist" parameterType="User">
+    <insert id="register" parameterType="User">
         insert into user(id, password, name, email, address1, address2)
         values(#{id}, #{password}, #{name}, #{email}, #{address1}, #{address2})
     </insert>
@@ -27,9 +27,26 @@
         where id = #{id}
     </update>
 
-    <select id="findPassword" parameterType="string" resultType="User">
+    <select id="findPassword" parameterType="FindPasswordRequest" resultType="User">
         select *
         from user
         where id=#{id} and email=#{email}
     </select>
+    <select id="getRefreshToken" parameterType="string" resultType="string">
+        select token
+        from user
+        where userid = #{userid}
+    </select>
+
+    <update id="saveRefreshToken" parameterType="map">
+        update user
+        set token = #{token}
+        where userid = #{userid}
+    </update>
+
+    <update id="deleteRefreshToken" parameterType="map">
+        update user
+        set token = #{token, jdbcType=VARCHAR}
+        where userid = #{userid}
+    </update>
 </mapper>

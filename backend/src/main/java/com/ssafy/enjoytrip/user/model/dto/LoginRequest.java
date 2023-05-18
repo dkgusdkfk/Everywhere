@@ -10,4 +10,5 @@ import lombok.*;
 public class LoginRequest {
     private String id;
     private String password;
+    private String token;
 }

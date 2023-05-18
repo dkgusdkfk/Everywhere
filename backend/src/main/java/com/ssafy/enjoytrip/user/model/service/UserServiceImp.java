@@ -2,25 +2,31 @@ package com.ssafy.enjoytrip.user.model.service;
 
 
 import com.ssafy.enjoytrip.user.model.dao.UserDao;
+import com.ssafy.enjoytrip.user.model.dto.FindPasswordRequest;
 import com.ssafy.enjoytrip.user.model.dto.LoginRequest;
 import com.ssafy.enjoytrip.user.model.dto.UserException;
 import com.ssafy.enjoytrip.user.model.dto.User;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.ibatis.session.SqlSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 
 @Slf4j
 @Service
 public class UserServiceImp implements UserService {
     UserDao userDao;
+    private SqlSession sqlSession;
 
     @Autowired
-    public UserServiceImp(UserDao userDao) {
+    public UserServiceImp(UserDao userDao, SqlSession sqlSession) {
         this.userDao = userDao;
+        this.sqlSession = sqlSession;
     }
 
     public User login(LoginRequest request) {
@@ -29,7 +35,7 @@ public class UserServiceImp implements UserService {
             if (user == null)
                 throw new UserException("등록되지 않은 아이디입니다.");
 
-            if(!user.getPassword().equals(request.getPassword()))
+            if (!user.getPassword().equals(request.getPassword()))
                 throw new UserException("비밀번호가 일치하지 않습니다");
             return user;
         } catch (SQLException e) {
@@ -51,13 +57,13 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public void regist(User user) {
+    public void register(User user) {
         try {
             User find = userDao.search(user.getId());
             if (find != null) {
                 throw new UserException("이미 등록된 아이디 입니다.");
             }
-            userDao.regist(user);
+            userDao.register(user);
         } catch (SQLException e) {
             e.printStackTrace();
             throw new UserException("회원 정보 처리 중 오류 발생!!!");
@@ -86,9 +92,9 @@ public class UserServiceImp implements UserService {
 
 
     @Override
-    public User findPassword(String id, String email) {
+    public User findPassword(FindPasswordRequest request) {
         try {
-            return userDao.findPassword(id, email);
+            return userDao.findPassword(request);
         } catch (Exception e) {
             e.printStackTrace();
             throw new UserException("비밀 번호 찾기 중 오류 발생!!");
@@ -102,9 +108,30 @@ public class UserServiceImp implements UserService {
                 return 0;
             else
                 return 1;
-        } catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
             throw new UserException("id 중복 체크 중 오류 발생!!");
         }
+    }
+
+    @Override
+    public void saveRefreshToken(String userid, String refreshToken) throws Exception {
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("userid", userid);
+        map.put("token", refreshToken);
+        sqlSession.getMapper(UserDao.class).saveRefreshToken(map);
+    }
+
+    @Override
+    public Object getRefreshToken(String userid) throws Exception {
+        return sqlSession.getMapper(UserDao.class).getRefreshToken(userid);
+    }
+
+    @Override
+    public void deleRefreshToken(String userid) throws Exception {
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("userid", userid);
+        map.put("token", null);
+        sqlSession.getMapper(UserDao.class).deleteRefreshToken(map);
     }
 }

@@ -54,7 +54,6 @@ public class BoardRestController {
     @PutMapping("/update")
     public ResponseEntity<?> modify(@RequestBody Board board) {
         boardService.modifyArticle(board);
-        System.out.println(boardService.getArticle(board.getBoardId()).getRegisterTime() + "======================================================================");
         return new ResponseEntity<>(SUCCESS, HttpStatus.OK);
     }
 

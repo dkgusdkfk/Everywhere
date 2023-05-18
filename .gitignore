@@ -236,3 +236,4 @@ $RECYCLE.BIN/
 
 **/node_modules/*
 **/target/*
+*.idea

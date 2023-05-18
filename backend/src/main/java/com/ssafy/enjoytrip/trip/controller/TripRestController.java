@@ -29,7 +29,7 @@ public class TripRestController {
         return new ResponseEntity<>(tripService.getSidoList(), HttpStatus.OK);
     }
 
-    @GetMapping("/gugun/{sidoCode}")
+    @GetMapping("/{sidoCode}/gugun")
     public ResponseEntity<?> gugun(@PathVariable int sidoCode) {
         return new ResponseEntity<>(tripService.getGugunList(sidoCode), HttpStatus.OK);
     }

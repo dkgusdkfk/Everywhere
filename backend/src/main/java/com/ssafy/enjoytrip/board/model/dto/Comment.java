@@ -14,5 +14,5 @@ public class Comment {
     private int commentId;
     private String userId;
     private String content;
-    private String registerTime;
+    private Date registerTime;
 }
