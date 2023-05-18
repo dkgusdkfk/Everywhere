@@ -48,11 +48,11 @@ public class UserServiceImp implements UserService {
     public User search(String id) {
         try {
             User user = userDao.search(id);
-            if (user == null) throw new RuntimeException("없는 사용자입니다");
+            if (user == null) throw new UserException("없는 사용자입니다");
             return user;
         } catch (SQLException e) {
             e.printStackTrace();
-            throw new RuntimeException("유저 search중 오류 발생");
+            throw new UserException("유저 search중 오류 발생");
         }
     }
 
@@ -115,22 +115,24 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public void saveRefreshToken(String userid, String refreshToken) throws Exception {
-        Map<String, String> map = new HashMap<String, String>();
-        map.put("userid", userid);
+    public void saveRefreshToken(String id, String refreshToken) throws Exception {
+        Map<String, String> map = new HashMap<>();
+        log.debug("service saveRefreshToken: id:{}",id);
+        log.debug("service saveRefreshToken: refreshToken:{}",refreshToken);
+        map.put("id", id);
         map.put("token", refreshToken);
         sqlSession.getMapper(UserDao.class).saveRefreshToken(map);
     }
 
     @Override
-    public Object getRefreshToken(String userid) throws Exception {
-        return sqlSession.getMapper(UserDao.class).getRefreshToken(userid);
+    public Object getRefreshToken(String id) throws Exception {
+        return sqlSession.getMapper(UserDao.class).getRefreshToken(id);
     }
 
     @Override
-    public void deleRefreshToken(String userid) throws Exception {
-        Map<String, String> map = new HashMap<String, String>();
-        map.put("userid", userid);
+    public void deleRefreshToken(String id) throws Exception {
+        Map<String, String> map = new HashMap<>();
+        map.put("id", id);
         map.put("token", null);
         sqlSession.getMapper(UserDao.class).deleteRefreshToken(map);
     }
