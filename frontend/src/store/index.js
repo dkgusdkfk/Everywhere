@@ -10,6 +10,7 @@ export default new Vuex.Store({
     board: {},
     boards: [],
     searchBoards: [],
+    comments: [],
     sidos: [{ value: null, text: "선택하세요" }],
     guguns: [{ value: null, text: "선택하세요" }],
     houses: [],
@@ -28,6 +29,9 @@ export default new Vuex.Store({
     },
     searchBoards(state) {
       return state.searchBoards;
+    },
+    comments(state) {
+      return state.comments;
     },
     allTodosCount(state) {
       return state.todos.length;
@@ -52,6 +56,9 @@ export default new Vuex.Store({
     },
     setSearchBoards(state, payload) {
       state.searchBoards = payload;
+    },
+    setComments(state, payload) {
+      state.comments = payload;
     },
     /////////////////////////////// House start /////////////////////////////////////
     SET_SIDO_LIST(state, sidos) {
@@ -114,7 +121,6 @@ export default new Vuex.Store({
     getBoards({ commit }) {
       http.get("rest/board/all?pageNo=1")
         .then(({ data }) => {
-          console.log(data)
           commit('setBoards', data.boards);
           commit('setSearchBoards', data.boards);
         })
@@ -166,6 +172,15 @@ export default new Vuex.Store({
       //   })
       // }
       // store.commit('setSearchs', find);
+    },
+    getComments(store, payload) {
+      http.get(`/rest/board/comment/${payload.boardId}`)
+        .then(({ data }) => {
+          store.commit('setComments', data.comments);
+        })
+      .catch(({ response }) => {
+        alert('오류 메세지: ' + response.data);
+      })
     },
     /////////////////////////////// House start /////////////////////////////////////
     getSido({ commit }) {
