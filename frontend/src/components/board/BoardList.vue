@@ -40,8 +40,8 @@
             </div>
             <div class="col-2"></div>
           </div>
-          <b-table hover :items="searchBoards" :fields="fields" @row-clicked="viewBoard"></b-table>
-          <div v-if="searchBoards == null">
+          <b-table hover :items="boards" :fields="fields" @row-clicked="viewBoard"></b-table>
+          <div v-if="boards == null">
             <table class='table table-hover'>
               <tr>
                 <td>게시글이 없습니다.</td>
@@ -55,12 +55,13 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from "vuex";
+import http from "@/api/http"
 
 export default {
   name: "BoardList",
   data() {
     return {
+      boards: [],
       key: 'all',
       word: '',
       keys: [
@@ -79,10 +80,10 @@ export default {
     };
   },
   created() {
-    this.getBoards();
-  },
-  computed: {
-    ...mapGetters(['searchBoards'])
+    http.get(`/board/all`).then(({ data }) => {
+      this.boards = data.boards;
+    });
+
   },
   watch: {
     pageNo: function () {
@@ -90,7 +91,6 @@ export default {
     }
   },
   methods: {
-    ...mapActions(["getBoards", "getSearchBoards"]),
     moveWrite() {
       this.$router.push({ name: "boardwrite" });
     },
@@ -104,7 +104,14 @@ export default {
       this.$router.push({ name: "boardwrite" });
     },
     search() {
-      this.getSearchBoards({pageNo:this.pageNo, key:this.key, word:this.word})
+      http.get(`board/all?pageNo=${this.pageNo}&word=${this.word}&key=${this.key}`)
+        .then(({ data }) => {
+          console.log(data);
+          this.boards = data.boards;
+        })
+        .catch(({ response }) => {
+          alert('오류 메세지: ' + response.data);
+        })
     }
   },
 };

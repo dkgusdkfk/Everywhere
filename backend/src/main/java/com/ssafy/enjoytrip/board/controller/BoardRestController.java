@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@RequestMapping("/rest/board")
+@RequestMapping("/board")
 @RestController
 @CrossOrigin(origins = {"*"}, maxAge = 6000)
 @Slf4j

@@ -179,45 +179,43 @@
 <script>
 // import moment from "moment";
 import http from "@/api/http";
-import { mapActions, mapGetters } from "vuex";
 
 export default {
     name: "BoardView",
     data() {
         return {
-            boardId: '',
-            // board: {},
-            // comments: {}
-            comment: '',
+            board: {},
+            comments: {},
+            comment: ""
         };
     },
     computed: {
-        ...mapGetters(['board']),
-        ...mapGetters(['comments']),
         message() {
             if (this.board.content) return this.board.content.split("\n").join("<br>");
             return "";
         },
     },
     created() {
-        this.boardId = this.$route.params.boardId;
-        this.getBoard({ boardId: this.boardId });
-        this.getComments({ boardId: this.boardId });
+        http.get(`/board/${this.$route.params.boardId}`).then(({ data }) => {
+            this.board = data;
+        });
+        http.get(`/board/comment/${this.$route.params.boardId}`).then(({ data }) => {
+            this.comments = data;
+        });
     },
     methods: {
-        ...mapActions(['getBoard']),
-        ...mapActions(['getComments']),
         moveModifyBoard() {
             this.$router.replace({
                 name: "boardmodify",
-                params: { boardId: this.boardId },
+                params: { boardId: this.board.boardId },
             });
+            //   this.$router.push({ path: `/board/modify/${this.article.articleno}` });
         },
         deleteBoard() {
             if (confirm("정말로 삭제?")) {
                 this.$router.replace({
                     name: "boarddelete",
-                    params: { boardId: this.boardId },
+                    params: { boardId: this.board.boardId },
                 });
             }
         },
@@ -226,20 +224,20 @@ export default {
         },
         commentDelete(commentId) {
             if (confirm("정말로 삭제?")) {
-                http.delete(`rest/board/deleteComment/${commentId}`).then(({ data }) => {
+                http.delete(`/board/deleteComment/${commentId}`).then(({ data }) => {
                     let msg = "삭제 처리시 문제가 발생했습니다.";
                     if (data === "success") {
                         msg = "삭제가 완료되었습니다.";
                     }
                     alert(msg);
                     this.$router.go();
-                    });
+                });
             }
         },
         registComment() {
-            http.post(`rest/board/writeComment`, {
+            http.post(`/board/writeComment`, {
                 userId: "admin",          // ------------------------------수정 필수--------------------------------
-                boardId: this.boardId,
+                boardId: this.board.boardId,
                 content: this.comment,
                 })
                 .then(({ data }) => {

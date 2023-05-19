@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 
-@RequestMapping("/rest/user")
+@RequestMapping("/user")
 @RestController
 @CrossOrigin(origins = {"*"}, maxAge = 6000)
 @Slf4j

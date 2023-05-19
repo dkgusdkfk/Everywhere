@@ -30,10 +30,22 @@
           </li>
         </ul>
 
-        <button type="button" class="btn btn-b-n navbar-toggle-box navbar-toggle-box-collapse" data-bs-toggle="collapse"
+        <div>
+          <b-button v-b-toggle.signInBar>
+            <i class="bi bi-person-circle"></i>
+          </b-button>
+          <b-sidebar id = "signInBar" right no-header>
+            <template #default="{hide}">
+              <span class="close-box-collapse right-boxed"><b-button class="bi bi-x" @click="hide"></b-button></span>
+              <sign-in-view></sign-in-view>
+            </template>
+          </b-sidebar>
+        </div>
+
+        <!-- <button type="button" class="btn btn-b-n navbar-toggle-box navbar-toggle-box-collapse" data-bs-toggle="collapse"
           data-bs-target="#navbarTogglerDemo01">
           <i class="bi bi-person-circle"></i>
-        </button>
+        </button> -->
         <!-- <img src="@/assets/img/favicon.png" />
               <img src="@/assets/img/apple-touch-icon.png" /> -->
 
@@ -47,9 +59,13 @@
 //     import MainIcon from "@/assets/img/favicon.png"
 //     import AppleTouchIcon from "@/assets/img/apple-touch-icon.png"
 // import { component } from "vue/types/umd";
+import SignInView from "@/components/user/SignIn.vue"
 
 export default {
-  name: "HeaderBar"
+  name: "HeaderBar",
+  components: {
+    SignInView
+  }
 };
 </script>
 
