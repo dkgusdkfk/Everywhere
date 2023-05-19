@@ -42,6 +42,7 @@ public class UserServiceImp implements UserService {
     public User search(String id) {
         try {
             User user = userDao.search(id);
+            log.debug(user.getId());
             if (user == null) throw new UserException("없는 사용자입니다");
             return user;
         } catch (SQLException e) {
