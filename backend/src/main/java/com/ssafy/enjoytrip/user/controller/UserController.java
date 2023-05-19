@@ -8,6 +8,7 @@ import com.ssafy.enjoytrip.user.model.dto.FindPasswordRequest;
 import com.ssafy.enjoytrip.user.model.dto.LoginRequest;
 import com.ssafy.enjoytrip.user.model.dto.User;
 import com.ssafy.enjoytrip.user.model.service.UserService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,16 +20,11 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/user")
+@RequiredArgsConstructor
 @Slf4j
 public class UserController {
-    private UserService userService;
-    private TripService tripService;
-    @Autowired
-    public UserController(UserService userService,TripService tripService){
-        this.userService=userService;
-        this.tripService=tripService;
-    }
-
+    private final UserService userService;
+    private final TripService tripService;
 
     @ExceptionHandler(Exception.class)
     public String handler(Exception ex, Model model) {
@@ -114,7 +110,6 @@ public class UserController {
     @ResponseBody
     @GetMapping("/idcheck")
     public int idCheck(@RequestParam String userId) {
-        System.out.println(userService.idCheck(userId));
         return userService.idCheck(userId);
     }
 

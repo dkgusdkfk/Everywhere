@@ -4,8 +4,8 @@ import com.ssafy.enjoytrip.board.model.dto.Board;
 import com.ssafy.enjoytrip.board.model.dto.Comment;
 import com.ssafy.enjoytrip.board.model.dto.PageBean;
 import com.ssafy.enjoytrip.board.model.service.BoardService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,14 +18,11 @@ import java.util.Map;
 @RestController
 @CrossOrigin(origins = {"*"}, maxAge = 6000)
 @Slf4j
+@RequiredArgsConstructor
 public class BoardRestController {
-    private BoardService boardService;
+    private final BoardService boardService;
     private static final String SUCCESS = "success";
 
-    @Autowired
-    public BoardRestController(BoardService boardService) {
-        this.boardService = boardService;
-    }
 
     @GetMapping("/all")
     public ResponseEntity<?> boardList(PageBean bean) {

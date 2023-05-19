@@ -4,8 +4,8 @@ import com.ssafy.enjoytrip.board.model.dto.Board;
 import com.ssafy.enjoytrip.board.model.dto.Comment;
 import com.ssafy.enjoytrip.board.model.dto.PageBean;
 import com.ssafy.enjoytrip.board.model.service.BoardService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -16,14 +16,10 @@ import java.util.List;
 @Controller
 @RequestMapping("/board")
 @Slf4j
+@RequiredArgsConstructor
 public class BoardController {
 
-    private BoardService boardService;
-
-    @Autowired
-    public BoardController(BoardService boardService) {
-        this.boardService = boardService;
-    }
+    private final BoardService boardService;
 
     @GetMapping("/list")
     public void boardList(PageBean bean, Model model) {

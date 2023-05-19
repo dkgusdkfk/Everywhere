@@ -5,20 +5,16 @@ import com.ssafy.enjoytrip.notice.model.dto.Notice;
 import com.ssafy.enjoytrip.notice.model.dto.NoticeException;
 import com.ssafy.enjoytrip.notice.model.dto.PageBean;
 import com.ssafy.enjoytrip.util.PageUtility;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class NoticeServiceImpl implements NoticeService {
-    private NoticeDao noticeDao;
-
-    @Autowired
-    public NoticeServiceImpl(NoticeDao noticeDao) {
-        this.noticeDao = noticeDao;
-    }
+    private final NoticeDao noticeDao;
 
     @Override
     public void writeNotice(Notice noticeDto) {

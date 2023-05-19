@@ -2,30 +2,25 @@ package com.ssafy.enjoytrip.trip.model.service;
 
 import com.ssafy.enjoytrip.trip.model.dao.TripDao;
 import com.ssafy.enjoytrip.trip.model.dto.*;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.ibatis.jdbc.SQL;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
 import java.util.List;
 
 @Slf4j
+@RequiredArgsConstructor
 @Service
 public class TripServiceImp implements TripService {
-    private TripDao tripDao;
-
-    @Autowired
-    public TripServiceImp(TripDao tripDao) {
-        this.tripDao = tripDao;
-    }
+    private final TripDao tripDao;
 
     @Override
     public JSONObject getAttractionList(SearchRequest request) {
         try {
-            List<AttractionInfo> attractionList =  tripDao.getAttractionList(request);
+            List<AttractionInfo> attractionList = tripDao.getAttractionList(request);
             JSONObject jsonObject = new JSONObject();
             JSONArray jsonArray = new JSONArray();
             for (AttractionInfo attractionDto : attractionList) {

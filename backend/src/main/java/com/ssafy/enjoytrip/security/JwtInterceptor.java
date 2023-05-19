@@ -1,9 +1,7 @@
 package com.ssafy.enjoytrip.security;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
@@ -12,16 +10,13 @@ import javax.servlet.http.HttpServletResponse;
 
 @Component
 @Slf4j
+@RequiredArgsConstructor
 public class JwtInterceptor implements HandlerInterceptor {
 
 
     private static final String HEADER_AUTH = "auth-token";
 
-    private JwtService jwtService;
-    @Autowired
-    public JwtInterceptor(JwtService jwtService) {
-        this.jwtService = jwtService;
-    }
+    private final JwtService jwtService;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)

@@ -2,8 +2,8 @@ package com.ssafy.enjoytrip.trip.controller;
 
 import com.ssafy.enjoytrip.trip.model.dto.SearchRequest;
 import com.ssafy.enjoytrip.trip.model.service.TripService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,14 +11,11 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RestController
 @RequestMapping("/rest/trip")
+@RequiredArgsConstructor
 public class TripRestController {
-    private TripService tripService;
+    private final TripService tripService;
     private static final String SUCCESS = "success";
 
-    @Autowired
-    public TripRestController(TripService tripService) {
-        this.tripService = tripService;
-    }
 
     @GetMapping("/search")
     public ResponseEntity<?> search(SearchRequest request) {

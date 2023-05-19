@@ -7,9 +7,8 @@ import com.ssafy.enjoytrip.user.model.dto.LoginRequest;
 import com.ssafy.enjoytrip.user.model.dto.User;
 import com.ssafy.enjoytrip.user.model.service.UserService;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,20 +21,15 @@ import java.util.Map;
 @RestController
 @CrossOrigin(origins = {"*"}, maxAge = 6000)
 @Slf4j
+@RequiredArgsConstructor
 public class UserRestController {
-    private UserService userService;
-    private TripService tripService;
-    private JwtService jwtService;
+    private final UserService userService;
+    private final TripService tripService;
+    private final JwtService jwtService;
 
     private static final String SUCCESS = "success";
     private static final String FAIL = "fail";
 
-    @Autowired
-    public UserRestController(UserService userService, TripService tripService,JwtService jwtService) {
-        this.userService = userService;
-        this.tripService = tripService;
-        this.jwtService = jwtService;
-    }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> search(@PathVariable String id) {

@@ -1,10 +1,12 @@
 package com.ssafy.enjoytrip.trip.controller;
 
-import com.ssafy.enjoytrip.trip.model.dto.*;
+import com.ssafy.enjoytrip.trip.model.dto.HotPlaceResponse;
+import com.ssafy.enjoytrip.trip.model.dto.SearchRequest;
+import com.ssafy.enjoytrip.trip.model.dto.Sido;
 import com.ssafy.enjoytrip.trip.model.service.TripService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,20 +19,16 @@ import java.util.List;
 @Slf4j
 @Controller
 @RequestMapping("/trip")
+@RequiredArgsConstructor
 public class TripController {
-    TripService tripService;
 
-    @Autowired
-    public TripController(TripService tripService) {
-        this.tripService = tripService;
-    }
+    private final TripService tripService;
 
     @ResponseBody
     @GetMapping("/search")
     public JSONObject search(@RequestParam("sidoCode") int sidoCode, @RequestParam("gugunCode") int gugunCode,
                              @RequestParam("contentTypeId") int contentTypeId) {
-        JSONObject jsonObject = tripService.getAttractionList(new SearchRequest(sidoCode, gugunCode, contentTypeId));
-        return jsonObject;
+        return tripService.getAttractionList(new SearchRequest(sidoCode, gugunCode, contentTypeId));
     }
 
     @GetMapping("/recommend")

@@ -4,36 +4,35 @@ import com.ssafy.enjoytrip.trip.model.dto.AttractionInfo;
 import com.ssafy.enjoytrip.trip.model.dto.HotPlaceResponse;
 import com.ssafy.enjoytrip.trip.model.service.TripService;
 import com.ssafy.enjoytrip.user.model.dto.User;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import javax.servlet.http.HttpSession;
 import java.text.DateFormat;
-import java.util.*;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
 /**
  * Handles requests for the application home page.
  */
 @Controller
+@RequiredArgsConstructor
 public class HomeController {
 
     private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 
-    private TripService tripService;
+    private final TripService tripService;
 
-    @Autowired
-    public HomeController(TripService tripService) {
-        this.tripService = tripService;
-    }
 
     /**
      * Simply selects the home view to render by returning its name.
      */
-    @RequestMapping(value = {"/", "/index"}, method = RequestMethod.GET)
+    @GetMapping(value = {"/", "/index"})
     public String home(Locale locale, Model model, HttpSession httpSession) {
         logger.info("Welcome home! The client locale is {}.", locale);
 

@@ -6,23 +6,16 @@ import com.ssafy.enjoytrip.board.model.dto.BoardException;
 import com.ssafy.enjoytrip.board.model.dto.Comment;
 import com.ssafy.enjoytrip.board.model.dto.PageBean;
 import com.ssafy.enjoytrip.util.PageUtility;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class BoardServiceImpl implements BoardService {
-    private BoardDao boardDao;
-
-    @Autowired
-    public BoardServiceImpl(BoardDao boardDao) {
-        this.boardDao = boardDao;
-    }
-
-    public BoardServiceImpl() {
-    }
+    private final BoardDao boardDao;
 
     @Override
     public void writeArticle(Board boardDto) {
@@ -80,16 +73,16 @@ public class BoardServiceImpl implements BoardService {
             throw new BoardException("게시글 삭제 중 오류");
         }
     }
+
     @Override
-    public Comment getComment(int commentId){
+    public Comment getComment(int commentId) {
         try {
             return boardDao.getComment(commentId);
-        }catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
-            throw  new BoardException("댓글 조회중 오류 발생");
+            throw new BoardException("댓글 조회중 오류 발생");
         }
     }
-
 
 
     @Override
@@ -122,9 +115,9 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     public List<Comment> listComment(int boardId) {
-        try{
+        try {
             return boardDao.listComment(boardId);
-        }catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
             throw new BoardException("댓글 불러오기중 오류");
         }

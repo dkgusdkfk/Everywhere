@@ -4,13 +4,11 @@ package com.ssafy.enjoytrip.user.model.service;
 import com.ssafy.enjoytrip.user.model.dao.UserDao;
 import com.ssafy.enjoytrip.user.model.dto.FindPasswordRequest;
 import com.ssafy.enjoytrip.user.model.dto.LoginRequest;
-import com.ssafy.enjoytrip.user.model.dto.UserException;
 import com.ssafy.enjoytrip.user.model.dto.User;
+import com.ssafy.enjoytrip.user.model.dto.UserException;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.session.SqlSession;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
@@ -19,15 +17,10 @@ import java.util.Map;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class UserServiceImp implements UserService {
-    UserDao userDao;
-    private SqlSession sqlSession;
-
-    @Autowired
-    public UserServiceImp(UserDao userDao, SqlSession sqlSession) {
-        this.userDao = userDao;
-        this.sqlSession = sqlSession;
-    }
+    private final UserDao userDao;
+    private final SqlSession sqlSession;
 
     public User login(LoginRequest request) {
         try {
@@ -117,8 +110,8 @@ public class UserServiceImp implements UserService {
     @Override
     public void saveRefreshToken(String id, String refreshToken) throws Exception {
         Map<String, String> map = new HashMap<>();
-        log.debug("service saveRefreshToken: id:{}",id);
-        log.debug("service saveRefreshToken: refreshToken:{}",refreshToken);
+        log.debug("service saveRefreshToken: id:{}", id);
+        log.debug("service saveRefreshToken: refreshToken:{}", refreshToken);
         map.put("id", id);
         map.put("token", refreshToken);
         sqlSession.getMapper(UserDao.class).saveRefreshToken(map);

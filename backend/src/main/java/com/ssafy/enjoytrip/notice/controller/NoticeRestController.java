@@ -3,8 +3,8 @@ package com.ssafy.enjoytrip.notice.controller;
 import com.ssafy.enjoytrip.notice.model.dto.Notice;
 import com.ssafy.enjoytrip.notice.model.dto.PageBean;
 import com.ssafy.enjoytrip.notice.model.service.NoticeService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,21 +17,17 @@ import java.util.Map;
 @RestController
 @CrossOrigin(origins = {"*"}, maxAge = 6000)
 @Slf4j
+@RequiredArgsConstructor
 public class NoticeRestController {
-    private NoticeService noticeService;
+    private final NoticeService noticeService;
     private static final String SUCCESS = "success";
-
-    @Autowired
-    public NoticeRestController(NoticeService noticeService) {
-        this.noticeService = noticeService;
-    }
 
     @GetMapping("/all")
     public ResponseEntity<?> noticeList(PageBean bean) {
         List<Notice> notices = noticeService.listNotice(bean);
         Map<String, Object> res = new HashMap<>();
-        res.put("notices",notices);
-        res.put("pageLink",bean.getPageLink());
+        res.put("notices", notices);
+        res.put("pageLink", bean.getPageLink());
         if (notices == null || notices.isEmpty()) return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
