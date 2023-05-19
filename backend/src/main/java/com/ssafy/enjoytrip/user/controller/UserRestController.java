@@ -74,6 +74,7 @@ public class UserRestController {
                 resultMap.put("access-token", tokenDto.getAccessToken());
                 resultMap.put("refresh-token", tokenDto.getRefreshToken());
                 resultMap.put(MESSAGE, SUCCESS);
+                log.debug("=-=-=--==-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-{}",resultMap);
                 status = HttpStatus.ACCEPTED;
             } else {
                 resultMap.put(MESSAGE, FAIL);
@@ -115,5 +116,33 @@ public class UserRestController {
         String id = jwtService.getUserId();
         if (!jwtService.checkToken(refreshToken) || !id.equals(loginUser.getId())) throw new Exception("토큰 사용 불가");
         return new ResponseEntity<>(jwtService.createAccessToken(USERID, loginUser.getId()), HttpStatus.ACCEPTED);
+    }
+
+    @GetMapping("/info/{id}")
+    public ResponseEntity<Map<String, Object>> getInfo(
+            @PathVariable("id") String userid,
+            HttpServletRequest request) {
+//		log.debug("userid : {} ", userid);
+        Map<String, Object> resultMap = new HashMap<>();
+        HttpStatus status = HttpStatus.UNAUTHORIZED;
+        if (jwtService.checkToken(request.getHeader("access-token"))) {
+            log.info("사용 가능한 토큰!!!");
+            try {
+//				로그인 사용자 정보.
+                User user = userService.search(userid);
+                resultMap.put("userInfo", user);
+                resultMap.put("message", SUCCESS);
+                status = HttpStatus.ACCEPTED;
+            } catch (Exception e) {
+                log.error("정보조회 실패 : {}", e);
+                resultMap.put("message", e.getMessage());
+                status = HttpStatus.INTERNAL_SERVER_ERROR;
+            }
+        } else {
+            log.error("사용 불가능 토큰!!!");
+            resultMap.put("message", FAIL);
+            status = HttpStatus.UNAUTHORIZED;
+        }
+        return new ResponseEntity<Map<String, Object>>(resultMap, status);
     }
 }
