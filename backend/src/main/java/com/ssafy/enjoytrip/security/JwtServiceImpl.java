@@ -1,8 +1,7 @@
 package com.ssafy.enjoytrip.security;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
-import io.jsonwebtoken.Jwts;
+import com.ssafy.enjoytrip.user.model.dto.TokenDto;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -18,21 +17,13 @@ import java.util.Map;
 @Slf4j
 public class JwtServiceImpl implements JwtService {
 
-
-//	SALT는 토큰 유효성 확인 시 사용하기 때문에 외부에 노출되지 않게 주의해야 한다.
-	private static final String SALT = "ssafySecret";
+	private static final String SALT = "ssafy";
+	public static final long ACCESS_TOKEN_EXPIRE_TIME = 30 * 60 * 1000L;
+	public static final long REFRESH_TOKEN_EXPIRE_TIME = 1000L * 60 * 60 * 24 * 7;
 	
 
-	@Override
-	public <T> String createAccessToken(String key, T data) {
-		return create(key, data, "access-token", 1_000L * 60 * 60);
-	}
 
 //	AccessToken에 비해 유효기간을 길게...
-	@Override
-	public <T> String createRefreshToken(String key, T data) {
-		return create(key, data, "refresh-token", (long)1_000 * 60 * 60 * 24 * 7);
-	}
 
 	//Token 발급
 	/**
@@ -44,28 +35,29 @@ public class JwtServiceImpl implements JwtService {
 	 */
 
 	@Override
-	public <T> String create(String key, T data, String subject, long expire) {
-		// Payload 설정 : 생성일 (IssuedAt), 유효기간 (Expiration), 
-		// 토큰 제목 (Subject), 데이터 (Claim) 등 정보 세팅.
-		Claims claims = Jwts.claims()
-				// 토큰 제목 설정 ex) access-token, refresh-token
-				.setSubject(subject)
-				// 생성일 설정
-				.setIssuedAt(new Date()) 
-				// 만료일 설정 (유효기간)
-				.setExpiration(new Date(System.currentTimeMillis() + expire)); 
-		
-		// 저장할 data의 key, value
-		claims.put(key, data);
+	public <T> TokenDto create(String key, T data) {
 
-		return Jwts.builder()
-				// Header 설정 : 토큰의 타입, 해쉬 알고리즘 정보 세팅.
+		Date now = new Date();
+
+		String accessToken =  Jwts.builder()
 				.setHeaderParam("typ", "JWT")
-				.setClaims(claims)
-				// Signature 설정 : secret key를 활용한 암호화.
+				.claim(key,data)
+				.setExpiration(new Date(now.getTime() + ACCESS_TOKEN_EXPIRE_TIME))        // payload "exp": 1516239022 (예시
+				.setSubject("access-Token")
 				.signWith(SignatureAlgorithm.HS256, this.generateKey())
 				.compact(); // 직렬화 처리.
 
+
+		Date refreshTokenExpiresIn = new Date(now.getTime() + REFRESH_TOKEN_EXPIRE_TIME);
+
+		String refreshToken = Jwts.builder()
+				.setHeaderParam("typ", "JWT")
+				.claim(key,data)
+				.setExpiration(refreshTokenExpiresIn)        // payload "exp": 1516239022 (예시
+				.setSubject("refresh-Token")
+				.signWith(SignatureAlgorithm.HS256, this.generateKey())
+				.compact(); // 직렬화 처리.
+		return new TokenDto(accessToken, refreshToken, REFRESH_TOKEN_EXPIRE_TIME / 1000);
 	}
 
 	// Signature 설정에 들어갈 key 생성.
@@ -80,20 +72,12 @@ public class JwtServiceImpl implements JwtService {
 	@Override
 	public boolean checkToken(String jwt) {
 		try {
-//			Json Web Signature? 서버에서 인증을 근거로 인증정보를 서버의 private key로 서명 한것을 토큰화 한것
-//			setSigningKey : JWS 서명 검증을 위한  secret key 세팅
-//			parseClaimsJws : 파싱하여 원본 jws 만들기
 			Jws<Claims> claims = Jwts.parser().setSigningKey(this.generateKey()).parseClaimsJws(jwt);
 //			Claims 는 Map의 구현체 형태
 			log.debug("claims: {}", claims);
 			return true;
 		} catch (Exception e) {
-//			if (log.isInfoEnabled()) {
-//				e.printStackTrace();
-//			} else {
 			log.error(e.getMessage());
-//			}
-//			throw new UnauthorizedException();
 //			개발환경
 			return false;
 		}
@@ -101,27 +85,36 @@ public class JwtServiceImpl implements JwtService {
 
 	@Override
 	public Map<String, Object> get(String key) {
-		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
-				.getRequest();
+		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
 		String jwt = request.getHeader("access-token");
+//		String jwt = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyaWQiOiJhZG1pbiIsImV4cCI6MTY4NTA4Mjg2Miwic3ViIjoicmVmcmVzaC1Ub2tlbiJ9.rdSspjP_V1_JP70mGdvW43_NJHjc58HGmeMDoCr5490";
 		Jws<Claims> claims = null;
 		try {
 			claims = Jwts.parser().setSigningKey(SALT.getBytes(StandardCharsets.UTF_8)).parseClaimsJws(jwt);
+			log.debug("-----------try문 통과");
 		} catch (Exception e) {
-//			if (log.isInfoEnabled()) {
-//				e.printStackTrace();
-//			} else {
 			log.error(e.getMessage());
-//			}
 			throw new UnAuthorizedException();
-//			개발환경
-//			Map<String,Object> testMap = new HashMap<>();
-//			testMap.put("userid", userid);
-//			return testMap;
 		}
 		Map<String, Object> value = claims.getBody();
 		log.info("value : {}", value);
 		return value;
+	}
+	@Override
+	public TokenDto.Response createAccessToken(String key, String id) {
+
+		Date now = new Date();
+		Date accessTokenExpiresIn = new Date(now.getTime() + ACCESS_TOKEN_EXPIRE_TIME);
+		String accessToken =  Jwts.builder()
+				.setHeaderParam("typ", "JWT")
+				.claim(key, id)
+				.setExpiration(accessTokenExpiresIn)        // payload "exp": 1516239022 (예시
+				.setSubject("access-Token")
+				.signWith(SignatureAlgorithm.HS256, this.generateKey())
+				.compact(); // 직렬화 처리.
+
+
+		return new TokenDto.Response(accessToken, REFRESH_TOKEN_EXPIRE_TIME);
 	}
 
 	@Override

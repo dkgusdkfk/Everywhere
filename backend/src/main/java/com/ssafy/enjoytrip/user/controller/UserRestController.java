@@ -1,9 +1,9 @@
 package com.ssafy.enjoytrip.user.controller;
 
 import com.ssafy.enjoytrip.security.JwtService;
-import com.ssafy.enjoytrip.trip.model.service.TripService;
 import com.ssafy.enjoytrip.user.model.dto.FindPasswordRequest;
 import com.ssafy.enjoytrip.user.model.dto.LoginRequest;
+import com.ssafy.enjoytrip.user.model.dto.TokenDto;
 import com.ssafy.enjoytrip.user.model.dto.User;
 import com.ssafy.enjoytrip.user.model.service.UserService;
 import io.swagger.annotations.ApiOperation;
@@ -24,12 +24,11 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class UserRestController {
     private final UserService userService;
-    private final TripService tripService;
     private final JwtService jwtService;
 
     private static final String SUCCESS = "success";
     private static final String FAIL = "fail";
-    private static final String USERID = "USERID";
+    private static final String USERID = "userid";
     private static final String MESSAGE = "message";
 
 
@@ -57,26 +56,23 @@ public class UserRestController {
         userService.remove(id);
         return new ResponseEntity<>(SUCCESS, HttpStatus.OK);
     }
+
     @PostMapping("find")
-    public ResponseEntity<?> findPassword(@RequestBody FindPasswordRequest request){
-        return new ResponseEntity<>(userService.findPassword(request),HttpStatus.OK);
+    public ResponseEntity<?> findPassword(@RequestBody FindPasswordRequest request) {
+        return new ResponseEntity<>(userService.findPassword(request), HttpStatus.OK);
     }
-    
+
     @PostMapping("/login")
-    public ResponseEntity<?> login(
-            @RequestBody LoginRequest request) {
+    public ResponseEntity<?> login(@RequestBody LoginRequest request) {
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status;
         try {
             User loginUser = userService.login(request);
             if (loginUser != null) {
-                String accessToken = jwtService.createAccessToken(USERID, loginUser.getId());// key, data
-                String refreshToken = jwtService.createRefreshToken(USERID, loginUser.getId());// key, data
-                userService.saveRefreshToken(request.getId(), refreshToken);
-                log.debug("로그인 accessToken 정보 : {}", accessToken);
-                log.debug("로그인 refreshToken 정보 : {}", refreshToken);
-                resultMap.put("access-token", accessToken);
-                resultMap.put("refresh-token", refreshToken);
+                TokenDto tokenDto = jwtService.create(USERID, loginUser.getId());
+                userService.saveRefreshToken(request.getId(), tokenDto.getRefreshToken());
+                resultMap.put("access-token", tokenDto.getAccessToken());
+                resultMap.put("refresh-token", tokenDto.getRefreshToken());
                 resultMap.put(MESSAGE, SUCCESS);
                 status = HttpStatus.ACCEPTED;
             } else {
@@ -113,22 +109,11 @@ public class UserRestController {
     @PostMapping("/refresh")
     public ResponseEntity<?> refreshToken(@RequestBody LoginRequest loginUser, HttpServletRequest request)
             throws Exception {
-        Map<String, Object> resultMap = new HashMap<>();
-        HttpStatus status = HttpStatus.ACCEPTED;
-        String token = request.getHeader("refresh-token");
-        log.debug("token : {}, loginUser : {}", token, loginUser);
-        if (jwtService.checkToken(token)) {
-            if (token.equals(userService.getRefreshToken(loginUser.getId()))) {
-                String accessToken = jwtService.createAccessToken(USERID, loginUser.getId());
-                log.debug("token : {}", accessToken);
-                log.debug("정상적으로 액세스토큰 재발급!!!");
-                resultMap.put("access-token", accessToken);
-                resultMap.put(MESSAGE, SUCCESS);
-            }
-        } else {
-            log.debug("리프레쉬토큰도 사용불!!!!!!!");
-            status = HttpStatus.UNAUTHORIZED;
-        }
-        return new ResponseEntity<>(resultMap, status);
+
+        String refreshToken = request.getHeader("refresh-token");
+//        String refreshToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyaWQiOiJhZG1pbiIsImV4cCI6MTY4NTA4Mjg2Miwic3ViIjoicmVmcmVzaC1Ub2tlbiJ9.rdSspjP_V1_JP70mGdvW43_NJHjc58HGmeMDoCr5490";
+        String id = jwtService.getUserId();
+        if (!jwtService.checkToken(refreshToken) || !id.equals(loginUser.getId())) throw new Exception("토큰 사용 불가");
+        return new ResponseEntity<>(jwtService.createAccessToken(USERID, loginUser.getId()), HttpStatus.ACCEPTED);
     }
 }
