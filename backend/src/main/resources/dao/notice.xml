@@ -21,7 +21,7 @@
         values (#{adminId}, #{title}, #{content})
     </insert>
 
-    <select id="listNotice" parameterType="PageBean" resultType="Notice">
+    <select id="listNotice" parameterType="NoticePageBean" resultType="Notice">
         select notice_id as noticeId, admin_id as adminId, title, content, hit, register_time as registerTime
         from notice
         <where>
@@ -31,7 +31,7 @@
         limit #{start}, #{interval}
     </select>
 
-    <select id="getTotalNoticeCount" parameterType="PageBean" resultType="int">
+    <select id="getTotalNoticeCount" parameterType="NoticePageBean" resultType="int">
         select count(*)
         from notice
         <where>

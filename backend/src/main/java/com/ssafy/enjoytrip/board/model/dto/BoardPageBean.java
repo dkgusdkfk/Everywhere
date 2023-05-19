@@ -6,7 +6,7 @@ import java.io.Serializable;
 
 /** UI 화면 페이지에 대한 정보를 표시하는 클래스  */
 @ToString
-public class PageBean implements Serializable{
+public class BoardPageBean implements Serializable{
 	/**검색 조건*/
 	private String key;
 	/**검색 단어*/
@@ -20,13 +20,13 @@ public class PageBean implements Serializable{
 	/**페이지 시작 번호*/
 	private int start=0;
 
-	public PageBean() {	}
-	public PageBean(String key, String word, int pageNo) {
+	public BoardPageBean() {	}
+	public BoardPageBean(String key, String word, int pageNo) {
 		setKey(key);
 		setWord(word);
 		setPageNo(pageNo);
 	}
-	public PageBean(String key, String word, String pageNo) {
+	public BoardPageBean(String key, String word, String pageNo) {
 		setKey(key);
 		setWord(word);
 		setPageNo(pageNo);
@@ -78,7 +78,8 @@ public class PageBean implements Serializable{
 	}
 	public int getStart() {
 		if(pageNo>1) {
-			return start = (pageNo-1)*interval;
+			start = (pageNo-1)*interval;
+			return start;
 		}else {
 			return 0;
 		}

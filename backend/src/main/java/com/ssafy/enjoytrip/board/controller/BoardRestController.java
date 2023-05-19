@@ -2,7 +2,7 @@ package com.ssafy.enjoytrip.board.controller;
 
 import com.ssafy.enjoytrip.board.model.dto.Board;
 import com.ssafy.enjoytrip.board.model.dto.Comment;
-import com.ssafy.enjoytrip.board.model.dto.PageBean;
+import com.ssafy.enjoytrip.board.model.dto.BoardPageBean;
 import com.ssafy.enjoytrip.board.model.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +25,7 @@ public class BoardRestController {
 
 
     @GetMapping("/all")
-    public ResponseEntity<?> boardList(PageBean bean) {
+    public ResponseEntity<?> boardList(BoardPageBean bean) {
         List<Board> boards = boardService.listArticle(bean);
         Map<String, Object> res = new HashMap<>();
         res.put("boards",boards);

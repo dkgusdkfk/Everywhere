@@ -3,7 +3,7 @@ package com.ssafy.enjoytrip.notice.model.service;
 import com.ssafy.enjoytrip.notice.model.dao.NoticeDao;
 import com.ssafy.enjoytrip.notice.model.dto.Notice;
 import com.ssafy.enjoytrip.notice.model.dto.NoticeException;
-import com.ssafy.enjoytrip.notice.model.dto.PageBean;
+import com.ssafy.enjoytrip.notice.model.dto.NoticePageBean;
 import com.ssafy.enjoytrip.util.PageUtility;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -26,7 +26,7 @@ public class NoticeServiceImpl implements NoticeService {
     }
 
     @Override
-    public List<Notice> listNotice(PageBean bean) {
+    public List<Notice> listNotice(NoticePageBean bean) {
         try {
             int total = noticeDao.getTotalNoticeCount(bean);
             PageUtility page = new PageUtility(bean.getInterval(), total, bean.getPageNo(), "");

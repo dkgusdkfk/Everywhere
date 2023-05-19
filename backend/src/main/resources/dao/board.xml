@@ -21,7 +21,7 @@
         values (#{userId}, #{title}, #{content})
     </insert>
 
-    <select id="listArticle" parameterType="PageBean" resultType="Board">
+    <select id="listArticle" parameterType="BoardPageBean" resultType="Board">
         select board_id as boardId, user_id as userId, title, content, hit, register_time as registerTime
         from board
         <where>
@@ -31,7 +31,7 @@
         limit #{start}, #{interval}
     </select>
 
-    <select id="getTotalArticleCount" parameterType="PageBean" resultType="int">
+    <select id="getTotalArticleCount" parameterType="NoticePageBean" resultType="int">
         select count(*)
         from board
         <where>
@@ -80,7 +80,7 @@
         values (#{boardId}, #{userId}, #{content})
     </insert>
 
-    <select id="getComment" parameterType="int">
+    <select id="getComment" parameterType="int" resultType="Comment">
         select *
         where comment_id =#{commentId}
     </select>

@@ -1,12 +1,12 @@
 package com.ssafy.enjoytrip.trip.model.dao;
 
 import com.ssafy.enjoytrip.trip.model.dto.*;
-import org.springframework.stereotype.Repository;
+import org.apache.ibatis.annotations.Mapper;
 
 import java.sql.SQLException;
 import java.util.List;
 
-@Repository
+@Mapper
 public interface TripDao {
 
 	List<AttractionInfo> getAttractionList(SearchRequest request) throws SQLException;

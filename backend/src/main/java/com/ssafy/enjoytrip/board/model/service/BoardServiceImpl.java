@@ -4,10 +4,11 @@ import com.ssafy.enjoytrip.board.model.dao.BoardDao;
 import com.ssafy.enjoytrip.board.model.dto.Board;
 import com.ssafy.enjoytrip.board.model.dto.BoardException;
 import com.ssafy.enjoytrip.board.model.dto.Comment;
-import com.ssafy.enjoytrip.board.model.dto.PageBean;
+import com.ssafy.enjoytrip.board.model.dto.BoardPageBean;
 import com.ssafy.enjoytrip.util.PageUtility;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -17,6 +18,7 @@ import java.util.List;
 public class BoardServiceImpl implements BoardService {
     private final BoardDao boardDao;
 
+    @Transactional
     @Override
     public void writeArticle(Board boardDto) {
         try {
@@ -27,7 +29,8 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public List<Board> listArticle(PageBean bean) {
+    @Transactional
+    public List<Board> listArticle(BoardPageBean bean) {
         try {
             int total = boardDao.getTotalArticleCount(bean);
             PageUtility page = new PageUtility(bean.getInterval(), total, bean.getPageNo(), "");
@@ -39,6 +42,7 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
+    @Transactional
     public Board getArticle(int boardId) {
         try {
             return boardDao.getArticle(boardId);
@@ -48,6 +52,7 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
+    @Transactional
     public void updateHit(int boardId) {
         try {
             boardDao.updateHit(boardId);
@@ -57,6 +62,7 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
+    @Transactional
     public void modifyArticle(Board boardDto) {
         try {
             boardDao.modifyArticle(boardDto);
@@ -66,6 +72,7 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
+    @Transactional
     public void deleteArticle(int boardId) {
         try {
             boardDao.deleteArticle(boardId);
@@ -75,6 +82,7 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
+    @Transactional
     public Comment getComment(int commentId) {
         try {
             return boardDao.getComment(commentId);
@@ -86,6 +94,7 @@ public class BoardServiceImpl implements BoardService {
 
 
     @Override
+    @Transactional
     public void writeComment(Comment comment) {
         try {
             boardDao.writeComment(comment);
@@ -95,6 +104,7 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
+    @Transactional
     public void modifyComment(Comment comment) {
         try {
 
@@ -105,6 +115,7 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
+    @Transactional
     public void deleteComment(int commentId) {
         try {
             boardDao.deleteComment(commentId);
@@ -114,6 +125,7 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
+    @Transactional
     public List<Comment> listComment(int boardId) {
         try {
             return boardDao.listComment(boardId);

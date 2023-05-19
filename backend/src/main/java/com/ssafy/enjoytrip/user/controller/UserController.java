@@ -1,6 +1,6 @@
 package com.ssafy.enjoytrip.user.controller;
 
-import com.ssafy.enjoytrip.board.model.dto.PageBean;
+import com.ssafy.enjoytrip.board.model.dto.BoardPageBean;
 import com.ssafy.enjoytrip.trip.model.dto.AddressResponse;
 import com.ssafy.enjoytrip.trip.model.dto.Sido;
 import com.ssafy.enjoytrip.trip.model.service.TripService;
@@ -10,7 +10,6 @@ import com.ssafy.enjoytrip.user.model.dto.User;
 import com.ssafy.enjoytrip.user.model.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -26,6 +25,7 @@ public class UserController {
     private final UserService userService;
     private final TripService tripService;
 
+    private static final String USERINFO = "USERINFO";
     @ExceptionHandler(Exception.class)
     public String handler(Exception ex, Model model) {
         model.addAttribute("msg", ex.getMessage());
@@ -36,7 +36,7 @@ public class UserController {
     @PostMapping("/login")
     public String login(LoginRequest request, HttpSession session) {
         User user = userService.login(request);
-        session.setAttribute("userInfo", user);
+        session.setAttribute(USERINFO, user);
         return "redirect:/index";
     }
 
@@ -67,16 +67,16 @@ public class UserController {
             AddressResponse address = tripService.getAddress(Integer.parseInt(user.getAddress1()), Integer.parseInt(user.getAddress2()));
             model.addAttribute("address", address);
         }
-        model.addAttribute("userInfo", user);
+        model.addAttribute(USERINFO, user);
         return "user/MyPage";
     }
 
     @GetMapping("/update")
-    public String update(@RequestParam("id") String id, Model model, PageBean bean) {
+    public String update(@RequestParam("id") String id, Model model, BoardPageBean bean) {
         User user = userService.search(id);
         List<Sido> list = tripService.getSidoList();
 
-        model.addAttribute("userInfo", user);
+        model.addAttribute(USERINFO, user);
         model.addAttribute("sidoList",list);
         return "user/UserInfoModify";
     }

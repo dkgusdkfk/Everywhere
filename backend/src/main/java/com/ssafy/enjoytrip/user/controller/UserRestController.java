@@ -29,6 +29,8 @@ public class UserRestController {
 
     private static final String SUCCESS = "success";
     private static final String FAIL = "fail";
+    private static final String USERID = "USERID";
+    private static final String MESSAGE = "message";
 
 
     @GetMapping("/{id}")
@@ -64,26 +66,26 @@ public class UserRestController {
     public ResponseEntity<?> login(
             @RequestBody LoginRequest request) {
         Map<String, Object> resultMap = new HashMap<>();
-        HttpStatus status = null;
+        HttpStatus status;
         try {
             User loginUser = userService.login(request);
             if (loginUser != null) {
-                String accessToken = jwtService.createAccessToken("userid", loginUser.getId());// key, data
-                String refreshToken = jwtService.createRefreshToken("userid", loginUser.getId());// key, data
+                String accessToken = jwtService.createAccessToken(USERID, loginUser.getId());// key, data
+                String refreshToken = jwtService.createRefreshToken(USERID, loginUser.getId());// key, data
                 userService.saveRefreshToken(request.getId(), refreshToken);
                 log.debug("로그인 accessToken 정보 : {}", accessToken);
                 log.debug("로그인 refreshToken 정보 : {}", refreshToken);
                 resultMap.put("access-token", accessToken);
                 resultMap.put("refresh-token", refreshToken);
-                resultMap.put("message", SUCCESS);
+                resultMap.put(MESSAGE, SUCCESS);
                 status = HttpStatus.ACCEPTED;
             } else {
-                resultMap.put("message", FAIL);
+                resultMap.put(MESSAGE, FAIL);
                 status = HttpStatus.ACCEPTED;
             }
         } catch (Exception e) {
             log.error("로그인 실패 : {}", e);
-            resultMap.put("message", e.getMessage());
+            resultMap.put(MESSAGE, e.getMessage());
             status = HttpStatus.INTERNAL_SERVER_ERROR;
         }
         return new ResponseEntity<>(resultMap, status);
@@ -93,14 +95,14 @@ public class UserRestController {
     @GetMapping("/logout/{id}")
     public ResponseEntity<?> removeToken(@PathVariable("id") String id) {
         Map<String, Object> resultMap = new HashMap<>();
-        HttpStatus status = HttpStatus.ACCEPTED;
+        HttpStatus status;
         try {
             userService.deleRefreshToken(id);
-            resultMap.put("message", SUCCESS);
+            resultMap.put(MESSAGE, SUCCESS);
             status = HttpStatus.ACCEPTED;
         } catch (Exception e) {
             log.error("로그아웃 실패 : {}", e);
-            resultMap.put("message", e.getMessage());
+            resultMap.put(MESSAGE, e.getMessage());
             status = HttpStatus.INTERNAL_SERVER_ERROR;
         }
         return new ResponseEntity<>(resultMap, status);
@@ -117,12 +119,11 @@ public class UserRestController {
         log.debug("token : {}, loginUser : {}", token, loginUser);
         if (jwtService.checkToken(token)) {
             if (token.equals(userService.getRefreshToken(loginUser.getId()))) {
-                String accessToken = jwtService.createAccessToken("userid", loginUser.getId());
+                String accessToken = jwtService.createAccessToken(USERID, loginUser.getId());
                 log.debug("token : {}", accessToken);
                 log.debug("정상적으로 액세스토큰 재발급!!!");
                 resultMap.put("access-token", accessToken);
-                resultMap.put("message", SUCCESS);
-                status = HttpStatus.ACCEPTED;
+                resultMap.put(MESSAGE, SUCCESS);
             }
         } else {
             log.debug("리프레쉬토큰도 사용불!!!!!!!");

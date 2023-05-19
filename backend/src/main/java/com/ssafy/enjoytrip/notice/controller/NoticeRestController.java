@@ -1,7 +1,7 @@
 package com.ssafy.enjoytrip.notice.controller;
 
 import com.ssafy.enjoytrip.notice.model.dto.Notice;
-import com.ssafy.enjoytrip.notice.model.dto.PageBean;
+import com.ssafy.enjoytrip.notice.model.dto.NoticePageBean;
 import com.ssafy.enjoytrip.notice.model.service.NoticeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +23,7 @@ public class NoticeRestController {
     private static final String SUCCESS = "success";
 
     @GetMapping("/all")
-    public ResponseEntity<?> noticeList(PageBean bean) {
+    public ResponseEntity<?> noticeList(NoticePageBean bean) {
         List<Notice> notices = noticeService.listNotice(bean);
         Map<String, Object> res = new HashMap<>();
         res.put("notices", notices);
