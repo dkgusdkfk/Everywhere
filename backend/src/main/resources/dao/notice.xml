@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ssafy.enjoytrip.notice.model.dao.NoticeDao">
+    <sql id="searchCon">
+        <if test="word != null and word != ''">
+            <choose>
+                <when test="key == 'title'">
+                    title like concat('%', #{word}, '%')
+                </when>
+                <when test="key == 'adminId'">
+                    admin_id = #{word}
+                </when>
+            </choose>
+        </if>
+    </sql>
+
+    <insert id="writeNotice" parameterType="Notice">
+        insert into notice(admin_id, title, content)
+        values (#{adminId}, #{title}, #{content})
+    </insert>
+
+    <select id="listNotice" parameterType="PageBean" resultType="Notice">
+        select notice_id as noticeId, admin_id as adminId, title, content, hit, register_time as registerTime
+        from notice
+        <where>
+            <include refid="searchCon"/>
+        </where>
+        order by notice_id
+        limit #{start}, #{interval}
+    </select>
+
+    <select id="getTotalNoticeCount" parameterType="PageBean" resultType="int">
+        select count(*)
+        from notice
+        <where>
+            <include refid="searchCon"></include>
+        </where>
+    </select>
+
+    <select id="getNotice" parameterType="int" resultType="Notice">
+        select notice_id as noticeId, admin_id as adminId, title, content, hit, register_time as registerTime
+        from notice
+        where notice_id = #{noticeId}
+    </select>
+
+
+    <update id="updateHit" parameterType="int">
+        update notice
+        set hit = hit + 1
+        where notice_id = #{noticeId}
+    </update>
+
+    <update id="modifyNotice" parameterType="Notice">
+        update notice
+        set admin_id=#{adminId},
+            title=#{title},
+            content=#{content},
+            hit=#{hit},
+            register_time=#{registerTime}
+        where notice_id = #{noticeId}
+    </update>
+
+    <delete id="deleteNotice" parameterType="int">
+        delete
+        from notice
+        where notice_id = #{noticeId}
+    </delete>
+
+
+</mapper>

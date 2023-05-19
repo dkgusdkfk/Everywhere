@@ -4,10 +4,7 @@ import com.ssafy.enjoytrip.board.model.dto.Board;
 import com.ssafy.enjoytrip.board.model.dto.Comment;
 import com.ssafy.enjoytrip.board.model.dto.PageBean;
 import com.ssafy.enjoytrip.board.model.service.BoardService;
-import com.ssafy.enjoytrip.board.model.service.BoardServiceImpl;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,7 +26,7 @@ public class BoardController {
     }
 
     @GetMapping("/list")
-    public void BoardList(PageBean bean, Model model) {
+    public void boardList(PageBean bean, Model model) {
         log.debug("boardlist...................pageBean:{}", bean);
         List<Board> boards = boardService.listArticle(bean);
         log.debug("boardlist....................{}", boards);
@@ -87,7 +84,6 @@ public class BoardController {
 
     @PostMapping("/writeComment")
     public String writeComment(Comment comment) {
-        System.out.println(comment);
         boardService.writeComment(comment);
         return "redirect:/board/view?boardId=" + comment.getBoardId();
     }

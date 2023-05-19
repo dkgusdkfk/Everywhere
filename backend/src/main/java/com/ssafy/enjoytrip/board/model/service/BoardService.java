@@ -1,6 +1,5 @@
 package com.ssafy.enjoytrip.board.model.service;
 
-import java.util.HashMap;
 import java.util.List;
 
 import com.ssafy.enjoytrip.board.model.dto.Board;

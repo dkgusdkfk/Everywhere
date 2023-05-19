@@ -1,4 +1,4 @@
-package com.ssafy.enjoytrip.board.model.dto;
+package com.ssafy.enjoytrip.notice.model.dto;
 
 import lombok.ToString;
 
