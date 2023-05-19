@@ -57,7 +57,7 @@ public class JwtServiceImpl implements JwtService {
 				.setSubject("refresh-Token")
 				.signWith(SignatureAlgorithm.HS256, this.generateKey())
 				.compact(); // 직렬화 처리.
-		return new TokenDto(accessToken, refreshToken, REFRESH_TOKEN_EXPIRE_TIME / 1000);
+		return new TokenDto(accessToken, refreshToken, REFRESH_TOKEN_EXPIRE_TIME);
 	}
 
 	// Signature 설정에 들어갈 key 생성.

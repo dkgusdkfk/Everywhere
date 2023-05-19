@@ -28,7 +28,7 @@ public class UserRestController {
 
     private static final String SUCCESS = "success";
     private static final String FAIL = "fail";
-    private static final String USERID = "userid";
+    private static final String USERID = "id";
     private static final String MESSAGE = "message";
 
 
