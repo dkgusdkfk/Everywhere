@@ -46,7 +46,7 @@ export default {
   },
   created() {
     if (this.type === "modify") {
-      http.get(`rest/board/${this.$route.params.boardId}`).then(({ data }) => {
+      http.get(`/board/${this.$route.params.boardId}`).then(({ data }) => {
         this.board = data;
       });
       this.isUserd = true;
@@ -73,7 +73,7 @@ export default {
     },
     registBoard() {
       http
-        .post(`rest/board/write`, {
+        .post(`/board/write`, {
           userId: "admin",          // ------------------------------수정 필수--------------------------------
           title: this.board.title,
           content: this.board.content,
@@ -89,7 +89,7 @@ export default {
     },
     modifyBoard() {
       http
-        .put(`rest/board/update`, {
+        .put(`/board/update`, {
           boardId: this.board.boardId,
           userId: this.board.userId,
           title: this.board.title,

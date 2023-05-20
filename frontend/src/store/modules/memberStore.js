@@ -1,6 +1,6 @@
 import jwtDecode from "jwt-decode";
 import router from "@/router";
-import { login, findById, tokenRegeneration, logout } from "@/api/member";
+import { login, findById, tokenRegeneration, logout, unregist } from "@/api/member";
 
 const memberStore = {
   namespaced: true,
@@ -137,6 +137,23 @@ const memberStore = {
         }
       );
     },
+    async userUnregist({ commit }, userId) {
+      await unregist(
+        userId,
+        ({ data }) => {
+          if (data === "success") {
+            commit("SET_IS_LOGIN", false);
+            commit("SET_USER_INFO", null);
+            commit("SET_IS_VALID_TOKEN", false);
+          } else {
+            console.log("유저 정보 없음!!!!");
+          }
+        },
+        (error) => {
+          console.log(error);
+        }
+      )
+    }
   },
 };
 

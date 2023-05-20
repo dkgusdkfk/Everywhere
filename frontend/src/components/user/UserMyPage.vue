@@ -11,8 +11,8 @@
                     <div class="col-md-12 col-lg-4">
                         <nav aria-label="breadcrumb" class="breadcrumb-box d-flex justify-content-lg-end">
                             <ol class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="${root}/user">Home</a></li>
-                                <li class="breadcrumb-item"><a href="${root}/user?action=mypage">My Page</a></li>
+                                <li class="breadcrumb-item"><a href="#">Home</a></li>
+                                <li class="breadcrumb-item"><a href="#">My Page</a></li>
                             </ol>
                         </nav>
                     </div>
@@ -26,7 +26,7 @@
                     <div class="col-sm-12">
                         <div class="row align-content-center">
                             <div class="col-md-6 d-flex justify-content-center">
-                                <img src="${root}/assets/img/defaultProfile.jpg" alt=""
+                                <img src="@/assets/img/defaultProfile.jpg" alt=""
                                     class="agent-avatar img-fluid rounded-circle">
                             </div>
                             <div
@@ -38,17 +38,17 @@
                                     <div class="agent-content mb-3">
                                         <div class="info-agents color-a">
                                             <h4 class="title-2 mb-2">
-                                                <strong>이름 : </strong> <span class="color-text-a">${userInfo.name}</span>
+                                                <strong>이름 : </strong> <span class="color-text-a">{{userInfo.name}}</span>
                                             </h4>
                                             <h4 class="title-2 mt-4">
-                                                <strong>ID: </strong> <span class="color-text-a">${userInfo.id}</span>
+                                                <strong>ID: </strong> <span class="color-text-a">{{userInfo.id}}</span>
                                             </h4>
                                             <h4 class="title-2 mt-4">
-                                                <strong>Email: </strong> <span class="color-text-a">${userInfo.email}</span>
+                                                <strong>Email: </strong> <span class="color-text-a">{{userInfo.email}}</span>
                                             </h4>
                                             <h4 class="title-2 mt-4">
                                                 <strong>Address : </strong>
-                                                <span class="color-text-a">${address.sidoName} ${address.gugunName} </span>
+                                                <!-- <span class="color-text-a">{{address.sidoName}} {{address.gugunName}} </span> -->
                                             </h4>
                                         </div>
                                     </div>
@@ -70,15 +70,15 @@
                                     </div>
                                     <div class="d-flex align-items-center justify-content-end">
                                         <a class="btn w-25 border border-2 rounded-3 text-bg-secondary"
-                                            href="${root}/user/update?id=${userInfo.id}">수정하기</a>
+                                            href="#" @click="moveModifyPage">수정하기</a>
                                         <a class="btn w-25 border border-2 rounded-3 text-bg-danger"
-                                            href='${root}/user/remove?id=${userInfo.id}'>회원 탈퇴</a>
+                                            href='#' @click="unregister">회원 탈퇴</a>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-12 section-t8">
+                    <!-- <div class="col-md-12 section-t8">
                         <div class="title-box-d">
                             <h3 class="title-d">내가 쓴 게시글</h3>
                         </div>
@@ -99,7 +99,7 @@
                         <div class="col-md-4">
                             <div class="card-box-a card-shadow">
                                 <div class="img-box-a">
-                                    <img src="${root}/assets/img/property-1.jpg" alt="" class="img-a img-fluid">
+                                    <img src="@/assets/img/property-1.jpg" alt="" class="img-a img-fluid">
                                 </div>
                                 <div class="card-overlay">
                                     <div class="card-overlay-a-content">
@@ -141,7 +141,7 @@
                         <div class="col-md-4">
                             <div class="card-box-a card-shadow">
                                 <div class="img-box-a">
-                                    <img src="${root}/assets/img/property-3.jpg" alt="" class="img-a img-fluid">
+                                    <img src="@/assets/img/property-3.jpg" alt="" class="img-a img-fluid">
                                 </div>
                                 <div class="card-overlay">
                                     <div class="card-overlay-a-content">
@@ -183,7 +183,7 @@
                         <div class="col-md-4">
                             <div class="card-box-a card-shadow">
                                 <div class="img-box-a">
-                                    <img src="${root}/assets/img/property-6.jpg" alt="" class="img-a img-fluid">
+                                    <img src="@/assets/img/property-6.jpg" alt="" class="img-a img-fluid">
                                 </div>
                                 <div class="card-overlay">
                                     <div class="card-overlay-a-content">
@@ -245,7 +245,7 @@
                         <div class="col-md-4">
                             <div class="card-box-a card-shadow">
                                 <div class="img-box-a">
-                                    <img src="${root}/assets/img/property-1.jpg" alt="" class="img-a img-fluid">
+                                    <img src="@assets/img/property-1.jpg" alt="" class="img-a img-fluid">
                                 </div>
                                 <div class="card-overlay">
                                     <div class="card-overlay-a-content">
@@ -287,7 +287,7 @@
                         <div class="col-md-4">
                             <div class="card-box-a card-shadow">
                                 <div class="img-box-a">
-                                    <img src="${root}/assets/img/property-3.jpg" alt="" class="img-a img-fluid">
+                                    <img src="@/assets/img/property-3.jpg" alt="" class="img-a img-fluid">
                                 </div>
                                 <div class="card-overlay">
                                     <div class="card-overlay-a-content">
@@ -329,7 +329,7 @@
                         <div class="col-md-4">
                             <div class="card-box-a card-shadow">
                                 <div class="img-box-a">
-                                    <img src="${root}/assets/img/property-6.jpg" alt="" class="img-a img-fluid">
+                                    <img src="@/assets/img/property-6.jpg" alt="" class="img-a img-fluid">
                                 </div>
                                 <div class="card-overlay">
                                     <div class="card-overlay-a-content">
@@ -368,7 +368,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </section>
@@ -376,16 +376,31 @@
 </template>
 
 <script>
+import {mapState, mapActions} from "vuex";
+
+const memberStore = "memberStore";
+
 export default {
     name: 'UserMyPage',
     components: {},
-    data() {
-        return {
-            message: '',
-        };
+    computed: {
+        ...mapState(memberStore, ["userInfo"]),
     },
-    created() { },
-    methods: {},
+    methods: {
+        ...mapActions(memberStore, ["userUnregist"]),
+
+        moveModifyPage() {
+            this.$router.replace({
+                name: "usermodify",
+            })
+        },
+        unregister() {
+            this.userUnregist(this.userInfo.id);
+            sessionStorage.removeItem("access-token");
+            sessionStorage.removeItem("refresh0token");
+            if (this.$route.path != "/") this.$router.push({ name: "main" });
+        }
+    },
 };
 </script>
 
