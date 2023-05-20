@@ -25,7 +25,10 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 import http from "@/api/http";
+
+const memberStore = "memberStore";
 
 export default {
   name: "BoardInputItem",
@@ -38,7 +41,6 @@ export default {
         content: "",
         registerTime: "",
       },
-      isUserId: false,
     };
   },
   props: {
@@ -49,8 +51,10 @@ export default {
       http.get(`/board/${this.$route.params.boardId}`).then(({ data }) => {
         this.board = data;
       });
-      this.isUserd = true;
     }
+  },
+  computed: {
+    ...mapState(memberStore, ["userInfo"]),
   },
   methods: {
     onSubmit(event) {
@@ -72,9 +76,10 @@ export default {
       // this.moveList();
     },
     registBoard() {
+      console.log(this.userInfo);
       http
         .post(`/board/write`, {
-          userId: "admin",          // ------------------------------수정 필수--------------------------------
+          userId: this.userInfo.id,          // ------------------------------수정 필수--------------------------------
           title: this.board.title,
           content: this.board.content,
         })

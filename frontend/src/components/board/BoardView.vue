@@ -52,18 +52,17 @@
                 <div class="col-sm-12 d-flex flex-column align-content-center justify-content-center w-75">
                     <div class="post-content color-text-a">
                         <pre class="mt-3">
-                {{ board.content }}
+                        {{ board.content }}
 
-            </pre>
+                    </pre>
                     </div>
                     <div class="d-flex justify-content-end">
                         <b-button variant="outline-info" size="sm" @click="moveList" class="mr-2">목록</b-button>
-                        <b-button variant="outline-primary" size="sm" @click="moveModifyBoard" class="mr-2">글수정</b-button>
-                        <b-button variant="outline-danger" size="sm" @click="deleteBoard">글삭제</b-button>
-                        <!-- <div v-if="userInfo.id == board.userId">
-                            <b-button variant="outline-primary" size="sm" @click="moveModifyBoard" class="mr-2">글수정</b-button>
+                        <div v-if="userInfo != null && userInfo.id == board.userId">
+                            <b-button variant="outline-primary" size="sm" @click="moveModifyBoard"
+                                class="mr-2">글수정</b-button>
                             <b-button variant="outline-danger" size="sm" @click="deleteBoard">글삭제</b-button>
-                        </div> -->
+                        </div>
                     </div>
                     <div class="post-footer">
                         <div class="post-share d-flex justify-content-end">
@@ -112,7 +111,8 @@
                                                         class="d-flex flex-column justify-content-center align-items-start">
                                                         <span>
                                                             <h4 class="ms-1 mt-0 mb-0">{{ comment.userId }}</h4>
-                                                        </span><span class="ms-1 mt-0 mb-0">{{ comment.registerTime }}</span>
+                                                        </span><span class="ms-1 mt-0 mb-0">{{ comment.registerTime
+                                                        }}</span>
                                                         <div style="padding: 5px" id="cmt">
                                                             <pre class="ms-1 mt-0 mb-0"
                                                                 style="font-size: 20px">{{ comment.content }}</pre>
@@ -138,11 +138,13 @@
                                                         </button>
                                                     </div>
                                                 </div> -->
-                                                <button type="button" id="btn-delete-comment"
-                                                    class="btn btn-outline-danger mb-3 ms-1"
-                                                    @click="commentDelete(comment.commentId)">
-                                                    댓글삭제
-                                                </button>
+                                                <div v-if="userInfo != null && userInfo.id == comment.userId">
+                                                    <button type="button" id="btn-delete-comment"
+                                                        class="btn btn-outline-danger mb-3 ms-1"
+                                                        @click="commentDelete(comment.commentId)">
+                                                        댓글삭제
+                                                    </button>
+                                                </div>
                                             </div>
                                         </div>
                                     </tr>
@@ -153,24 +155,24 @@
                 </div>
 
             </div>
-            <div class="form-comments">
+            <div class="form-comments" v-if="userInfo != null">
                 <div class="title-box-d">
                     <h3 class="title-d"> Leave a Reply</h3>
                 </div>
-                    <div class="row">
-                        <div class="col-md-12 mb-3">
-                            <div class="form-group">
-                                <input type="hidden" id="userId" value="${userInfo.id}" name="userId">
-                                <input type="hidden" id="boardId" value="${board.boardId}" name="boardId">
-                                <label for="content">댓글을 입력하세요.</label>
-                                <textarea id="content" class="form-control" placeholder="Comment *" name="content" cols="45"
-                                    rows="8" v-model="comment" required></textarea>
-                            </div>
-                        </div>
-                        <div class="col-md-12">
-                            <button type="button" class="btn btn-a" @click="registComment()">댓글 달기</button>
+                <div class="row">
+                    <div class="col-md-12 mb-3">
+                        <div class="form-group">
+                            <input type="hidden" id="userId" value="${userInfo.id}" name="userId">
+                            <input type="hidden" id="boardId" value="${board.boardId}" name="boardId">
+                            <label for="content">댓글을 입력하세요.</label>
+                            <textarea id="content" class="form-control" placeholder="Comment *" name="content" cols="45"
+                                rows="8" v-model="comment" required></textarea>
                         </div>
                     </div>
+                    <div class="col-md-12">
+                        <button type="button" class="btn btn-a" @click="registComment()">댓글 달기</button>
+                    </div>
+                </div>
             </div>
         </div>
     </b-container>
@@ -178,7 +180,10 @@
 
 <script>
 // import moment from "moment";
+import { mapState } from "vuex";
 import http from "@/api/http";
+
+const memberStore = "memberStore";
 
 export default {
     name: "BoardView",
@@ -186,14 +191,8 @@ export default {
         return {
             board: {},
             comments: {},
-            comment: ""
+            comment: "",
         };
-    },
-    computed: {
-        message() {
-            if (this.board.content) return this.board.content.split("\n").join("<br>");
-            return "";
-        },
     },
     created() {
         http.get(`/board/${this.$route.params.boardId}`).then(({ data }) => {
@@ -202,6 +201,13 @@ export default {
         http.get(`/board/comment/${this.$route.params.boardId}`).then(({ data }) => {
             this.comments = data;
         });
+    },
+    computed: {
+        message() {
+            if (this.board.content) return this.board.content.split("\n").join("<br>");
+            return "";
+        },
+        ...mapState(memberStore, ["userInfo"]),
     },
     methods: {
         moveModifyBoard() {
@@ -236,17 +242,17 @@ export default {
         },
         registComment() {
             http.post(`/board/writeComment`, {
-                userId: "admin",          // ------------------------------수정 필수--------------------------------
+                userId: this.userInfo.id,
                 boardId: this.board.boardId,
                 content: this.comment,
-                })
+            })
                 .then(({ data }) => {
-                let msg = "등록 처리시 문제가 발생했습니다.";
-                if (data === "success") {
-                    msg = "등록이 완료되었습니다.";
-                }
-                alert(msg);
-                this.$router.go();
+                    let msg = "등록 처리시 문제가 발생했습니다.";
+                    if (data === "success") {
+                        msg = "등록이 완료되었습니다.";
+                    }
+                    alert(msg);
+                    this.$router.go();
                 });
         },
     },
