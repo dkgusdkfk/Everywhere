@@ -84,7 +84,7 @@
       <div class="swiper-pagination"></div>
     </div>
     <!-- End Intro Section -->
-    <c:if test="${not empty recommendAttraction}">
+    <div> <!-- v-if="recommendAttraction" 추가-->
       <section class="section-property section-t8">
         <div class="container">
           <div class="row">
@@ -101,10 +101,12 @@
             </div>
           </div>
 
-          <div id="property-carousel" class="swiper">
-            <div class="swiper-wrapper">
+          <div>
+            <b-carousel id="carousel-1" v-model="slide" :interval="4000" controls indicators background="#ababab"
+              img-width="1024" img-height="480" style="text-shadow: 1px 1px 2px #333;" @sliding-start="onSlideStart"
+              @sliding-end="onSlideEnd">
 
-              <c:forEach var="attraction" items="${recommendAttraction}">
+              <div v-for="attraction in attractions" :key="attraction.contentId">
                 <div class="carousel-item-b swiper-slide">
                   <div class="card-box-a card-shadow">
                     <div class="img-box-a" style="height: 480px;">
@@ -148,15 +150,15 @@
                     </div>
                   </div>
                 </div>
-              </c:forEach>
+              </div>
               <!-- End carousel item -->
-            </div>
+            </b-carousel>
           </div>
           <div class="propery-carousel-pagination carousel-pagination"></div>
 
         </div>
       </section>
-    </c:if>
+    </div>
     <!-- End Latest Properties Section --> <!-- ======= Latest News Section ======= -->
     <section class="section-news section-t8">
       <div class="container">
@@ -174,11 +176,13 @@
           </div>
         </div>
 
-        <div id="news-carousel" class="swiper">
-          <div class="swiper-wrapper">
+        <div>
+          <b-carousel id="carousel-1" v-model="slide" :interval="4000" controls indicators
+            style="text-shadow: 1px 1px 2px #333;" @sliding-start="onSlideStart"
+            @sliding-end="onSlideEnd">
 
-            <c:forEach var="hotPlace" items="${hotPlaceList}" begin="0" end="10">
-              <div class="carousel-item-c swiper-slide">
+            <div v-for="hotPlace in hotPlaces" :key="hotPlace.contentId">
+              <b-carousel-slide>
                 <div class="card-box-b card-shadow news-box">
                   <div class="img-box-b" style="height: 280px">
                     <c:choose>
@@ -206,13 +210,15 @@
                     </div>
                   </div>
                 </div>
-              </div>
+              </b-carousel-slide>
               <!-- End carousel item -->
-            </c:forEach>
-          </div>
+            </div>
+          </b-carousel>
+          <p class="mt-4">
+            Slide #: {{ slide }} <br>
+            Sliding: {{ sliding }}
+          </p>
         </div>
-
-        <div class="news-carousel-pagination carousel-pagination"></div>
       </div>
     </section>
 
@@ -220,11 +226,41 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+import http from "@/api/http";
+
+const memberStore = "memberStore";
+
 export default {
   name: "AppMain",
   props: {
     msg: String,
   },
+  data() {
+    return {
+      attractions: [],
+      hotPlaces: [],
+      slide: 0,
+      sliding: null,
+    }
+  },
+  created() {
+    console.log(this.userInfo)
+    http.get(`/trip/recommend/${this.userInfo.address1}/${this.userInfo.address2}`).then(({ data }) => {
+      this.attractions = data;
+    })
+  },
+  computed: {
+    ...mapState(memberStore, ["userInfo"]),
+  },
+  methods: {
+    onSlideStart() {
+      this.sliding = true
+    },
+    onSlideEnd() {
+      this.sliding = false
+    }
+  }
 };
 </script>
 

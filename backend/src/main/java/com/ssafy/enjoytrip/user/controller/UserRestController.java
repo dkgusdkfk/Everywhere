@@ -74,7 +74,6 @@ public class UserRestController {
                 resultMap.put("access-token", tokenDto.getAccessToken());
                 resultMap.put("refresh-token", tokenDto.getRefreshToken());
                 resultMap.put(MESSAGE, SUCCESS);
-                log.debug("=-=-=--==-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-{}",resultMap);
                 status = HttpStatus.ACCEPTED;
             } else {
                 resultMap.put(MESSAGE, FAIL);
