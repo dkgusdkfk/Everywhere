@@ -12,12 +12,10 @@
       </div>
     </section>
 
-    <div class="d-flex justify-content-center search-spot w-75">
-      <form class="d-flex justify-content-center w-100" @submit="search" role="search">
-        <select v-model="selectedSido" class="form-select me-2 w-100">
-          <option value="0" selected>검색 할 지역 선택</option>
-          <option v-for="sido in sidoList" :value="sido.sidoCode" :key="sido.sidoCode">{{ sido.sidoName }}</option>
-        </select>
+    <div class="mb-3">
+            <label for="address1">주소</label>
+
+        <select-sido @select-sido="selectSido"></select-sido>
         <select v-model="selectedGugun" class="form-select me-2 w-100">
           <option value="0" selected>검색 할 지역 선택</option>
         </select>
