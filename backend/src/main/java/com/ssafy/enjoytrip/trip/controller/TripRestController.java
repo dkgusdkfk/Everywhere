@@ -19,6 +19,8 @@ public class TripRestController {
 
     @GetMapping("/search")
     public ResponseEntity<?> search(SearchRequest request) {
+        System.out.println("==================================");
+        System.out.println(tripService.getAttractionList(request));
         return new ResponseEntity<>(tripService.getAttractionList(request), HttpStatus.OK);
     }
     @GetMapping("/sido")

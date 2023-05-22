@@ -10,4 +10,10 @@ function gugunList(params, success, fail) {
   api.get(`/trip/gugun`, { params: params }).then(success).catch(fail);
 }
 
-export { sidoList, gugunList };
+function attractionList(search, success, fail) {
+  api.get(`/trip/search`, JSON.stringify(search)).then(success).catch(fail);
+}
+
+
+
+export { sidoList, gugunList, attractionList };

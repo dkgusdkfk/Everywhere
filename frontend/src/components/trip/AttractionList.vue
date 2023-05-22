@@ -12,34 +12,38 @@
       </div>
     </section>
 
-    <div class="mb-3">
-            <label for="address1">주소</label>
-
-        <select-sido @select-sido="selectSido"></select-sido>
-        <select v-model="selectedGugun" class="form-select me-2 w-100">
-          <option value="0" selected>검색 할 지역 선택</option>
-        </select>
-        <select v-model="selectedContentType" class="form-select me-2 w-100">
-          <option value="0" selected>관광지 유형</option>
-          <option value="12">관광지</option>
-          <option value="14">문화시설</option>
-          <option value="15">축제공연행사</option>
-          <option value="25">여행코스</option>
-          <option value="28">레포츠</option>
-          <option value="32">숙박</option>
-          <option value="38">쇼핑</option>
-          <option value="39">음식점</option>
-        </select>
-        <button class="btn btn-outline-success w-50" type="submit" style="width: 200px">검색</button>
+    <div class="d-flex justify-content-center search-spot w-75">
+      <form class="d-flex justify-content-center w-100" @submit="search" role="search">
+        <div class="mb-3">
+          <label for="address1">주소</label>
+          <select-sido @select-sido="selectSido"></select-sido>
+        </div>
+        <div class="mb-3">
+          <label for="address2">상세주소</label>
+          <select-gugun :sidoCode=sidoCode @select-gugun="selectGugun"></select-gugun>
+        </div>
+        <div class="mb-3">
+          <label for="address2">관광지 유형</label>
+          <select class="form-select me-2 w-100" @select-contentTypeId="selectContentType">
+            <option value="0" selected>관광지 유형</option>
+            <option value="12">관광지</option>
+            <option value="14">문화시설</option>
+            <option value="15">축제공연행사</option>
+            <option value="25">여행코스</option>
+            <option value="28">레포츠</option>
+            <option value="32">숙박</option>
+            <option value="38">쇼핑</option>
+            <option value="39">음식점</option>
+          </select>
+        </div>
+        <button class="btn btn-outline-success w-50" @click="search" style="width: 200px">검색</button>
       </form>
     </div>
 
     <div class="d-flex align-items-top result-spot w-75">
-      <!-- kakao map start -->
       <div id="map" class="mt-3" style="width: 700px; height: 700px"></div>
-      <!-- kakao map end -->
       <div class="row w-50">
-        <table class="table table-hover" v-show="showResults">
+        <table class="table table-hover">
           <thead>
             <tr style="color: #2eca6a; font-weight: bolder;">
               <th>대표이미지</th>
@@ -47,27 +51,38 @@
               <th>주소</th>
             </tr>
           </thead>
-          <tbody>
-            <tr v-for="spot in searchResults" :key="spot.contentid" @click="goToDetail(spot.contentid)">
-              <td><img :src="spot.firstimage" alt="Spot Image" width="80" height="80"></td>
-              <td>{{ spot.title }}</td>
-              <td>{{ spot.addr1 }}</td>
-            </tr>
+          <tbody id="trip-list">
+            <!-- <tr v-for="attraction in attractionList" :key="attraction.contentId">
+              <td><img :src="attraction.firstImage" alt="attraction" style="width: 100px; height: 100px"></td>
+              <td>{{ attraction.title }}</td>
+              <td>{{ attraction.addr1 }}</td>
+            </tr> -->
           </tbody>
         </table>
-        <div class="alert alert-warning mt-3" role="alert" v-show="noResults">
-          검색 결과가 없습니다.
-        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import { mapActions, mapMutations } from "vuex";
+import SelectSido from "@/components/item/SelectSido.vue";
+import SelectGugun from "@/components/item/SelectGugun.vue";
+import http from "@/api/http";
+const itemStore = "itemStore";
+
 export default {
   name: "KakaoMap",
+  components: {
+    SelectSido,
+    SelectGugun,
+  },
+
   data() {
     return {
+      sidoCode: null,
+      gugunCode: null,
+      contentTypeId: null,
       markerPositions1: [
         [33.452278, 126.567803],
         [33.452671, 126.574792],
@@ -84,6 +99,7 @@ export default {
       ],
       markers: [],
       infowindow: null,
+      attractionList: [],
     };
   },
   mounted() {
@@ -94,9 +110,10 @@ export default {
       /* global kakao */
       script.onload = () => kakao.maps.load(this.initMap);
       script.src =
-        "//dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey="+process.env.VUE_APP_KAKAO_MAP_API_KEY;
+        "//dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=" + process.env.VUE_APP_KAKAO_MAP_API_KEY;
       document.head.appendChild(script);
     }
+
   },
   methods: {
     initMap() {
@@ -110,6 +127,52 @@ export default {
       //지도 객체는 반응형 관리 대상이 아니므로 initMap에서 선언합니다.
       this.map = new kakao.maps.Map(container, options);
     },
-  },
-};
+    ...mapActions(itemStore, ["getGugun"]),
+    ...mapMutations(itemStore, ["CLEAR_GUGUN_LIST"]),
+    selectSido(sidoCode) {
+      this.sidoCode = sidoCode;
+    },
+    selectGugun(gugunCode) {
+      this.gugunCode = gugunCode;
+    },
+    selectContentType(contentTypeId) {
+      this.contentTypeId = contentTypeId;
+    },
+
+    search() {
+      console.log("===========" + this.sidoCode + this.gugunCode + this.contentTypeId)
+      // 검색 버튼 클릭 시 호출되는 함수
+      // API 호출 및 검색 결과 데이터를 attractionList에 할당하는 로직
+      // const sidoCode = this.sidoCode;
+      // const gugunCode = this.gugunCode;
+      // const contentTypeId = this.contentTypeId;
+      // if (sidoCode !== '0' && gugunCode !== '0' && contentTypeId !== '0') {
+      //   // API 호출을 위한 요청 파라미터 설정
+      // }
+
+      http.get(`trip/search`, {
+        sidoCode: this.sidoCode,
+        gugunCode: this.gugunCode,
+        contentTypeId: this.contentTypeId
+      })
+        .then(({ data }) => {
+          console.log(data);
+          this.attractionList = data;
+        })
+        .catch(({ response }) => {
+          alert('오류 메세지: ' + response.data);
+        })
+
+    },
+    // watch: {
+    //   selectedSido(newValue) {
+    //     if (newValue !== '0') {
+    //       this.loadGugunList(newValue);
+    //     } else {
+    //       this.selectedGugun = '0';
+    //     }
+    //   }
+    // }
+  }
+}
 </script>
