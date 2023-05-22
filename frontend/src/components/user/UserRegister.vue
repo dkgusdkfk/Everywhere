@@ -27,7 +27,7 @@
           <div class="row">
             <div class="col-md-6 mb-3">
               <label for="userid">아이디</label>
-              <input type="text" class="form-control" id="userid" name="id" placeholder="" value="" required>
+              <input type="text" class="form-control" id="userid" v-model="user.id" placeholder="" value="" required>
             </div>
             <div class="col-md-6 mb-3">
               <label for="idcheck-result" class="col form-label"></label>
@@ -39,7 +39,7 @@
           <div class="row">
             <div class="col-md-3 mb-3">
               <label for="pw">비밀번호</label>
-              <input type="password" class="form-control" id="pw" name="password" placeholder="비밀번호 입력" required />
+              <input type="password" class="form-control" id="pw" v-model="user.password" placeholder="비밀번호 입력" required />
             </div>
             <div class="col-md-3 mb-3">
               <label for="pwdcheck" class="col-3 form-label"></label>
@@ -53,11 +53,11 @@
           </div>
           <div class="mb-3">
             <label for="name">이름</label>
-            <input type="text" class="form-control" id="name" name="name" placeholder="이름" required>
+            <input type="text" class="form-control" id="name" v-model="user.name" placeholder="이름" required>
           </div>
           <div class="mb-3">
             <label for="email">이메일</label>
-            <input type="email" class="form-control" id="email" name="email" placeholder="you@example.com" required>
+            <input type="email" class="form-control" id="email" v-model="user.email" placeholder="you@example.com" required>
             <div class="invalid-feedback">이메일을 입력해주세요.</div>
           </div>
           <div class="mb-3">
@@ -66,7 +66,7 @@
           </div>
           <div class="mb-3">
             <label for="address2">상세주소</label>
-            <select-gugun :sidoCode=sidoCode @select-gugun="selectGugun"></select-gugun>
+            <select-gugun :sidoCode=this.user.address1 @select-gugun="selectGugun"></select-gugun>
           </div>
           <button class="btn btn-primary btn-lg btn-block" type="button" @click="regist">가입하기</button>
         </form>
@@ -78,6 +78,7 @@
 
 <script>
 import { mapActions, mapMutations } from "vuex";
+import http from "@/api/http";
 import SelectSido from "@/components/item/SelectSido.vue";
 import SelectGugun from "@/components/item/SelectGugun.vue";
 
@@ -106,13 +107,23 @@ export default {
     selectSido(sidoCode) {
       // this.CLEAR_GUGUN_LIST();
       // this.getGugun(sidoCode);
-      this.user.address2 = sidoCode;
+      this.user.address1 = sidoCode;
     },
     selectGugun(gugunCode) {
       this.user.address2 = gugunCode;
     },
-    async regist() {
-      await this.userRegist(this.user);
+    regist() {
+      http.post(`/user`, this.user)
+        .then(({ data }) => {
+          console.log(data)
+          let msg = "등록 처리시 문제가 발생했습니다.";
+          if (data === "success") {
+            msg = "등록이 완료되었습니다.";
+          }
+          alert(msg);
+          if (this.$route.path != "/") this.$router.push({ name: "main" });
+        })
+
     }
   }
 };
