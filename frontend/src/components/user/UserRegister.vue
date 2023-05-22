@@ -105,8 +105,6 @@ export default {
     ...mapActions(itemStore, ["getGugun"]),
     ...mapMutations(itemStore, ["CLEAR_GUGUN_LIST"]),
     selectSido(sidoCode) {
-      // this.CLEAR_GUGUN_LIST();
-      // this.getGugun(sidoCode);
       this.user.address1 = sidoCode;
     },
     selectGugun(gugunCode) {

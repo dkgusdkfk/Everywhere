@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <div>
     <section class="intro-single">
       <div class="container">
@@ -112,4 +112,4 @@ export default {
     },
   },
 };
-</script>
+</script> -->

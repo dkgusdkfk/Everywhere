@@ -24,4 +24,8 @@ async function unregist(userId, success, fail) {
   await api.delete(`/user/${userId}`).then(success).catch(fail);
 }
 
-export { login, findById, tokenRegeneration, logout, unregist };
+async function update(user, success, fail) {
+  await api.put(`/user`, JSON.stringify(user)).then(success).catch(fail);
+}
+
+export { login, findById, tokenRegeneration, logout, unregist, update };

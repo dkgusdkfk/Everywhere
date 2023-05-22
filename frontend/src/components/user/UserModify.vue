@@ -57,22 +57,15 @@
                                 required></b-form-input>
                             <div class="invalid-feedback">이메일을 입력해주세요.</div>
                         </div>
-                        <!-- <div class="mb-3">
+                        <div class="mb-3">
                             <label for="address1">주소</label>
-                            <select id="address1" name="address1" class="form-select me-2 w-100">
-                                <option value="0" selected>지역 선택</option>
-                                <c:forEach items="${sidoList}" var="sido">
-                                    <option value="${sido.sidoCode}">${sido.sidoName}</option>
-                                </c:forEach>
-                            </select>
+                            <select-sido @select-sido="selectSido"></select-sido>
                         </div>
                         <div class="mb-3">
                             <label for="address2">상세주소</label>
-                            <select id="address2" name="address2" class="form-select me-2 w-100">
-                                <option value="0" selected>상세 지역 선택</option>
-                            </select>
-                        </div> -->
-                        <button class="btn btn-primary btn-lg btn-block" type="submit">수정하기</button>
+                            <select-gugun :sidoCode=this.userInfo.address1 @select-gugun="selectGugun"></select-gugun>
+                        </div>
+                        <button class="btn btn-primary btn-lg btn-block" type="button" @click="update">수정하기</button>
                     </b-form>
                 </div>
             </div>
@@ -82,17 +75,37 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState,mapActions, mapMutations } from "vuex";
+import SelectSido from "@/components/item/SelectSido.vue";
+import SelectGugun from "@/components/item/SelectGugun.vue";
 
 const memberStore = "memberStore";
+const itemStore = "itemStore";
 
 export default {
     name: 'UserModify',
+    components: {
+        SelectSido,
+        SelectGugun,
+    },
     computed: {
         ...mapState(memberStore, ["userInfo"]),
     },
     methods: {
-
+        ...mapActions(itemStore, ["getGugun"]),
+        ...mapActions(memberStore, ["userUpdate"]),
+        ...mapMutations(itemStore, ["CLEAR_GUGUN_LIST"]),
+        selectSido(sidoCode) {
+            this.userInfo.address1 = sidoCode;
+            console.log(this.userInfo.address1)
+        },
+        selectGugun(gugunCode) {
+            this.userInfo.address2 = gugunCode;
+        },
+        async update() {
+            await this.userUpdate(this.userInfo);
+            this.$router.push({ name: "mypage" });
+        }
     }
 }
 
