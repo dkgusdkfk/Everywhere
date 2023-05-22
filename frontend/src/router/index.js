@@ -108,6 +108,11 @@ const routes = [
         path: "list",
         name: "triplist",
         component: () => import(/* webpackChunkName: "board" */ "@/components/trip/AttractionList"),
+      },
+      {
+        path: "hotplace",
+        name: "HotPalce",
+        component: () => import(/* webpackChunkName: "trip" */ "@/components/trip/HotPlace"),
       }
     ]
   }
