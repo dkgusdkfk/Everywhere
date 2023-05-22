@@ -62,20 +62,13 @@
           </div>
           <div class="mb-3">
             <label for="address1">주소</label>
-            <select id="address1" name="address1" class="form-select me-2 w-100">
-              <option value="0" selected>지역 선택</option>
-              <c:forEach items="${sidoList}" var="sido">
-                <option value="${sido.sidoCode}">${sido.sidoName}</option>
-              </c:forEach>
-            </select>
+            <select-sido @select-sido="selectSido"></select-sido>
           </div>
           <div class="mb-3">
             <label for="address2">상세주소</label>
-            <select id="address2" name="address2" class="form-select me-2 w-100">
-              <option value="0" selected>상세 지역 선택</option>
-            </select>
+            <select-gugun :sidoCode=sidoCode @select-gugun="selectGugun"></select-gugun>
           </div>
-          <button class="btn btn-primary btn-lg btn-block" id="registBtn" type="button">가입하기</button>
+          <button class="btn btn-primary btn-lg btn-block" type="button" @click="regist">가입하기</button>
         </form>
       </div>
     </div>
@@ -84,8 +77,44 @@
 </template>
 
 <script>
+import { mapActions, mapMutations } from "vuex";
+import SelectSido from "@/components/item/SelectSido.vue";
+import SelectGugun from "@/components/item/SelectGugun.vue";
+
+const itemStore = "itemStore";
+
 export default {
   name: "UserRegister",
+  components: {
+    SelectSido,
+    SelectGugun,
+  },
+  data() {
+    return {
+      user: {
+        id: null,
+        password: null,
+        email: null,
+        address1: null,
+        address2: null
+      },
+    };
+  },
+  methods: {
+    ...mapActions(itemStore, ["getGugun"]),
+    ...mapMutations(itemStore, ["CLEAR_GUGUN_LIST"]),
+    selectSido(sidoCode) {
+      // this.CLEAR_GUGUN_LIST();
+      // this.getGugun(sidoCode);
+      this.user.address2 = sidoCode;
+    },
+    selectGugun(gugunCode) {
+      this.user.address2 = gugunCode;
+    },
+    async regist() {
+      await this.userRegist(this.user);
+    }
+  }
 };
 </script>
 

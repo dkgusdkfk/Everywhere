@@ -86,9 +86,9 @@
     <!-- End Intro Section -->
     <div> <!-- v-if="recommendAttraction" 추가-->
       <section class="section-property section-t8">
-        <div class="container">
-          <div class="row">
-            <div class="col-md-12">
+        <b-container>
+          <b-row>
+            <b-col>
               <div class="title-wrap d-flex justify-content-between">
                 <div class="title-box">
                   <h2 class="title-a">우리 지역 여행지 추천</h2>
@@ -98,8 +98,8 @@
                   </a>
                 </div>
               </div>
-            </div>
-          </div>
+            </b-col>
+          </b-row>
 
           <div>
             <b-carousel id="carousel-1" v-model="slide" :interval="4000" controls indicators background="#ababab"
@@ -220,7 +220,7 @@
 
           <div class="propery-carousel-pagination carousel-pagination"></div>
 
-        </div>
+        </b-container>
       </section>
     </div>
     <!-- End Latest Properties Section --> <!-- ======= Latest News Section ======= -->
