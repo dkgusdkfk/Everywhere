@@ -1,78 +1,81 @@
 <template>
   <div>
     <section class="intro-single">
-    <div class="container">
-      <div class="row">
-        <div class="col-md-12 col-lg-8">
-          <div class="title-single-box">
-            <h1 class="title-single">회원 가입</h1>
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12 col-lg-8">
+            <div class="title-single-box">
+              <h1 class="title-single">회원 가입</h1>
+            </div>
           </div>
-        </div>
-        <div class="col-md-12 col-lg-4">
-          <nav aria-label="breadcrumb" class="breadcrumb-box d-flex justify-content-lg-end">
-            <ol class="breadcrumb">
-              <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active" aria-current="page"><a href="SignUp.jsp">Sign-Up</a></li>
-            </ol>
-          </nav>
+          <div class="col-md-12 col-lg-4">
+            <nav aria-label="breadcrumb" class="breadcrumb-box d-flex justify-content-lg-end">
+              <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="#">Home</a></li>
+                <li class="breadcrumb-item active" aria-current="page"><a href="SignUp.jsp">Sign-Up</a></li>
+              </ol>
+            </nav>
+          </div>
         </div>
       </div>
-    </div>
-  </section>
-  <!-- End Intro Single--> <!-- ======= Property Grid ======= -->
-  <div class="container">
-    <div class="input-form-backgroud row">
-      <div class="input-form col-md-12 mx-auto">
-        <form id="frm" action="${root}/user/regist" method="post">
-          <div class="row">
-            <div class="col-md-6 mb-3">
-              <label for="userid">아이디</label>
-              <input type="text" class="form-control" id="userid" v-model="user.id" placeholder="" value="" required>
-            </div>
-            <div class="col-md-6 mb-3">
-              <label for="idcheck-result" class="col form-label"></label>
-              <div class="col form-control me-3" style="background-color:lightgray" id="idcheck-result">아이디는 6자 이상 16자
-                이하입니다.</div>
-            </div>
+    </section>
+    <!-- End Intro Single--> <!-- ======= Property Grid ======= -->
+    <div class="container">
+      <div class="input-form-backgroud row">
+        <div class="input-form col-md-12 mx-auto">
+          <form id="frm" action="${root}/user/regist" method="post">
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="userid">아이디</label>
+                <input type="text" class="form-control" id="userid" v-model="user.id" placeholder="" value="" required>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label for="idcheck-result" class="col form-label"></label>
+                <div class="col form-control me-3" style="background-color:lightgray" id="idcheck-result">아이디는 6자 이상 16자
+                  이하입니다.</div>
+              </div>
 
-          </div>
-          <div class="row">
-            <div class="col-md-3 mb-3">
-              <label for="pw">비밀번호</label>
-              <input type="password" class="form-control" id="pw" v-model="user.password" placeholder="비밀번호 입력" required />
             </div>
-            <div class="col-md-3 mb-3">
-              <label for="pwdcheck" class="col-3 form-label"></label>
-              <input type="password" class="form-control" placeholder="비밀번호 확인" id="pwdcheck" required/>
-            </div>
-            <div class="col-md-6 mb-3">
-              <label for="pwdcheck-result" class="col form-label"></label>
-              <div class="col form-control me-3" style="background-color:lightgray" id="pwdcheck-result">비밀번호가 일치하지 않습니다.
+            <div class="row">
+              <div class="col-md-3 mb-3">
+                <label for="pw">비밀번호</label>
+                <input type="password" class="form-control" id="pw" v-model="user.password" placeholder="비밀번호 입력"
+                  required />
+              </div>
+              <div class="col-md-3 mb-3">
+                <label for="pwdcheck" class="col-3 form-label"></label>
+                <input type="password" class="form-control" placeholder="비밀번호 확인" id="pwdcheck" required />
+              </div>
+              <div class="col-md-6 mb-3">
+                <label for="pwdcheck-result" class="col form-label"></label>
+                <div class="col form-control me-3" style="background-color:lightgray" id="pwdcheck-result">비밀번호가 일치하지
+                  않습니다.
+                </div>
               </div>
             </div>
-          </div>
-          <div class="mb-3">
-            <label for="name">이름</label>
-            <input type="text" class="form-control" id="name" v-model="user.name" placeholder="이름" required>
-          </div>
-          <div class="mb-3">
-            <label for="email">이메일</label>
-            <input type="email" class="form-control" id="email" v-model="user.email" placeholder="you@example.com" required>
-            <div class="invalid-feedback">이메일을 입력해주세요.</div>
-          </div>
-          <div class="mb-3">
-            <label for="address1">주소</label>
-            <select-sido @select-sido="selectSido"></select-sido>
-          </div>
-          <div class="mb-3">
-            <label for="address2">상세주소</label>
-            <select-gugun :sidoCode=this.user.address1 @select-gugun="selectGugun"></select-gugun>
-          </div>
-          <button class="btn btn-primary btn-lg btn-block" type="button" @click="regist">가입하기</button>
-        </form>
+            <div class="mb-3">
+              <label for="name">이름</label>
+              <input type="text" class="form-control" id="name" v-model="user.name" placeholder="이름" required>
+            </div>
+            <div class="mb-3">
+              <label for="email">이메일</label>
+              <input type="email" class="form-control" id="email" v-model="user.email" placeholder="you@example.com"
+                required>
+              <div class="invalid-feedback">이메일을 입력해주세요.</div>
+            </div>
+            <div class="mb-3">
+              <label for="address1">주소</label>
+              <select-sido @select-sido="selectSido"></select-sido>
+            </div>
+            <div class="mb-3">
+              <label for="address2">상세주소</label>
+              <select-gugun :sidoCode=this.user.address1 @select-gugun="selectGugun"></select-gugun>
+            </div>
+            <button class="btn btn-primary btn-lg btn-block" type="button" @click="regist">가입하기</button>
+          </form>
+        </div>
       </div>
     </div>
-  </div>
   </div>
 </template>
 
@@ -99,6 +102,8 @@ export default {
         address1: null,
         address2: null
       },
+      isUseId: false,
+      isUsePw: false,
     };
   },
   methods: {
@@ -121,10 +126,15 @@ export default {
           alert(msg);
           if (this.$route.path != "/") this.$router.push({ name: "main" });
         })
-
+    },
+    checkId() {
+      // if (this.user.id < 6 || this.user.id > 16) {
+        
+      // }
     }
   }
 };
+
 </script>
 
 <style></style>
