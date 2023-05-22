@@ -10,7 +10,7 @@
           </router-link>
         </a>
         <ul class="navbar-nav me-5 ms-5 d-flex w-75 align-items-center justify-content-center ">
-          <li class="nav-item dropdown ms-5 me-5"><a class="nav-link" href="${root}/trip/attr" aria-haspopup="true"
+          <li class="nav-item dropdown ms-5 me-5"><a class="nav-link" href="trip/list" aria-haspopup="true"
               aria-expanded="false">지역별 여행지 추천</a></li>
 
           <li class="nav-item dropdown me-5 ms-5"><a class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
