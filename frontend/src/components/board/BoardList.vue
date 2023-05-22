@@ -83,7 +83,6 @@ export default {
     http.get(`/board/all`).then(({ data }) => {
       this.boards = data.boards;
     });
-
   },
   watch: {
     pageNo: function () {
