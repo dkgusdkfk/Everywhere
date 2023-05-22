@@ -237,3 +237,4 @@ $RECYCLE.BIN/
 **/node_modules/*
 **/target/*
 *.idea
+frontend/.env.local
