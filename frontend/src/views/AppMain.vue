@@ -105,19 +105,75 @@
             <b-carousel id="carousel-1" v-model="slide" :interval="4000" controls indicators background="#ababab"
               img-width="1024" img-height="480" style="text-shadow: 1px 1px 2px #333;" @sliding-start="onSlideStart"
               @sliding-end="onSlideEnd">
+                  <!-- <div class="carousel-item-b swiper-slide"> -->
+                  <b-carousel-slide v-for="attraction in attractions" :key="attraction.contentId">
+                    <b-card class="card-box-a" style="width: 20rem;">
+                      <div class="img-box-a" style="height: 480px;">
+                        <b-img :src="attraction.firstImage" alt="" class="img-a img-fluid"></b-img>
+                      </div>
+                      <div class="card-overlay">
+                        <div class="card-overlay-a-content">
+                          <div class="card-header-a">
+                            <h2 class="card-title-a">
+                              <a href="property-single.jsp">
+                                {{ attraction.title }}
+                              </a>
+                            </h2>
+                          </div>
+                          <div class="card-body-a">
+                            <div class="price-box d-flex">
+                              <span class="price-a">주소</span>
+                            </div>
+                            <div style="color: white">{{ attraction.address1 }} {{ attraction.address2 }}</div>
+                            <a href="#" class="link-a">Click here to view <span class="bi bi-chevron-right"></span>
+                            </a>
+                          </div>
+                          <div class="card-footer-a">
+                            <ul class="card-info d-flex justify-content-around">
+                              <li>
+                                <h4 class="card-info-title">Area</h4> <span>340m <sup>2</sup>
+                                </span>
+                              </li>
+                              <li>
+                                <h4 class="card-info-title">Beds</h4> <span>2</span>
+                              </li>
+                              <li>
+                                <h4 class="card-info-title">Baths</h4> <span>4</span>
+                              </li>
+                              <li>
+                                <h4 class="card-info-title">Garages</h4> <span>1</span>
+                              </li>
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+                    </b-card>
+                  </b-carousel-slide>
+                  <!-- </div> -->
+                <!-- <p class="mt-4">
+                  Slide #: {{ slide }} <br>
+                  Sliding: {{ sliding }}
+                </p> -->
+              <!-- End carousel item -->
+            </b-carousel>
+          </div>
 
-              <div v-for="attraction in attractions" :key="attraction.contentId">
+          <!-- <div>
+            <b-carousel id="property-carousel" v-model="slide" :interval="4000" controls indicators background="#ababab"
+                        img-width="1024" img-height="480" style="text-shadow: 1px 1px 2px #333;" @sliding-start="onSlideStart"
+                        @sliding-end="onSlideEnd">
+              <b-carousel-slide v-for="attraction in attractions" :key="attraction.contentId">
                 <div class="carousel-item-b swiper-slide">
-                  <div class="card-box-a card-shadow">
+                  <b-card class="card-box-a card-shadow" style="width: 20rem;">
                     <div class="img-box-a" style="height: 480px;">
-                      <img src="${attraction.firstImage}" alt="" class="img-a img-fluid">
+                      <b-img :src="attraction.firstImage" alt="" class="img-a img-fluid"></b-img>
                     </div>
                     <div class="card-overlay">
                       <div class="card-overlay-a-content">
                         <div class="card-header-a">
                           <h2 class="card-title-a">
                             <a href="property-single.jsp">
-                              ${attraction.title}
+                              {{ attraction.title }}
                             </a>
                           </h2>
                         </div>
@@ -125,35 +181,43 @@
                           <div class="price-box d-flex">
                             <span class="price-a">주소</span>
                           </div>
-                          <div style="color: white">${attraction.address1} ${attraction.address2}</div>
-                          <a href="#" class="link-a">Click here to view <span class="bi bi-chevron-right"></span>
-                          </a>
+                          <div style="color: white">{{ attraction.address1 }} {{ attraction.address2 }}</div>
+                          <a href="#" class="link-a">Click here to view <span class="bi bi-chevron-right"></span></a>
                         </div>
                         <div class="card-footer-a">
                           <ul class="card-info d-flex justify-content-around">
                             <li>
-                              <h4 class="card-info-title">Area</h4> <span>340m <sup>2</sup>
-                              </span>
+                              <h4 class="card-info-title">Area</h4>
+                              <span>340m <sup>2</sup></span>
                             </li>
                             <li>
-                              <h4 class="card-info-title">Beds</h4> <span>2</span>
+                              <h4 class="card-info-title">Beds</h4>
+                              <span>2</span>
                             </li>
                             <li>
-                              <h4 class="card-info-title">Baths</h4> <span>4</span>
+                              <h4 class="card-info-title">Baths</h4>
+                              <span>4</span>
                             </li>
                             <li>
-                              <h4 class="card-info-title">Garages</h4> <span>1</span>
+                              <h4 class="card-info-title">Garages</h4>
+                              <span>1</span>
+                            </li>
+                            <li>
+                              <h4 class="card-info-title">Tags</h4>
+                              <b-tag variant="primary">Tag 1</b-tag>
+                              <b-tag variant="secondary">Tag 2</b-tag>
                             </li>
                           </ul>
                         </div>
                       </div>
                     </div>
-                  </div>
+                  </b-card>
                 </div>
-              </div>
-              <!-- End carousel item -->
+              </b-carousel-slide>
             </b-carousel>
-          </div>
+          </div> -->
+
+
           <div class="propery-carousel-pagination carousel-pagination"></div>
 
         </div>
@@ -178,8 +242,7 @@
 
         <div>
           <b-carousel id="carousel-1" v-model="slide" :interval="4000" controls indicators
-            style="text-shadow: 1px 1px 2px #333;" @sliding-start="onSlideStart"
-            @sliding-end="onSlideEnd">
+            style="text-shadow: 1px 1px 2px #333;" @sliding-start="onSlideStart" @sliding-end="onSlideEnd">
 
             <div v-for="hotPlace in hotPlaces" :key="hotPlace.contentId">
               <b-carousel-slide>
@@ -214,10 +277,6 @@
               <!-- End carousel item -->
             </div>
           </b-carousel>
-          <p class="mt-4">
-            Slide #: {{ slide }} <br>
-            Sliding: {{ sliding }}
-          </p>
         </div>
       </div>
     </section>
@@ -245,7 +304,6 @@ export default {
     }
   },
   created() {
-    console.log(this.userInfo)
     http.get(`/trip/recommend/${this.userInfo.address1}/${this.userInfo.address2}`).then(({ data }) => {
       this.attractions = data;
     })

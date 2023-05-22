@@ -22,7 +22,7 @@
                 </router-link>
               </b-dropdown-item>
               <b-dropdown-item>
-                <router-link :to="{ name: 'hotplace' }" class="link">
+                <router-link :to="{ name: 'HotPalce' }" class="link">
                   Hot Place
                 </router-link>
               </b-dropdown-item>

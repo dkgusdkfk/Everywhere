@@ -99,16 +99,18 @@ const routes = [
       },
     ],
   },
-  // {
-  //   path: "/trip",
-  //   name: "trip",
-  //   component: () => import(/* webpackChunkName: "trip" */ "@/views/AppTrip"),
-  //   children: [
-  //     {
-  //       path: ""
-  //     }
-  //   ]
-  // }
+  {
+    path: "/trip",
+    name: "trip",
+    component: () => import(/* webpackChunkName: "trip" */ "@/views/AppTrip"),
+    children: [
+      {
+        path: "hotplace",
+        name: "HotPalce",
+        component: () => import(/* webpackChunkName: "trip" */ "@/components/trip/HotPlace"),
+      }
+    ]
+  },
 ];
 
 const router = new VueRouter({
