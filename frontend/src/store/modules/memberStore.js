@@ -1,6 +1,6 @@
 import jwtDecode from "jwt-decode";
 import router from "@/router";
-import { login, findById, tokenRegeneration, logout, unregist } from "@/api/member";
+import { login, findById, tokenRegeneration, logout, unregist, update } from "@/api/member";
 
 const memberStore = {
   namespaced: true,
@@ -38,7 +38,7 @@ const memberStore = {
       await login(
         user,
         ({ data }) => {
-          console.log(data)
+          console.log(data);
           if (data.message === "success") {
             let accessToken = data["access-token"];
             let refreshToken = data["refresh-token"];
@@ -73,7 +73,10 @@ const memberStore = {
           }
         },
         async (error) => {
-          console.log("getUserInfo() error code [토큰 만료되어 사용 불가능.] ::: ", error.response.status);
+          console.log(
+            "getUserInfo() error code [토큰 만료되어 사용 불가능.] ::: ",
+            error.response.status
+          );
           commit("SET_IS_VALID_TOKEN", false);
           await dispatch("tokenRegeneration");
         }
@@ -152,8 +155,23 @@ const memberStore = {
         (error) => {
           console.log(error);
         }
-      )
-    }
+      );
+    },
+    async userUpdate({ commit }, user) {
+      await update(
+        user,
+        ({ data }) => {
+          if (data === "success") {
+            commit("SET_USER_INFO", user);
+          } else {
+            console.log("수정 실패!!!");
+          }
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    },
   },
 };
 

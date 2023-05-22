@@ -54,4 +54,9 @@ public class TripRestController {
         return new ResponseEntity<>(tripService.recommendAttractionList(sidoCode, gugunCode), HttpStatus.OK);
     }
 
+    @GetMapping("/getAddress/{sidoCode}/{gugunCode}")
+    public ResponseEntity<?> getAddress(@PathVariable int sidoCode, @PathVariable int gugunCode) {
+        return new ResponseEntity<>(tripService.getAddress(sidoCode, gugunCode), HttpStatus.OK);
+    }
+
 }

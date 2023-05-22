@@ -144,4 +144,9 @@ public class UserRestController {
         }
         return new ResponseEntity<Map<String, Object>>(resultMap, status);
     }
+
+    @GetMapping("/idcheck")
+    public ResponseEntity<?> idCheck(@RequestParam String userId) {
+        return new ResponseEntity<>(userService.idCheck(userId), HttpStatus.OK);
+    }
 }

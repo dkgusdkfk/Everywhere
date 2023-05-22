@@ -48,7 +48,7 @@
                                             </h4>
                                             <h4 class="title-2 mt-4">
                                                 <strong>Address : </strong>
-                                                <!-- <span class="color-text-a">{{address.sidoName}} {{address.gugunName}} </span> -->
+                                                <span class="color-text-a">{{address.sidoName}} {{address.gugunName}} </span>
                                             </h4>
                                         </div>
                                     </div>
@@ -376,13 +376,29 @@
 </template>
 
 <script>
-import {mapState, mapActions} from "vuex";
+import { mapState, mapActions } from "vuex";
+import http from "@/api/http"
 
 const memberStore = "memberStore";
 
 export default {
     name: 'UserMyPage',
+    data() {
+        return {
+            address: {
+                sidoName: null,
+                gugunName: null,
+            }
+        }
+    },
     components: {},
+    created() {
+
+        http.get(`/trip/getAddress/${this.userInfo.address1}/${this.userInfo.address2}`).then(({ data }) => {
+            this.address.sidoName = data.sidoName;
+            this.address.gugunName = data.gugunName;
+        });
+    },
     computed: {
         ...mapState(memberStore, ["userInfo"]),
     },

@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <div>
     <section class="intro-single">
       <div class="container">
@@ -127,6 +127,7 @@ export default {
       //지도 객체는 반응형 관리 대상이 아니므로 initMap에서 선언합니다.
       this.map = new kakao.maps.Map(container, options);
     },
+<<<<<<< HEAD
     ...mapActions(itemStore, ["getGugun"]),
     ...mapMutations(itemStore, ["CLEAR_GUGUN_LIST"]),
     selectSido(sidoCode) {
@@ -176,3 +177,8 @@ export default {
   }
 }
 </script>
+=======
+  },
+};
+</script> -->
+>>>>>>> 9b9500185e7c3c7dc0da64c8fda7e2f18a78804c
