@@ -105,8 +105,8 @@ const routes = [
     component: () => import(/* webpackChunkName: "trip" */ "@/views/AppTrip"),
     children: [
       {
-        path: "list",
-        name: "triplist",
+        path: "triplist",
+        name: "TripList",
         component: () => import(/* webpackChunkName: "board" */ "@/components/trip/AttractionList"),
       },
       {
