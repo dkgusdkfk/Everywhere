@@ -1,7 +1,7 @@
 <template>
     <div>
-        <div class="modal-dialog modal-xl border-0">
-            <div class="modal-content">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content border-0">
                 <div class="modal-header border-0">
                     <button @click="$emit('close')" class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
@@ -29,7 +29,7 @@
                                 <p>
                                     주소 : {{attraction.address1}} {{attraction.address2}}
                                 </p>
-                                <p>
+                                <p v-if="attraction.tel">
                                     전화번호 : {{attraction.tel}}
                                 </p>
                                 <p>

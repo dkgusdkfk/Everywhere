@@ -13,7 +13,7 @@
     </section>
 
     <b-modal ref="attractionModal" centered hide-footer hide-header size="lg">
-      <attraction-modal :attraction="selectAttraction" @close="closeModal" v-if="modal"></attraction-modal>
+      <attraction-modal :attraction="selectAttraction" @close="closeModal" v-if="selectAttraction"></attraction-modal>
     </b-modal>
 
     <div class="d-flex justify-content-center search-spot w-75">
@@ -54,7 +54,7 @@
             </tr>
           </thead>
           <tbody id="trip-list">
-            <tr v-for="attraction in attractionList" :key="attraction.contentId">
+            <tr v-for="attraction in attractionList" :key="attraction.contentId" @click="moveCenter(attraction.latitude, attraction.longitude)">
               <td><b-img :src="attraction.imgPath" style="width: 100px; height: 100px"></b-img></td>
               <td>{{ attraction.title }}</td>
               <td>{{ attraction.address1 }} {{ attraction.address2 }}</td>
@@ -94,7 +94,6 @@ export default {
       positions: [],
       markers: [],
 
-      modal: false,
       selectAttraction: null,
     };
   },
@@ -160,7 +159,6 @@ export default {
 
         kakao.maps.event.addListener(marker, 'click', () => {
           this.selectAttraction = position.attraction;
-          this.modal = true;
           this.openModal();
         })
 
@@ -186,6 +184,9 @@ export default {
         });
       }
     },
+    moveCenter(lat, lng) {
+        this.map.setCenter(new kakao.maps.LatLng(lat, lng));
+    },
 
     ...mapActions(itemStore, ["getGugun"]),
     ...mapMutations(itemStore, ["CLEAR_GUGUN_LIST"]),
@@ -208,7 +209,6 @@ export default {
       http.get(`trip/search`, {params: params})
         .then(({ data }) => {
           this.attractionList = data.attractionList;
-          console.log(this.attractionList)
         })
         .catch(({ response }) => {
           alert('오류 메세지: ' + response.data);

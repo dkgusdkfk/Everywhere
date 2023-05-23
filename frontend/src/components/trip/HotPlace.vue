@@ -23,21 +23,18 @@
                 </div>
             </div>
         </section>
+
+        <b-modal ref="attractionModal" centered hide-footer hide-header size="lg">
+            <attraction-modal :attraction="selectAttraction" @close="closeModal" v-if="selectAttraction"></attraction-modal>
+        </b-modal>
+
         <section class="agents-grid grid">
             <b-container>
                 <b-row>
                     <b-card-group deck>
                         <div v-for="place in hotPlaces" :key="place.contentId">
                             <b-col cols="3">
-                                <b-card class="card-box-d" :img-src="place.imgPath" style="width:300px; height:200px">
-                                <!-- <div class="card-img-d">
-                                    <div v-if="place.imgPath">
-                                        <b-img :src="place.imgPath" alt="" class="img-d img-fluid" ></b-img>
-                                    </div>
-                                    <div v-else>
-                                        <b-img :src="require(`@/assets/img/noimg.gif`)" alt="" class="img-d img-fluid" style="width:500px; height:250px"></b-img>
-                                    </div>
-                                </div> -->
+                                <b-card class="card-box-d" :img-src="place.imgPath" style="width:300px; height:200px" @click="openModal(place.contentId)">
                                     <div class=" card-overlay card-overlay-hover">
                                         <div class="card-header-d">
                                             <div class="card-title-d align-self-center">
@@ -97,13 +94,17 @@
 
 <script>
 import http from "@/api/http";
+import AttractionModal from "@/components/item/AttractionModal.vue";
 
 export default {
     name: 'HotPlace',
-    components: {},
+    components: {
+        AttractionModal
+    },
     data() {
         return {
             hotPlaces: [],
+            selectAttraction: null,
         };
     },
     created() {
@@ -122,7 +123,19 @@ export default {
                 alert(msg);
                 this.$router.go();
             })
-		}
+        },
+
+        // Modal method
+        openModal(contentId) {
+            http.get(`/trip/${contentId}`).then(({ data })  => {
+                console.log(data)
+                this.selectAttraction = data;
+            })
+            this.$refs['attractionModal'].show()
+        },
+        closeModal() {
+            this.$refs['attractionModal'].hide()
+        },
     },
 };
 </script>
