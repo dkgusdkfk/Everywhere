@@ -86,9 +86,11 @@ public class TripServiceImp implements TripService {
             jsonObject.put("title", find.getTitle());
             jsonObject.put("address1", find.getAddress1());
             jsonObject.put("address2", find.getAddress2());
-            jsonObject.put("imagePath", find.getFirstImage());
-            jsonObject.put("zipCode", find.getZipcode());
-            jsonObject.put("telNumber", find.getTel());
+            jsonObject.put("imgPath", find.getFirstImage());
+            jsonObject.put("zipcode", find.getZipcode());
+            jsonObject.put("tel", find.getTel());
+            jsonObject.put("overview", find.getOverview());
+
             return jsonObject;
         } catch (Exception e) {
             e.printStackTrace();

@@ -10,8 +10,10 @@
           </router-link>
         </a>
         <ul class="navbar-nav me-5 ms-5 d-flex w-75 align-items-center justify-content-center ">
-          <li class="nav-item dropdown ms-5 me-5"><a class="nav-link" href="trip/list" aria-haspopup="true"
-              aria-expanded="false">지역별 여행지 추천</a></li>
+          <li class="nav-item dropdown ms-5 me-5 nav-link">
+            <router-link :to="{ name: 'TripList' }" class="link">지역별 여행지 추천</router-link>
+          </li>
+
 
           <li class="nav-item dropdown me-5 ms-5"><a class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
               role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">커뮤니티</a>
