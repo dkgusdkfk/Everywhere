@@ -115,7 +115,41 @@ const routes = [
         component: () => import(/* webpackChunkName: "trip" */ "@/components/trip/HotPlace"),
       }
     ]
-  }
+  },
+  {
+    path: "/notice",
+    name: "notice",
+    component: () => import(/* webpackChunkName: "board" */ "@/views/AppBoard"),
+    redirect: "/notice/list",
+    children: [
+      {
+        path: "list",
+        name: "notice",
+        component: () => import(/* webpackChunkName: "board" */ "@/components/notice/NoticeList"),
+      },
+      {
+        path: "write",
+        name: "noticewrite",
+        beforeEnter: onlyAuthUser,
+        component: () => import(/* webpackChunkName: "board" */ "@/components/notice/NoticeWrite"),
+      },
+      {
+        path: "view/:noticeId",
+        name: "noticeview",
+        component: () => import(/* webpackChunkName: "board" */ "@/components/notice/NoticeView"),
+      },
+      {
+        path: "modify",
+        name: "noticemodify",
+        component: () => import(/* webpackChunkName: "board" */ "@/components/notice/NoticeModify"),
+      },
+      {
+        path: "delete/:noticeId",
+        name: "noticedelete",
+        component: () => import(/* webpackChunkName: "board" */ "@/components/notice/NoticeDelete"),
+      },
+    ],
+  },
 ];
 
 const router = new VueRouter({
