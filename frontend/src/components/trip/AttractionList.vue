@@ -12,6 +12,10 @@
       </div>
     </section>
 
+    <b-modal ref="attractionModal" centered hide-footer hide-header size="lg">
+      <attraction-modal :attraction="selectAttraction" @close="closeModal" v-if="modal"></attraction-modal>
+    </b-modal>
+
     <div class="d-flex justify-content-center search-spot w-75">
         <div class="mb-3">
           <label for="address1">주소</label>
@@ -67,6 +71,7 @@
 import { mapActions, mapMutations } from "vuex";
 import SelectSido from "@/components/item/SelectSido.vue";
 import SelectGugun from "@/components/item/SelectGugun.vue";
+import AttractionModal from "@/components/item/AttractionModal.vue";
 import http from "@/api/http";
 const itemStore = "itemStore";
 
@@ -75,6 +80,7 @@ export default {
   components: {
     SelectSido,
     SelectGugun,
+    AttractionModal,
   },
 
   data() {
@@ -83,9 +89,13 @@ export default {
       gugunCode: null,
       contentTypeId: null,
       attractionList: [],
+
       map: null,
       positions: [],
       markers: [],
+
+      modal: false,
+      selectAttraction: null,
     };
   },
   mounted() {
@@ -101,7 +111,7 @@ export default {
       this.positions = [];
       this.attractionList.forEach((attraction) => {
         let obj = {};
-        obj.title = attraction.title;
+        obj.attraction = attraction;
         obj.latlng = new kakao.maps.LatLng(attraction.latitude, attraction.longitude);
 
         this.positions.push(obj);
@@ -131,9 +141,7 @@ export default {
     },
     loadMaker() {
       // 현재 표시되어있는 marker들이 있다면 marker에 등록된 map을 없애준다.
-      console.log("1111");
       this.deleteMarker();
-      console.log("2222");
       // 마커 이미지를 생성합니다
       //   const imgSrc = require("@/assets/map/markerStar.png");
       // 마커 이미지의 이미지 크기 입니다
@@ -146,9 +154,16 @@ export default {
         const marker = new kakao.maps.Marker({
           map: this.map, // 마커를 표시할 지도
           position: position.latlng, // 마커를 표시할 위치
-          title: position.title, // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
+          // title: position.title, // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
           //   image: markerImage, // 마커의 이미지
         });
+
+        kakao.maps.event.addListener(marker, 'click', () => {
+          this.selectAttraction = position.attraction;
+          this.modal = true;
+          this.openModal();
+        })
+
         this.markers.push(marker);
       });
       console.log("마커수 ::: " + this.markers.length);
@@ -208,7 +223,16 @@ export default {
                 }
                 alert(msg);
             })
-		}
+    },
+
+    // Modal method
+    openModal() {
+      this.$refs['attractionModal'].show()
+
+    },
+    closeModal() {
+      this.$refs['attractionModal'].hide()
+    },
   },
 
 }
