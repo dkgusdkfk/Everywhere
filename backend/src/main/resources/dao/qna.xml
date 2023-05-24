@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.ssafy.enjoytrip.board.model.dao.BoardDao">
+<mapper namespace="com.ssafy.enjoytrip.qna.model.dao.QnaDao">
     <sql id="searchCon">
         <if test="word != null and word != ''">
             <choose>
@@ -16,85 +16,85 @@
         </if>
     </sql>
 
-    <insert id="writeArticle" parameterType="Qna">
-        insert into board(user_id, title, content)
+    <insert id="writeQna" parameterType="Qna">
+        insert into qna(user_id, title, content)
         values (#{userId}, #{title}, #{content})
     </insert>
 
-    <select id="listArticle" parameterType="QnaPageBean" resultType="Qna">
-        select board_id as boardId, user_id as userId, title, content, hit, register_time as registerTime
-        from board
+    <select id="listQna" parameterType="QnaPageBean" resultType="Qna">
+        select qna_id as qnaId, user_id as userId, title, content, hit, register_time as registerTime
+        from qna
         <where>
             <include refid="searchCon"/>
         </where>
-        order by board_id
+        order by qna_id
         limit #{start}, #{interval}
     </select>
 
-    <select id="getTotalArticleCount" parameterType="NoticePageBean" resultType="int">
+    <select id="getTotalQnaCount" parameterType="NoticePageBean" resultType="int">
         select count(*)
-        from board
+        from qna
         <where>
             <include refid="searchCon"></include>
         </where>
     </select>
 
-    <select id="getArticle" parameterType="int" resultType="Qna">
-        select board_id as boardId, user_id as userId, title, content, hit, register_time as registerTime
-        from board
-        where board_id = #{boardId}
+    <select id="getQna" parameterType="int" resultType="Qna">
+        select qna_id as qnaId, user_id as userId, title, content, hit, register_time as registerTime
+        from qna
+        where qna_id = #{qnaId}
     </select>
 
 
     <update id="updateHit" parameterType="int">
-        update board
+        update qna
         set hit = hit + 1
-        where board_id = #{boardId}
+        where qna_id = #{qnaId}
     </update>
 
-    <update id="modifyArticle" parameterType="Qna">
-        update board
+    <update id="modifyQna" parameterType="Qna">
+        update qna
         set user_id=#{userId},
             title=#{title},
             content=#{content},
             hit=#{hit},
             register_time=#{registerTime}
-        where board_id = #{boardId}
+        where qna_id = #{qnaId}
     </update>
 
-    <delete id="deleteArticle" parameterType="int">
+    <delete id="deleteQna" parameterType="int">
         delete
-        from board
-        where board_id = #{boardId}
+        from qna
+        where qna_id = #{qnaId}
     </delete>
 
-    <select id="listComment" parameterType="int" resultType="Comment">
-        select board_id as boardId, user_id as userId, content, comment_id as commentId, register_time as registerTime
-        from comment
-        where board_id = #{boardId}
-        order by board_id
+    <select id="listComment" parameterType="int" resultType="QnaComment">
+        select qna_id as qnaId, user_id as userId, content, comment_id as commentId, register_time as registerTime
+        from qna_comment
+        where qna_id = #{qnaId}
+        order by qna_id
     </select>
 
     <insert id="writeComment" parameterType="QnaComment">
-        insert into comment(board_id, user_id, content)
-        values (#{boardId}, #{userId}, #{content})
+        insert into qna_comment(qna_id, user_id, content)
+        values (#{qnaId}, #{userId}, #{content})
     </insert>
 
-    <select id="getComment" parameterType="int" resultType="Comment">
+    <select id="getComment" parameterType="int" resultType="QnaComment">
         select *
-        from comment
+        from qna_comment
         where comment_id =#{commentId}
     </select>
 
     <update id="modifyComment" parameterType="QnaComment">
-        update comment
+        update qna_comment
         set content=#{content}
         where comment_id = #{commentId}
     </update>
 
     <delete id="deleteComment" parameterType="int">
         delete
-        from comment
+        from qna_comment
         where comment_id = #{commentId}
     </delete>
 </mapper>

@@ -168,6 +168,40 @@ const routes = [
       },
     ],
   },
+  {
+    path: "/qna",
+    name: "qna",
+    component: () => import(/* webpackChunkName: "board" */ "@/views/AppBoard"),
+    redirect: "/qna/list",
+    children: [
+      {
+        path: "list",
+        name: "qna",
+        component: () => import(/* webpackChunkName: "board" */ "@/components/qna/QnaList"),
+      },
+      {
+        path: "write",
+        name: "qnawrite",
+        beforeEnter: onlyAdmin,
+        component: () => import(/* webpackChunkName: "board" */ "@/components/qna/QnaWrite"),
+      },
+      {
+        path: "view/:qnaId",
+        name: "qnaview",
+        component: () => import(/* webpackChunkName: "board" */ "@/components/qna/QnaView"),
+      },
+      {
+        path: "modify",
+        name: "qnamodify",
+        component: () => import(/* webpackChunkName: "board" */ "@/components/qna/QnaModify"),
+      },
+      {
+        path: "delete/:qnaId",
+        name: "qnadelete",
+        component: () => import(/* webpackChunkName: "board" */ "@/components/qna/QnaDelete"),
+      },
+    ],
+  },
 ];
 
 const router = new VueRouter({
