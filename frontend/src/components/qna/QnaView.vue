@@ -38,10 +38,6 @@
                             <strong>조회 : </strong>
                             <span class="color-text-a">{{ qna.hit }}</span>
                         </li>
-                        <li class="list-inline-item">
-                            <strong>댓글 : </strong>
-                            <span class="color-text-a">4</span>
-                        </li>
                     </ul>
                 </div>
             </div>

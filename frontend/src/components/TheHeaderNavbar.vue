@@ -44,6 +44,11 @@
                 </router-link>
               </b-dropdown-item>
               <b-dropdown-item>
+                <router-link :to="{ name: 'qna' }" class="link">
+                  Q&A
+                </router-link>
+              </b-dropdown-item>
+              <b-dropdown-item>
                 <router-link :to="{ name: 'HotPalce' }" class="link">
                   Hot Place
                 </router-link>
