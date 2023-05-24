@@ -12,9 +12,11 @@
       </div>
     </section>
 
-    <div class="map_wrap">
-      <div id="map" style="width:100%;height:100%;position:relative;overflow:hidden;"></div>
-      <div id="menu_wrap" class="bg_white">
+    <b-row>
+      <b-col cols="8">
+        <div class="map_wrap">
+      <div id="map" style="width:100%;height:100%;position:relative;overflow:hidden;" @mousedown.right="finish"></div>
+      <span id="menu_wrap" class="bg_white">
         <div class="option">
           <div>
             <label for="address1">주소</label>
@@ -42,7 +44,7 @@
         </div>
 
         <ul id="placesList">
-            <li class="item" v-for="attraction in attractionList" :key="attraction">
+            <li class="item" v-for="attraction in attractionList" :key="attraction.contentId">
               <span><b-img :src="attraction.imgPath" style="float:left;width:70px; height:50px;margin:10px 0 0 10px;"></b-img></span>
               <div class="info">
                 <h5>{{ attraction.title }}</h5>
@@ -51,9 +53,30 @@
               </div>
             </li>
         </ul>
-      </div>
-
+      </span>
     </div>
+      </b-col>
+      <b-col cols="4">
+        <table class="table table-hover">
+          <thead>
+            <tr style="color: #2eca6a; font-weight: bolder;">
+              <th>대표이미지</th>
+              <th>관광지명</th>
+              <th>주소</th>
+            </tr>
+          </thead>
+          <tbody id="trip-list">
+            <tr v-for="attraction in plans" :key="attraction.contentId" @click="moveCenter(attraction.latitude, attraction.longitude)">
+              <td><b-img :src="attraction.imgPath" style="width: 100px; height: 70px"></b-img></td>
+              <td>{{ attraction.title }}</td>
+              <td>{{ attraction.address1 }} {{ attraction.address2 }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </b-col>
+    </b-row>
+    
+      
 
 
   </div>
@@ -76,14 +99,26 @@ export default {
 
   data() {
     return {
+      // 검색
       sidoCode: null,
       gugunCode: null,
       contentTypeId: null,
       attractionList: [],
 
+      // 마커
       map: null,
       positions: [],
       markers: [],
+
+      // 선의 거리 계산
+      drawingFlag: false,
+      moveLine: null,
+      clickLine: null,
+      distanceOverlay: null,
+      dots: [],
+
+      // 계획
+      plans: [],
     };
   },
   mounted() {
@@ -137,9 +172,10 @@ export default {
           position: position.latlng,
         });
 
+        // 마커 클릭 시
         kakao.maps.event.addListener(marker, 'click', () => {
-          this.selectAttraction = position.attraction;
-          this.openModal();
+          this.plans.push(position.attraction);
+          this.clickMarker(position.latlng);
         })
 
         this.markers.push(marker);
@@ -203,14 +239,166 @@ export default {
       })
     },
 
-    // Modal method
-    openModal() {
-      this.$refs['attractionModal'].show()
+    // 선의 거리 계산
+    clickMarker(clickPosition) {
+      if (!this.drawingFlag) {
+        this.drawingFlag = true;
+        this.deleteClickLine();
+        this.deleteDistance();
+        this.deleteCircleDot();
 
+        this.clickLine = new kakao.maps.Polyline({
+          map: this.map,
+          path: [clickPosition],
+          strokeWeight: 3,
+          strokeColor: '#db4040',
+          strokeOpacity: 1,
+          strokeStyle: 'solid',
+        })
+
+        this.moveLine = new kakao.maps.Polyline({
+          strokeWeight: 3,
+          strokeColor: '#db4040',
+          strokeOpacity: 0.5,
+          strokeStyle: 'solid'
+        })
+
+        this.displayCircleDot(clickPosition, 0);
+      } else {
+        var path = this.clickLine.getPath();
+        path.push(clickPosition);
+        this.clickLine.setPath(path);
+        var distance = Math.round(this.clickLine.getLength());
+        this.displayCircleDot(clickPosition, distance);
+      }
     },
-    closeModal() {
-      this.$refs['attractionModal'].hide()
+
+    finish() {
+      if (this.drawingFlag) {
+        this.moveLine.setMap(null);
+        this.moveLine = null;
+
+        var path = this.clickLine.getPath();
+        if (path.length > 1) {
+          if (this.dots[this.dots.length - 1].distance) {
+            this.dots[this.dots.length - 1].distance.setMap(null);
+            this.dots[this.dots.length - 1].distance = null;
+          }
+          var distance = Math.round(this.clickLine.getLength());
+          var content = this.getTimeHTML(distance);
+
+          this.showDistance(content, path[path.length - 1]);
+        } else {
+          this.deleteClickLine();
+          this.deleteCircleDot();
+          this.deleteDistance();
+        }
+        this.drawingFlag = false;
+      }
     },
+
+    deleteClickLine() {
+      if (this.clickLine) {
+        this.clickLine.setMap(null);
+        this.clickLine = null;
+      }
+    },
+
+    showDistance(content, position) {
+      if (this.distanceOverlay) {
+        this.distanceOverlay.setPosition(position);
+        this.distanceOverlay.setContent(content);
+      } else {
+        this.distanceOverlay = new kakao.maps.CustomOverlay({
+          map: this.map,
+          content: content,
+          position: position,
+          xAnchor: 0,
+          yAnchor: 0,
+          zIndex: 3,
+        })
+      }
+    },
+
+    deleteDistance() {
+      if (this.distanceOverlay) {
+        this.distanceOverlay.setMap(null);
+        this.distanceOverlay = null;
+      }
+    },
+
+    displayCircleDot(position, distance) {
+      var circleOverlay = new kakao.maps.CustomOverlay({
+        content: '<span class="dot"></span>',
+        position: position,
+        zIndex: 1
+      });
+
+      circleOverlay.setMap(this.map);
+
+      if (distance > 0) {
+          var distanceOverlay = new kakao.maps.CustomOverlay({
+              content: '<div class="dotOverlay">거리 <span class="number">' + distance + '</span>m</div>',
+              position: position,
+              yAnchor: 1,
+              zIndex: 2
+          });
+
+          distanceOverlay.setMap(this.map);
+      }
+
+      this.dots.push({circle:circleOverlay, distance: distanceOverlay});
+    },
+
+    deleteCircleDot() {
+      var i;
+
+      for ( i = 0; i < this.dots.length; i++ ){
+          if (this.dots[i].circle) { 
+            this.dots[i].circle.setMap(null);
+          }
+
+          if (this.dots[i].distance) {
+            this.dots[i].distance.setMap(null);
+          }
+      }
+
+      this.dots = [];
+    },
+
+    getTimeHTML(distance) {
+
+      var walkkTime = distance / 67 | 0;
+      var walkHour = '', walkMin = '';
+
+      if (walkkTime > 60) {
+        walkHour = '<span class="number">' + Math.floor(walkkTime / 60) + '</span>시간 '
+      }
+      walkMin = '<span class="number">' + walkkTime % 60 + '</span>분'
+
+      var bycicleTime = distance / 227 | 0;
+      var bycicleHour = '', bycicleMin = '';
+
+      if (bycicleTime > 60) {
+        bycicleHour = '<span class="number">' + Math.floor(bycicleTime / 60) + '</span>시간 '
+      }
+      bycicleMin = '<span class="number">' + bycicleTime % 60 + '</span>분'
+
+      var content = '<ul class="dotOverlay distanceInfo">';
+      content += '    <li>';
+      content += '        <span class="label">총거리</span><span class="number">' + distance + '</span>m';
+      content += '    </li>';
+      content += '    <li>';
+      content += '        <span class="label">도보</span>' + walkHour + walkMin;
+      content += '    </li>';
+      content += '    <li>';
+      content += '        <span class="label">자전거</span>' + bycicleHour + bycicleMin;
+      content += '    </li>';
+      content += '</ul>'
+
+      return content;
+    }
+
   },
 
 }
@@ -252,8 +440,14 @@ export default {
 #placesList .info .gray {color:#8a8a8a;}
 #placesList .info .jibun {padding-left:26px;background:url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/places_jibun.png) no-repeat;}
 #placesList .info .tel {color:#009900;}
-#placesList .item .markerbg {float:left;position:absolute;width:36px; height:37px;margin:10px 0 0 10px;background:url(http://t1.daumcdn.net/mapjsapi/images/transparent.gif) no-repeat;}
-#placesList .item .marker {background-position: 0 -10px;}
+.dot {overflow:hidden;float:left;width:12px;height:12px;background: url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/mini_circle.png');}    
+.dotOverlay {position:relative;bottom:10px;border-radius:6px;border: 1px solid #ccc;border-bottom:2px solid #ddd;float:left;font-size:12px;padding:5px;background:#fff;}
+.dotOverlay:nth-of-type(n) {border:0; box-shadow:0px 1px 2px #888;}    
+.number {font-weight:bold;color:#ee6152;}
+.dotOverlay:after {content:'';position:absolute;margin-left:-6px;left:50%;bottom:-8px;width:11px;height:8px;background:url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/vertex_white_small.png')}
+.distanceInfo {position:relative;top:5px;left:5px;list-style:none;margin:0;}
+.distanceInfo .label {display:inline-block;width:50px;}
+.distanceInfo:after {content:none;}
 
 div label {
   font-weight: bold;
