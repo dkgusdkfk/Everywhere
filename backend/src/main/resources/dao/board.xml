@@ -16,12 +16,12 @@
         </if>
     </sql>
 
-    <insert id="writeArticle" parameterType="Board">
+    <insert id="writeArticle" parameterType="Qna">
         insert into board(user_id, title, content)
         values (#{userId}, #{title}, #{content})
     </insert>
 
-    <select id="listArticle" parameterType="BoardPageBean" resultType="Board">
+    <select id="listArticle" parameterType="QnaPageBean" resultType="Qna">
         select board_id as boardId, user_id as userId, title, content, hit, register_time as registerTime
         from board
         <where>
@@ -39,7 +39,7 @@
         </where>
     </select>
 
-    <select id="getArticle" parameterType="int" resultType="Board">
+    <select id="getArticle" parameterType="int" resultType="Qna">
         select board_id as boardId, user_id as userId, title, content, hit, register_time as registerTime
         from board
         where board_id = #{boardId}
@@ -52,7 +52,7 @@
         where board_id = #{boardId}
     </update>
 
-    <update id="modifyArticle" parameterType="Board">
+    <update id="modifyArticle" parameterType="Qna">
         update board
         set user_id=#{userId},
             title=#{title},
@@ -75,17 +75,18 @@
         order by board_id
     </select>
 
-    <insert id="writeComment" parameterType="Comment">
+    <insert id="writeComment" parameterType="QnaComment">
         insert into comment(board_id, user_id, content)
         values (#{boardId}, #{userId}, #{content})
     </insert>
 
     <select id="getComment" parameterType="int" resultType="Comment">
         select *
+        from comment
         where comment_id =#{commentId}
     </select>
 
-    <update id="modifyComment" parameterType="Comment">
+    <update id="modifyComment" parameterType="QnaComment">
         update comment
         set content=#{content}
         where comment_id = #{commentId}
