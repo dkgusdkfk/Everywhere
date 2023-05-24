@@ -15,7 +15,6 @@ public interface TripDao {
 
     List<Gugun> getGugunList(int gugunCode) throws SQLException;
 
-
     AttractionInfo getDetailInfo(int contentId) throws SQLException;
 
     List<HotPlaceResponse> getHotPlaces() throws SQLException;
@@ -37,4 +36,14 @@ public interface TripDao {
     void addRecommendedUser(HotPlaceRequest request) throws SQLException;
 
     void deleteRecommendUser(HotPlaceRequest request) throws SQLException;
+
+    void addPlan(TripPlan request) throws SQLException;
+
+    void addPlanList(TripPlanListDto request) throws SQLException;
+
+    void deletePlan(int planId) throws SQLException;
+
+    List<TripPlanListDto> getPlanListByPlanId(int planId) throws SQLException;
+
+    TripPlanResponse getPlan(int planId) throws SQLException;
 }

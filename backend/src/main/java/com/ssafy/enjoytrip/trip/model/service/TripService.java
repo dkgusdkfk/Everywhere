@@ -22,4 +22,11 @@ public interface TripService {
     AddressResponse getAddress(int sidoCode, int gugunCode);
 
     List<AttractionInfo> recommendAttractionList(int sidoCode, int gugunCode);
+
+    void addPlan(TripPlan request);
+
+    void deletePlan(int planId);
+
+    TripPlan getPlan(int planId);
+    AttractionInfo getDetail(int contentId);
 }

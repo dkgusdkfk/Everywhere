@@ -44,7 +44,7 @@ public class TripServiceImp implements TripService {
             return jsonObject;
         } catch (Exception e) {
             e.printStackTrace();
-            return null;
+            throw new TripException("여행지 리스트 가져오기 실패");
         }
     }
 
@@ -64,7 +64,7 @@ public class TripServiceImp implements TripService {
             return jsonObjectGugun;
         } catch (Exception e) {
             e.printStackTrace();
-            return null;
+            throw new TripException("구/군 리스트 가져오기 실패");
         }
     }
 
@@ -74,7 +74,7 @@ public class TripServiceImp implements TripService {
             return tripDao.getSidoList();
         } catch (Exception e) {
             e.printStackTrace();
-            return null;
+            throw new TripException("시/도 리스트 가져오기 실패");
         }
     }
 
@@ -94,9 +94,27 @@ public class TripServiceImp implements TripService {
             return jsonObject;
         } catch (Exception e) {
             e.printStackTrace();
-            return null;
+            throw new TripException("attraction info 가져오기 실패");
         }
     }
+   /* public AttractionInfo getDetail(int contentId) {
+        try {
+            AttractionInfo find = tripDao.getDetailInfo(contentId);
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("title", find.getTitle());
+            jsonObject.put("address1", find.getAddress1());
+            jsonObject.put("address2", find.getAddress2());
+            jsonObject.put("imgPath", find.getFirstImage());
+            jsonObject.put("zipcode", find.getZipcode());
+            jsonObject.put("tel", find.getTel());
+            jsonObject.put("overview", find.getOverview());
+
+            return jsonObject;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new TripException("attraction info 가져오기 실패");
+        }
+    }*/
 
     @Override
     public List<HotPlaceResponse> getHotPlaces() {
@@ -104,7 +122,7 @@ public class TripServiceImp implements TripService {
             return tripDao.getHotPlaces();
         } catch (SQLException e) {
             e.printStackTrace();
-            return null;
+            throw new TripException("핫플레이스 가져오기 실패");
         }
     }
 
@@ -126,6 +144,7 @@ public class TripServiceImp implements TripService {
             }
         } catch (Exception e) {
             e.printStackTrace();
+            throw new TripException("핫플레이스 등록 실패");
         }
     }
 
@@ -135,7 +154,7 @@ public class TripServiceImp implements TripService {
             return tripDao.getAddress(sidoCode, gugunCode);
         } catch (SQLException e) {
             e.printStackTrace();
-            return null;
+            throw new TripException("주소 가져오기 실패");
         }
     }
 
@@ -145,8 +164,47 @@ public class TripServiceImp implements TripService {
             return tripDao.recommendAttractionList(sidoCode, gugunCode);
         } catch (SQLException e) {
             e.printStackTrace();
-            return null;
+            throw new TripException("추천리스트 조회 실패");
         }
     }
+
+    public void addPlan(TripPlan request) {
+        try {
+            tripDao.addPlan(request);
+            List<AttractionInfo> list = request.getPlanList();
+            for (int i = 0; i < list.size(); i++) {
+                tripDao.addPlanList(new TripPlanListDto(request.getPlanId(), list.get(i).getContentId(), i + 1));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            e.printStackTrace();
+            throw new TripException("계획 추가 실패");
+        }
+    }
+
+    @Override
+    public void deletePlan(int planId){
+        try{
+            tripDao.deletePlan(planId);
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new TripException("계획 삭제 실패");
+        }
+    }
+  /*      @Override
+    public TripPlan getPlan(int planId) {
+        try{
+            List<TripPlanListDto> list = tripDao.getPlanListByPlanId(planId);
+            List<AttractionInfo> attractionInfos = null;
+            for(TripPlanListDto dto:list){
+                attractionInfos.add(getDetailInfo(dto.getContentId()).);
+            }
+            return new TripPlan(tripDao.getPlan(planId),tripDao.getPlanListByPlanId(planId));
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new TripException("Plan 불러오기 실패");
+        }
+    }
+*/
 
 }

@@ -2,6 +2,7 @@ package com.ssafy.enjoytrip.trip.controller;
 
 import com.ssafy.enjoytrip.trip.model.dto.HotPlaceRequest;
 import com.ssafy.enjoytrip.trip.model.dto.SearchRequest;
+import com.ssafy.enjoytrip.trip.model.dto.TripPlan;
 import com.ssafy.enjoytrip.trip.model.service.TripService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -59,5 +60,22 @@ public class TripRestController {
     public ResponseEntity<?> getAddress(@PathVariable int sidoCode, @PathVariable int gugunCode) {
         return new ResponseEntity<>(tripService.getAddress(sidoCode, gugunCode), HttpStatus.OK);
     }
+    @GetMapping("/plan/{planId}")
+    public ResponseEntity<?> getPlan(@PathVariable int planId){
+        return new ResponseEntity<>(tripService.getPlan(planId),HttpStatus.OK);
+    }
+    @PostMapping("/plan")
+    public ResponseEntity<?> addPlan(@RequestBody TripPlan request){
+        tripService.addPlan(request);
+        return new ResponseEntity<>(SUCCESS, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/plan/{planId}")
+    public ResponseEntity<?> deletePlan(@PathVariable int planId){
+        tripService.deletePlan(planId);
+        return new ResponseEntity<>(SUCCESS, HttpStatus.OK);
+    }
+
+
 
 }

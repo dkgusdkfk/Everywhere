@@ -124,7 +124,7 @@
         where sido_code = #{sidoCode}
           and gugun_code = #{gugunCode}
           and content_type_id in (12, 14, 15, 25, 28)
-        order by rand() limit 10
+        order by rand()
     </select>
 
     <select id="checkRecommend" parameterType="HotPlaceRequest" resultType="int">
@@ -145,4 +145,31 @@
         where content_id = #{contentId}
           and user_id = #{userId}
     </delete>
+    <insert id="addPlan" parameterType="TripPlan">
+        insert into trip_plan
+        values (#{planId}, #{userId}, #{distance}, #{cycleTime}, #{walkTime})
+    </insert>
+    <insert id="addPlanList" parameterType="TripPlanListDto">
+        insert into plan_list
+        values (#{planId}, #{contentId}, #{order})
+    </insert>
+    <delete id="deletePlan" parameterType="int">
+        delete
+        from trip_plan
+        where plan_id = #{planId}
+    </delete>
+
+    <select id="getPlanListByPlanId" parameterType="int" resultType="TripPlanListDto">
+        select *
+        from plan_list
+        where plan_id = #{planId}
+    </select>
+
+    <select id="getPlan" parameterType="int" resultType="TripPlanResponse">
+        select *
+        from trip_plan
+        where plan_id = #{planId}
+    </select>
+
+
 </mapper>
