@@ -42,37 +42,16 @@
         </div>
 
         <ul id="placesList">
-          <!-- <div v-for="attraction in attractionList" :key="attraction.contentId"> -->
             <li class="item" v-for="attraction in attractionList" :key="attraction">
               <span><b-img :src="attraction.imgPath" style="float:left;width:70px; height:50px;margin:10px 0 0 10px;"></b-img></span>
-              <!-- <span class="markerbg"></span> -->
               <div class="info">
                 <h5>{{ attraction.title }}</h5>
                 <span>{{ attraction.address1 }} {{ attraction.address2 }}</span>
                 <span class="tel">{{ attraction.tel }}</span>
               </div>
             </li>
-          <!-- </div> -->
         </ul>
       </div>
-
-      <!-- <table class="table table-hover">
-        <thead>
-          <tr style="color: #2eca6a; font-weight: bolder;">
-            <th>대표이미지</th>
-            <th>관광지명</th>
-            <th>주소</th>
-          </tr>
-        </thead>
-        <tbody id="trip-list">
-          <tr v-for="attraction in attractionList" :key="attraction.contentId"
-            @click="moveCenter(attraction.latitude, attraction.longitude)">
-            <td><b-img :src="attraction.imgPath" style="width: 100px; height: 100px"></b-img></td>
-            <td>{{ attraction.title }}</td>
-            <td>{{ attraction.address1 }} {{ attraction.address2 }}</td>
-          </tr>
-        </tbody>
-      </table> -->
 
     </div>
 
