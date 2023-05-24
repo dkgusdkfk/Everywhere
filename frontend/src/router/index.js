@@ -113,6 +113,11 @@ const routes = [
         path: "hotplace",
         name: "HotPalce",
         component: () => import(/* webpackChunkName: "trip" */ "@/components/trip/HotPlace"),
+      },
+      {
+        path: "tripplan",
+        name: "TripPlan",
+        component: () => import(/* webpackChunkName: "trip" */ "@/components/trip/TripPlan"),
       }
     ]
   },
