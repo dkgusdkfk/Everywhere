@@ -39,7 +39,7 @@
           <option value="39">음식점</option>
         </select>
       </div>
-      <button class="btn btn-outline-success w-50" @click="search" style="width: 200px">검색</button>
+      <button class="btn btn-outline-danger w-50" @click="search" style="width: 200px">검색</button>
     </div>
 
     <div class="d-flex align-items-top result-spot w-75">
@@ -47,7 +47,7 @@
       <div class="row w-50">
         <table class="table table-hover">
           <thead>
-            <tr style="color: #2eca6a; font-weight: bolder;">
+            <tr style="color: #ff4400; font-weight: bolder;">
               <th>대표이미지</th>
               <th>관광지명</th>
               <th>주소</th>
@@ -60,7 +60,7 @@
               <td>{{ attraction.title }}</td>
               <td>{{ attraction.address1 }} {{ attraction.address2 }}</td>
               <td><input type='button' @click="increaseLikeCount(attraction.contentId)" id="hotplaceBtn"
-                  style="background-color: #00DE38;" value='핫플 등록!' /></td>
+                  style="background-color: #ff2bc6;" value='핫플 등록!' /></td>
             </tr>
           </tbody>
         </table>

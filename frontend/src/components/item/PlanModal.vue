@@ -38,7 +38,7 @@
                                 <p>
                                     자전거 : {{ result.cycleTime }}분
                                 </p>
-                                <button @click="complete" class="btn btn-success" data-bs-dismiss="modal">
+                                <button @click="complete" class="btn btn-danger" data-bs-dismiss="modal">
                                     <i class="fas fa-xmark fa-fw"></i>
                                     완료
                                 </button>

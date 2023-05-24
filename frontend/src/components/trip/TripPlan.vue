@@ -19,7 +19,7 @@
     <b-row style="margin: auto">
       <b-col cols="8">
         <div class="map_wrap">
-          <div id="map" style="width:100%;height:100%;position:relative;overflow:hidden;" @mousedown.right="finish"></div>
+          <div id="map" style="width:100%;height:100%;position:relative;overflow:hidden;" @mousedown.right="reset"></div>
           <span id="menu_wrap" class="bg_white">
             <div class="option">
               <div>
@@ -44,7 +44,7 @@
                   <option value="39">음식점</option>
                 </select>
               </div>
-              <button class="btn btn-outline-success w-50" @click="search" style="width: 200px">검색</button>
+              <button class="btn btn-outline-danger w-50" @click="search" style="width: 200px">검색</button>
             </div>
 
             <ul id="placesList">
@@ -65,7 +65,7 @@
         <b-row style="height:460px; overflow:auto;">
           <table class="table table-hover">
             <thead>
-              <tr style="color: #2eca6a; font-weight: bolder;">
+              <tr style="color: #ff4400; font-weight: bolder;">
                 <th>대표이미지</th>
                 <th>관광지명</th>
                 <th>주소</th>
@@ -82,7 +82,7 @@
             </tbody>
           </table>
         </b-row>
-        <b-row><b-button @click="openModal">계획 완료</b-button></b-row>
+        <b-row><b-button @click="complete" style="background-color: #fa3939;">계획 완료</b-button></b-row>
       </b-col>
     </b-row>
 
@@ -186,14 +186,11 @@ export default {
       this.positions.forEach((position) => {
         const marker = new kakao.maps.Marker({
           map: this.map,
-          check: false,
           position: position.latlng,
         });
 
         // 마커 클릭 시
         kakao.maps.event.addListener(marker, 'click', () => {
-          if (marker.check) return;
-          marker.check = true;
           if (!this.drawingFlag) {
             this.plans = [];
           }
@@ -308,17 +305,18 @@ export default {
             this.dots[this.dots.length - 1].distance.setMap(null);
             this.dots[this.dots.length - 1].distance = null;
           }
-          var distance = Math.round(this.clickLine.getLength());
-          var content = this.getTimeHTML(distance);
-
-          this.showDistance(content, path[path.length - 1]);
-        } else {
-          this.deleteClickLine();
-          this.deleteCircleDot();
-          this.deleteDistance();
         }
+        this.deleteClickLine();
+        this.deleteCircleDot();
+        this.deleteDistance();
+
         this.drawingFlag = false;
       }
+    },
+
+    reset() {
+        this.finish();
+        this.plans = [];
     },
 
     deleteClickLine() {
@@ -390,45 +388,21 @@ export default {
       this.dots = [];
     },
 
-    getTimeHTML(distance) {
+    getTime(distance) {
       this.result.totalDistance = distance;
 
       var walkkTime = distance / 67 | 0;
       this.result.walkTime = walkkTime;
-      var walkHour = '', walkMin = '';
-
-      if (walkkTime > 60) {
-        walkHour = '<span class="number">' + Math.floor(walkkTime / 60) + '</span>시간 '
-      }
-      walkMin = '<span class="number">' + walkkTime % 60 + '</span>분'
 
       var bycicleTime = distance / 227 | 0;
       this.result.cycleTime = bycicleTime;
-      var bycicleHour = '', bycicleMin = '';
-
-      if (bycicleTime > 60) {
-        bycicleHour = '<span class="number">' + Math.floor(bycicleTime / 60) + '</span>시간 '
-      }
-      bycicleMin = '<span class="number">' + bycicleTime % 60 + '</span>분'
-
-      var content = '<ul class="dotOverlay distanceInfo">';
-      content += '    <li>';
-      content += '        <span class="label">총거리</span><span class="number">' + distance + '</span>m';
-      content += '    </li>';
-      content += '    <li>';
-      content += '        <span class="label">도보</span>' + walkHour + walkMin;
-      content += '    </li>';
-      content += '    <li>';
-      content += '        <span class="label">자전거</span>' + bycicleHour + bycicleMin;
-      content += '    </li>';
-      content += '</ul>'
-
-      return content;
     },
 
     // 계획 완료
     complete() {
-
+      var distance = Math.round(this.clickLine.getLength());
+      this.getTime(distance);
+      this.openModal();
     },
 
     // Modal method
