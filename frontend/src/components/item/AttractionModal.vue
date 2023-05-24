@@ -35,7 +35,7 @@
                                 <p>
                                     {{attraction.overview}}
                                 </p>
-                                <button @click="$emit('close')" class="btn btn-success" data-bs-dismiss="modal">
+                                <button @click="$emit('close')" class="btn btn-danger" data-bs-dismiss="modal">
                                     <i class="fas fa-xmark fa-fw"></i>
                                     Close Window
                                 </button>
