@@ -9,6 +9,7 @@ import org.json.simple.JSONObject;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -79,7 +80,7 @@ public class TripServiceImp implements TripService {
     }
 
     @Override
-    public JSONObject getDetailInfo(int contentId) {
+    public JSONObject getDetailJSON(int contentId) {
         try {
             AttractionInfo find = tripDao.getDetailInfo(contentId);
             JSONObject jsonObject = new JSONObject();
@@ -97,24 +98,14 @@ public class TripServiceImp implements TripService {
             throw new TripException("attraction info 가져오기 실패");
         }
     }
-   /* public AttractionInfo getDetail(int contentId) {
+   public AttractionInfo getDetail(int contentId) {
         try {
-            AttractionInfo find = tripDao.getDetailInfo(contentId);
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("title", find.getTitle());
-            jsonObject.put("address1", find.getAddress1());
-            jsonObject.put("address2", find.getAddress2());
-            jsonObject.put("imgPath", find.getFirstImage());
-            jsonObject.put("zipcode", find.getZipcode());
-            jsonObject.put("tel", find.getTel());
-            jsonObject.put("overview", find.getOverview());
-
-            return jsonObject;
+            return tripDao.getDetailInfo(contentId);
         } catch (Exception e) {
             e.printStackTrace();
             throw new TripException("attraction info 가져오기 실패");
         }
-    }*/
+    }
 
     @Override
     public List<HotPlaceResponse> getHotPlaces() {
@@ -171,7 +162,7 @@ public class TripServiceImp implements TripService {
     public void addPlan(TripPlan request) {
         try {
             tripDao.addPlan(request);
-            List<AttractionInfo> list = request.getPlanList();
+            List<TripPlanListDto> list = request.getPlanList();
             for (int i = 0; i < list.size(); i++) {
                 tripDao.addPlanList(new TripPlanListDto(request.getPlanId(), list.get(i).getContentId(), i + 1));
             }
@@ -183,28 +174,31 @@ public class TripServiceImp implements TripService {
     }
 
     @Override
-    public void deletePlan(int planId){
-        try{
+    public void deletePlan(int planId) {
+        try {
             tripDao.deletePlan(planId);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             throw new TripException("계획 삭제 실패");
         }
     }
-  /*      @Override
+
+    @Override
     public TripPlan getPlan(int planId) {
-        try{
+        try {
             List<TripPlanListDto> list = tripDao.getPlanListByPlanId(planId);
-            List<AttractionInfo> attractionInfos = null;
-            for(TripPlanListDto dto:list){
-                attractionInfos.add(getDetailInfo(dto.getContentId()).);
+            List<AttractionInfo> attractionInfos = new ArrayList<>();
+            for (TripPlanListDto dto : list) {
+                attractionInfos.add(getDetail(dto.getContentId()));
             }
-            return new TripPlan(tripDao.getPlan(planId),tripDao.getPlanListByPlanId(planId));
-        }catch (Exception e){
+            log.debug("================planId:{}",planId);
+            log.debug("==============tripDao.getPlan{}",tripDao.getPlan(planId));
+            return new TripPlan(tripDao.getPlan(planId), tripDao.getPlanListByPlanId(planId));
+        } catch (Exception e) {
             e.printStackTrace();
             throw new TripException("Plan 불러오기 실패");
         }
     }
-*/
+
 
 }

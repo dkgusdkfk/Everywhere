@@ -12,11 +12,11 @@ import java.util.List;
 public class TripPlan {
     private int planId;
     private String userId;
-    private List<AttractionInfo> planList;
+    private List<TripPlanListDto> planList;
     private int distance;
     private int cycleTime;
     private int walkTime;
-    public TripPlan(TripPlanResponse trip, List<AttractionInfo> list){
+    public TripPlan(TripPlanResponse trip, List<TripPlanListDto> list){
         this.planList=list;
         this.planId= trip.getPlanId();
         this.userId=trip.getUserId();

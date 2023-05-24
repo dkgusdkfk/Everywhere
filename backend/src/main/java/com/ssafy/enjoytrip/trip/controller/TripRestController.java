@@ -37,7 +37,7 @@ public class TripRestController {
 
     @GetMapping("/{contentId}")
     public ResponseEntity<?> detail(@PathVariable int contentId) {
-        return new ResponseEntity<>(tripService.getDetailInfo(contentId), HttpStatus.OK);
+        return new ResponseEntity<>(tripService.getDetailJSON(contentId), HttpStatus.OK);
     }
 
     @GetMapping("/hotPlace")

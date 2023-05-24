@@ -13,7 +13,7 @@ public interface TripService {
 
     JSONObject getGugunList(int sidoCode);
 
-    JSONObject getDetailInfo(int contentId);
+    JSONObject getDetailJSON(int contentId);
 
     List<HotPlaceResponse> getHotPlaces();
 
