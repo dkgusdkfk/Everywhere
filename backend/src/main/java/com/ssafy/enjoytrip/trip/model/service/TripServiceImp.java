@@ -109,14 +109,22 @@ public class TripServiceImp implements TripService {
     }
 
     @Override
-    public void hotRegist(int id) {
+    public void hotRegist(HotPlaceRequest request) {
         try {
-            if (tripDao.hotSearch(id) == null) {
-                tripDao.hotRegist(id);
-            } else {
-                tripDao.hotUpdate(id);
+            if (tripDao.hotSearch(request.getContentId()) == null) {//핫 플레이스에 등록이 되지 않은 관광지라면
+                tripDao.hotRegist(request.getContentId()); // hotplace 등록 및 추천수 +1, 추천자 목록에 user 등록
+                tripDao.addRecommendedUser(request);
+                return;
             }
-        } catch (SQLException e) {
+            //핫 플레이스에 이미 등록이 된 관광지라면
+            if (tripDao.checkRecommend(request) > 0) { //user가 이미 추천을 누른 관광지라면
+                tripDao.hotUpdateMinus(request.getContentId()); //추천수 -1, 추천자 목록에서 삭제
+                tripDao.deleteRecommendUser(request);
+            } else {
+                tripDao.hotUpdatePlus(request.getContentId()); //user가 아직 누르지 않았다면
+                tripDao.addRecommendedUser(request); //추천수 +1, 추천자 목록에 등록
+            }
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
