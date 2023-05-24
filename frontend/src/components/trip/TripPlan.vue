@@ -12,6 +12,10 @@
       </div>
     </section>
 
+    <b-modal ref="planModal" centered hide-footer hide-header size="lg">
+      <plan-modal :plans="plans" :result="result" @close="closeModal" v-if="plans"></plan-modal>
+    </b-modal>
+
     <b-row style="margin: auto">
       <b-col cols="8">
         <div class="map_wrap">
@@ -78,7 +82,7 @@
             </tbody>
           </table>
         </b-row>
-        <b-row><b-button @click="complete">계획 완료</b-button></b-row>
+        <b-row><b-button @click="openModal">계획 완료</b-button></b-row>
       </b-col>
     </b-row>
 
@@ -91,8 +95,10 @@
 import { mapActions, mapMutations } from "vuex";
 import SelectSido from "@/components/item/SelectSido.vue";
 import SelectGugun from "@/components/item/SelectGugun.vue";
+import PlanModal from "@/components/item/PlanModal.vue";
 
 import http from "@/api/http";
+
 const itemStore = "itemStore";
 
 export default {
@@ -100,6 +106,7 @@ export default {
   components: {
     SelectSido,
     SelectGugun,
+    PlanModal,
   },
 
   data() {
@@ -124,6 +131,11 @@ export default {
 
       // 계획
       plans: [],
+      result: {
+        totalDistance: 0,
+        walkTime: 0,
+        cycleTime: 0,
+      },
     };
   },
   mounted() {
@@ -379,8 +391,10 @@ export default {
     },
 
     getTimeHTML(distance) {
+      this.result.totalDistance = distance;
 
       var walkkTime = distance / 67 | 0;
+      this.result.walkTime = walkkTime;
       var walkHour = '', walkMin = '';
 
       if (walkkTime > 60) {
@@ -389,6 +403,7 @@ export default {
       walkMin = '<span class="number">' + walkkTime % 60 + '</span>분'
 
       var bycicleTime = distance / 227 | 0;
+      this.result.cycleTime = bycicleTime;
       var bycicleHour = '', bycicleMin = '';
 
       if (bycicleTime > 60) {
@@ -414,7 +429,16 @@ export default {
     // 계획 완료
     complete() {
 
-    }
+    },
+
+    // Modal method
+    openModal() {
+      this.$refs['planModal'].show()
+
+    },
+    closeModal() {
+      this.$refs['planModal'].hide()
+    },
 
   },
 
