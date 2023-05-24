@@ -9,28 +9,18 @@
             <span class="color-b">Trip</span> -->
           </router-link>
         </a>
-        <ul class="navbar-nav me-5 ms-5 d-flex w-75 align-items-center justify-content-center ">
-          <!-- <li class="nav-item dropdown ms-5 me-5 nav-link">
+        <ul class="navbar-nav d-flex w-75 align-items-center justify-content-center ">
+          <li class="nav-item dropdown nav-link">
             <router-link :to="{ name: 'TripList' }" class="link">지역별 여행지 추천</router-link>
-          </li> -->
-
-          <li class="nav-item dropdown me-5 ms-5"><a class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
-              role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">여행</a>
-            <div class="dropdown-menu">
-              <b-dropdown-item>
-                <router-link :to="{ name: 'TripList' }" class="link">
-                  지역별 여행지 추천
-                </router-link>
-              </b-dropdown-item>
-              <b-dropdown-item>
-                <router-link :to="{ name: 'TripPlan' }" class="link">
-                  여행 계획
-                </router-link>
-              </b-dropdown-item>
-            </div>
+          </li>
+          <li class="nav-item dropdown nav-link">
+            <router-link :to="{ name: 'TripPlan' }" class="link">여행 계획</router-link>
+          </li>
+          <li class="nav-item dropdown nav-link">
+            <router-link :to="{ name: 'HotPlace' }" class="link">Hot Place</router-link>
           </li>
 
-          <li class="nav-item dropdown me-5 ms-5"><a class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
+          <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
               role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">커뮤니티</a>
             <div class="dropdown-menu">
               <b-dropdown-item>
@@ -46,11 +36,6 @@
               <b-dropdown-item>
                 <router-link :to="{ name: 'qna' }" class="link">
                   Q&A
-                </router-link>
-              </b-dropdown-item>
-              <b-dropdown-item>
-                <router-link :to="{ name: 'HotPalce' }" class="link">
-                  Hot Place
                 </router-link>
               </b-dropdown-item>
             </div>
@@ -129,5 +114,14 @@ export default {
 
 #nav {
   height: 130px;
+}
+
+.navbar-nav .nav-link {
+  white-space: nowrap;
+}
+
+.navbar-nav {
+  display: flex;
+  justify-content: flex-start;
 }
 </style>

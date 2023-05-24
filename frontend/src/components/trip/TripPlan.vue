@@ -12,71 +12,76 @@
       </div>
     </section>
 
-    <b-row>
+    <b-row style="margin: auto">
       <b-col cols="8">
         <div class="map_wrap">
-      <div id="map" style="width:100%;height:100%;position:relative;overflow:hidden;" @mousedown.right="finish"></div>
-      <span id="menu_wrap" class="bg_white">
-        <div class="option">
-          <div>
-            <label for="address1">주소</label>
-            <select-sido @select-sido="selectSido"></select-sido>
-          </div>
-          <div>
-            <label for="address2">상세주소</label>
-            <select-gugun :sidoCode=sidoCode @select-gugun="selectGugun"></select-gugun>
-          </div>
-          <div>
-            <label for="address2">관광지 유형</label>
-            <select v-model="contentTypeId" class="custom-select">
-              <option value="null" disabled>선택하세요</option>
-              <option value="12">관광지</option>
-              <option value="14">문화시설</option>
-              <option value="15">축제공연행사</option>
-              <option value="25">여행코스</option>
-              <option value="28">레포츠</option>
-              <option value="32">숙박</option>
-              <option value="38">쇼핑</option>
-              <option value="39">음식점</option>
-            </select>
-          </div>
-          <button class="btn btn-outline-success w-50" @click="search" style="width: 200px">검색</button>
-        </div>
-
-        <ul id="placesList">
-            <li class="item" v-for="attraction in attractionList" :key="attraction.contentId">
-              <span><b-img :src="attraction.imgPath" style="float:left;width:70px; height:50px;margin:10px 0 0 10px;"></b-img></span>
-              <div class="info">
-                <h5>{{ attraction.title }}</h5>
-                <span>{{ attraction.address1 }} {{ attraction.address2 }}</span>
-                <span class="tel">{{ attraction.tel }}</span>
+          <div id="map" style="width:100%;height:100%;position:relative;overflow:hidden;" @mousedown.right="finish"></div>
+          <span id="menu_wrap" class="bg_white">
+            <div class="option">
+              <div>
+                <label for="address1">주소</label>
+                <select-sido @select-sido="selectSido"></select-sido>
               </div>
-            </li>
-        </ul>
-      </span>
-    </div>
+              <div>
+                <label for="address2">상세주소</label>
+                <select-gugun :sidoCode=sidoCode @select-gugun="selectGugun"></select-gugun>
+              </div>
+              <div>
+                <label for="address2">관광지 유형</label>
+                <select v-model="contentTypeId" class="custom-select">
+                  <option value="null" disabled>선택하세요</option>
+                  <option value="12">관광지</option>
+                  <option value="14">문화시설</option>
+                  <option value="15">축제공연행사</option>
+                  <option value="25">여행코스</option>
+                  <option value="28">레포츠</option>
+                  <option value="32">숙박</option>
+                  <option value="38">쇼핑</option>
+                  <option value="39">음식점</option>
+                </select>
+              </div>
+              <button class="btn btn-outline-success w-50" @click="search" style="width: 200px">검색</button>
+            </div>
+
+            <ul id="placesList">
+              <li class="item" v-for="attraction in attractionList" :key="attraction.contentId" @click="moveCenter(attraction.latitude, attraction.longitude)">
+                <span><b-img :src="attraction.imgPath"
+                    style="float:left;width:70px; height:50px;margin:10px 0 0 10px;"></b-img></span>
+                <div class="info">
+                  <h5>{{ attraction.title }}</h5>
+                  <span>{{ attraction.address1 }} {{ attraction.address2 }}</span>
+                  <span class="tel">{{ attraction.tel }}</span>
+                </div>
+              </li>
+            </ul>
+          </span>
+        </div>
       </b-col>
       <b-col cols="4">
-        <table class="table table-hover">
-          <thead>
-            <tr style="color: #2eca6a; font-weight: bolder;">
-              <th>대표이미지</th>
-              <th>관광지명</th>
-              <th>주소</th>
-            </tr>
-          </thead>
-          <tbody id="trip-list">
-            <tr v-for="attraction in plans" :key="attraction.contentId" @click="moveCenter(attraction.latitude, attraction.longitude)">
-              <td><b-img :src="attraction.imgPath" style="width: 100px; height: 70px"></b-img></td>
-              <td>{{ attraction.title }}</td>
-              <td>{{ attraction.address1 }} {{ attraction.address2 }}</td>
-            </tr>
-          </tbody>
-        </table>
+        <b-row style="height:460px; overflow:auto;">
+          <table class="table table-hover">
+            <thead>
+              <tr style="color: #2eca6a; font-weight: bolder;">
+                <th>대표이미지</th>
+                <th>관광지명</th>
+                <th>주소</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="trip-list">
+              <tr v-for="(attraction, index) in plans" :key="index">
+                <td><b-img :src="attraction.imgPath" style="width: 100px; height: 70px"></b-img></td>
+                <td>{{ attraction.title }}</td>
+                <td>{{ attraction.address1 }} {{ attraction.address2 }}</td>
+                <td><i class="bi bi-x-lg" aria-hidden="true" @click="cancel(index)"></i></td>
+              </tr>
+            </tbody>
+          </table>
+        </b-row>
+        <b-row><b-button @click="complete">계획 완료</b-button></b-row>
       </b-col>
     </b-row>
-    
-      
+
 
 
   </div>
@@ -169,11 +174,17 @@ export default {
       this.positions.forEach((position) => {
         const marker = new kakao.maps.Marker({
           map: this.map,
+          check: false,
           position: position.latlng,
         });
 
         // 마커 클릭 시
         kakao.maps.event.addListener(marker, 'click', () => {
+          if (marker.check) return;
+          marker.check = true;
+          if (!this.drawingFlag) {
+            this.plans = [];
+          }
           this.plans.push(position.attraction);
           this.clickMarker(position.latlng);
         })
@@ -228,16 +239,6 @@ export default {
           alert('오류 메세지: ' + response.data);
         })
     },
-    increaseLikeCount(id) {
-      console.log(id)
-      http.post(`/trip/hotRegist/${id}`).then(({ data }) => {
-        let msg = "문제가 발생했습니다.";
-        if (data === "success") {
-          msg = "추천되었습니다.";
-        }
-        alert(msg);
-      })
-    },
 
     // 선의 거리 계산
     clickMarker(clickPosition) {
@@ -268,9 +269,20 @@ export default {
         var path = this.clickLine.getPath();
         path.push(clickPosition);
         this.clickLine.setPath(path);
+        console.log(this.clickLine.getPath())
         var distance = Math.round(this.clickLine.getLength());
         this.displayCircleDot(clickPosition, distance);
       }
+    },
+
+    cancel(index) {
+      this.plans.splice(index, 1);
+
+      this.finish();
+      for (var i = 0; i < this.plans.length; i++) {
+        this.clickMarker(new kakao.maps.LatLng(this.plans[i].latitude,this.plans[i].longitude))
+      }
+      this.search()
     },
 
     finish() {
@@ -337,30 +349,30 @@ export default {
       circleOverlay.setMap(this.map);
 
       if (distance > 0) {
-          var distanceOverlay = new kakao.maps.CustomOverlay({
-              content: '<div class="dotOverlay">거리 <span class="number">' + distance + '</span>m</div>',
-              position: position,
-              yAnchor: 1,
-              zIndex: 2
-          });
+        var distanceOverlay = new kakao.maps.CustomOverlay({
+          content: '<div class="dotOverlay">거리 <span class="number">' + distance + '</span>m</div>',
+          position: position,
+          yAnchor: 1,
+          zIndex: 2
+        });
 
-          distanceOverlay.setMap(this.map);
+        distanceOverlay.setMap(this.map);
       }
 
-      this.dots.push({circle:circleOverlay, distance: distanceOverlay});
+      this.dots.push({ circle: circleOverlay, distance: distanceOverlay });
     },
 
     deleteCircleDot() {
       var i;
 
-      for ( i = 0; i < this.dots.length; i++ ){
-          if (this.dots[i].circle) { 
-            this.dots[i].circle.setMap(null);
-          }
+      for (i = 0; i < this.dots.length; i++) {
+        if (this.dots[i].circle) {
+          this.dots[i].circle.setMap(null);
+        }
 
-          if (this.dots[i].distance) {
-            this.dots[i].distance.setMap(null);
-          }
+        if (this.dots[i].distance) {
+          this.dots[i].distance.setMap(null);
+        }
       }
 
       this.dots = [];
@@ -397,6 +409,11 @@ export default {
       content += '</ul>'
 
       return content;
+    },
+
+    // 계획 완료
+    complete() {
+
     }
 
   },
@@ -422,32 +439,164 @@ export default {
   appearance: none;
 }
 
-.map_wrap, .map_wrap * {margin:0;padding:0;font-family:'Malgun Gothic',dotum,'돋움',sans-serif;font-size:12px;}
-.map_wrap a, .map_wrap a:hover, .map_wrap a:active{color:#000;text-decoration: none;}
-.map_wrap {position:relative;width:100%;height:500px;}
-#menu_wrap {position:absolute;top:0;left:0;bottom:0;width:400px;margin:10px 0 30px 10px;padding:5px;overflow-y:auto;background:rgba(255, 255, 255, 0.7);z-index: 1;font-size:12px;border-radius: 10px;}
-.bg_white {background:#fff;}
-#menu_wrap hr {display: block; height: 1px;border: 0; border-top: 2px solid #5F5F5F;margin:3px 0;}
-#menu_wrap .option{text-align: center;}
-#menu_wrap .option p {margin:10px 0;}  
-#menu_wrap .option button {margin-left:5px;}
+.map_wrap,
+.map_wrap * {
+  margin: 0;
+  padding: 0;
+  font-family: 'Malgun Gothic', dotum, '돋움', sans-serif;
+  font-size: 12px;
+}
 
-#placesList li {list-style: none;}
-#placesList .item {position:relative;border-bottom:1px solid #888;overflow: hidden;cursor: pointer;min-height: 65px;}
-#placesList .item span {display: block;margin-top:4px;}
-#placesList .item h5, #placesList .item .info {text-overflow: ellipsis;overflow: hidden;white-space: nowrap;}
-#placesList .item .info{padding:10px 0 10px 0;}
-#placesList .info .gray {color:#8a8a8a;}
-#placesList .info .jibun {padding-left:26px;background:url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/places_jibun.png) no-repeat;}
-#placesList .info .tel {color:#009900;}
-.dot {overflow:hidden;float:left;width:12px;height:12px;background: url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/mini_circle.png');}    
-.dotOverlay {position:relative;bottom:10px;border-radius:6px;border: 1px solid #ccc;border-bottom:2px solid #ddd;float:left;font-size:12px;padding:5px;background:#fff;}
-.dotOverlay:nth-of-type(n) {border:0; box-shadow:0px 1px 2px #888;}    
-.number {font-weight:bold;color:#ee6152;}
-.dotOverlay:after {content:'';position:absolute;margin-left:-6px;left:50%;bottom:-8px;width:11px;height:8px;background:url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/vertex_white_small.png')}
-.distanceInfo {position:relative;top:5px;left:5px;list-style:none;margin:0;}
-.distanceInfo .label {display:inline-block;width:50px;}
-.distanceInfo:after {content:none;}
+.map_wrap a,
+.map_wrap a:hover,
+.map_wrap a:active {
+  color: #000;
+  text-decoration: none;
+}
+
+.map_wrap {
+  position: relative;
+  width: 100%;
+  height: 500px;
+}
+
+#menu_wrap {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 400px;
+  margin: 10px 0 30px 10px;
+  padding: 5px;
+  overflow-y: auto;
+  background: rgba(255, 255, 255, 0.7);
+  z-index: 1;
+  font-size: 12px;
+  border-radius: 10px;
+}
+
+.bg_white {
+  background: #fff;
+}
+
+#menu_wrap hr {
+  display: block;
+  height: 1px;
+  border: 0;
+  border-top: 2px solid #5F5F5F;
+  margin: 3px 0;
+}
+
+#menu_wrap .option {
+  text-align: center;
+}
+
+#menu_wrap .option p {
+  margin: 10px 0;
+}
+
+#menu_wrap .option button {
+  margin-left: 5px;
+}
+
+#placesList li {
+  list-style: none;
+}
+
+#placesList .item {
+  position: relative;
+  border-bottom: 1px solid #888;
+  overflow: hidden;
+  cursor: pointer;
+  min-height: 65px;
+}
+
+#placesList .item span {
+  display: block;
+  margin-top: 4px;
+}
+
+#placesList .item h5,
+#placesList .item .info {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+#placesList .item .info {
+  padding: 10px 0 10px 0;
+}
+
+#placesList .info .gray {
+  color: #8a8a8a;
+}
+
+#placesList .info .jibun {
+  padding-left: 26px;
+  background: url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/places_jibun.png) no-repeat;
+}
+
+#placesList .info .tel {
+  color: #009900;
+}
+
+.dot {
+  overflow: hidden;
+  float: left;
+  width: 12px;
+  height: 12px;
+  background: url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/mini_circle.png');
+}
+
+.dotOverlay {
+  position: relative;
+  bottom: 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  border-bottom: 2px solid #ddd;
+  float: left;
+  font-size: 12px;
+  padding: 5px;
+  background: #fff;
+}
+
+.dotOverlay:nth-of-type(n) {
+  border: 0;
+  box-shadow: 0px 1px 2px #888;
+}
+
+.number {
+  font-weight: bold;
+  color: #ee6152;
+}
+
+.dotOverlay:after {
+  content: '';
+  position: absolute;
+  margin-left: -6px;
+  left: 50%;
+  bottom: -8px;
+  width: 11px;
+  height: 8px;
+  background: url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/vertex_white_small.png')
+}
+
+.distanceInfo {
+  position: relative;
+  top: 5px;
+  left: 5px;
+  list-style: none;
+  margin: 0;
+}
+
+.distanceInfo .label {
+  display: inline-block;
+  width: 50px;
+}
+
+.distanceInfo:after {
+  content: none;
+}
 
 div label {
   font-weight: bold;
