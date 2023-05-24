@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ssafy.enjoytrip.qna.model.dao.QnaDao">
+    <sql id="searchCon">
+        <if test="word != null and word != ''">
+            <choose>
+                <when test="key == 'title'">
+                    title like concat('%', #{word}, '%')
+                </when>
+                <when test="key == 'userId'">
+                    user_id = #{word}
+                </when>
+            </choose>
+        </if>
+    </sql>
+
+    <insert id="writeQna" parameterType="Qna">
+        insert into qna(user_id, title, content)
+        values (#{userId}, #{title}, #{content})
+    </insert>
+
+    <select id="listQna" parameterType="QnaPageBean" resultType="Qna">
+        select qna_id as qnaId, user_id as userId, title, content, hit, register_time as registerTime
+        from qna
+        <where>
+            <include refid="searchCon"/>
+        </where>
+        order by qna_id
+        limit #{start}, #{interval}
+    </select>
+
+    <select id="getTotalQnaCount" parameterType="NoticePageBean" resultType="int">
+        select count(*)
+        from qna
+        <where>
+            <include refid="searchCon"></include>
+        </where>
+    </select>
+
+    <select id="getQna" parameterType="int" resultType="Qna">
+        select qna_id as qnaId, user_id as userId, title, content, hit, register_time as registerTime
+        from qna
+        where qna_id = #{qnaId}
+    </select>
+
+
+    <update id="updateHit" parameterType="int">
+        update qna
+        set hit = hit + 1
+        where qna_id = #{qnaId}
+    </update>
+
+    <update id="modifyQna" parameterType="Qna">
+        update qna
+        set user_id=#{userId},
+            title=#{title},
+            content=#{content},
+            hit=#{hit},
+            register_time=#{registerTime}
+        where qna_id = #{qnaId}
+    </update>
+
+    <delete id="deleteQna" parameterType="int">
+        delete
+        from qna
+        where qna_id = #{qnaId}
+    </delete>
+
+    <select id="listComment" parameterType="int" resultType="QnaComment">
+        select qna_id as qnaId, user_id as userId, content, comment_id as commentId, register_time as registerTime
+        from qna_comment
+        where qna_id = #{qnaId}
+        order by qna_id
+    </select>
+
+    <insert id="writeComment" parameterType="QnaComment">
+        insert into qna_comment(qna_id, user_id, content)
+        values (#{qnaId}, #{userId}, #{content})
+    </insert>
+
+    <select id="getComment" parameterType="int" resultType="QnaComment">
+        select *
+        from qna_comment
+        where comment_id =#{commentId}
+    </select>
+
+    <update id="modifyComment" parameterType="QnaComment">
+        update qna_comment
+        set content=#{content}
+        where comment_id = #{commentId}
+    </update>
+
+    <delete id="deleteComment" parameterType="int">
+        delete
+        from qna_comment
+        where comment_id = #{commentId}
+    </delete>
+</mapper>
