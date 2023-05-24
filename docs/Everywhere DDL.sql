@@ -155,20 +155,20 @@ CREATE TABLE `enjoytrip`.`like` (
     REFERENCES `enjoytrip`.`qna` (`qna_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION);
+    
+CREATE TABLE `trip_plan` (
+  `plan_id` int NOT NULL AUTO_INCREMENT,
+  `user_id` varchar(45) NOT NULL,
+  `distance` int NOT NULL,
+  `cycleTime` int NOT NULL,
+  `walkTime` int NOT NULL,
+  PRIMARY KEY (`plan_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE `plan_list` (
   `plan_id` int NOT NULL,
   `content_id` int NOT NULL,
   `order` int NOT NULL,
-  `distance` int NOT NULL,
-  `cycle_time` int NOT NULL,
-  `walk_time` int NOT NULL,
   PRIMARY KEY (`plan_id`),
   CONSTRAINT `plan_id_fk` FOREIGN KEY (`plan_id`) REFERENCES `trip_plan` (`plan_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
-CREATE TABLE `trip_plan` (
-  `plan_id` int NOT NULL AUTO_INCREMENT,
-  `user_id` varchar(45) NOT NULL,
-  PRIMARY KEY (`plan_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
