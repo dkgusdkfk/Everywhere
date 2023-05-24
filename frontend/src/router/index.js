@@ -26,6 +26,19 @@ const onlyAuthUser = async (to, from, next) => {
   }
 };
 
+const onlyAdmin = async (to, from, next) => {
+  const checkUserInfo = store.getters["memberStore/checkUserInfo"];
+
+  if (checkUserInfo == null || checkUserInfo.id != "admin") {
+    alert("관리자만 이용할 수 있습니다");
+    router.push({ name: "main" });
+  }
+  else {
+    console.log("로그인 했다!!!!!!!!!!!!!.");
+    next();
+  }
+};
+
 const routes = [
   {
     path: "/",
@@ -135,7 +148,7 @@ const routes = [
       {
         path: "write",
         name: "noticewrite",
-        beforeEnter: onlyAuthUser,
+        beforeEnter: onlyAdmin,
         component: () => import(/* webpackChunkName: "board" */ "@/components/notice/NoticeWrite"),
       },
       {

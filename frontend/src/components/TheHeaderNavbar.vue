@@ -4,7 +4,7 @@
       <div class="container">
         <a class="navbar-brand text-brand">
           <router-link :to="{ name: 'main' }" class="link">
-            <img src="@/assets/img/logo.png" id="logo"/>
+            <img src="@/assets/img/logo.png" id="logo" />
             <!-- <span class="color-a">Enjoy</span>
             <span class="color-b">Trip</span> -->
           </router-link>
@@ -34,6 +34,11 @@
               role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">커뮤니티</a>
             <div class="dropdown-menu">
               <b-dropdown-item>
+                <router-link :to="{ name: 'notice' }" class="link">
+                  공지사항
+                </router-link>
+              </b-dropdown-item>
+              <b-dropdown-item>
                 <router-link :to="{ name: 'board' }" class="link">
                   게시판
                 </router-link>
@@ -51,8 +56,8 @@
           <b-button v-b-toggle.signInBar>
             <i class="bi bi-person-circle"></i>
           </b-button>
-          <b-sidebar id = "signInBar" right no-header>
-            <template #default="{hide}">
+          <b-sidebar id="signInBar" right no-header>
+            <template #default="{ hide }">
               <span class="close-box-collapse right-boxed"><b-button class="bi bi-x" @click="hide"></b-button></span>
               <sign-in-view></sign-in-view>
             </template>
@@ -106,8 +111,6 @@ export default {
 
 /* Service Key */
 /* @import '@/assets/js/key.js'; */
-
-
 </style>
 <style scoped>
 .link {
