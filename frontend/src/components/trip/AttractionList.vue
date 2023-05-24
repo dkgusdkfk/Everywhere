@@ -17,29 +17,29 @@
     </b-modal>
 
     <div class="d-flex justify-content-center search-spot w-75">
-        <div class="mb-3">
-          <label for="address1">주소</label>
-          <select-sido @select-sido="selectSido"></select-sido>
-        </div>
-        <div class="mb-3">
-          <label for="address2">상세주소</label>
-          <select-gugun :sidoCode=sidoCode @select-gugun="selectGugun"></select-gugun>
-        </div>
-        <div class="mb-3">
-          <label for="address2">관광지 유형</label>
-          <select v-model="contentTypeId" class="custom-select">
-            <option value="null" disabled>선택하세요</option>
-            <option value="12">관광지</option>
-            <option value="14">문화시설</option>
-            <option value="15">축제공연행사</option>
-            <option value="25">여행코스</option>
-            <option value="28">레포츠</option>
-            <option value="32">숙박</option>
-            <option value="38">쇼핑</option>
-            <option value="39">음식점</option>
-          </select>
-        </div>
-        <button class="btn btn-outline-success w-50" @click="search" style="width: 200px">검색</button>
+      <div class="mb-3">
+        <label for="address1">주소</label>
+        <select-sido @select-sido="selectSido"></select-sido>
+      </div>
+      <div class="mb-3">
+        <label for="address2">상세주소</label>
+        <select-gugun :sidoCode=sidoCode @select-gugun="selectGugun"></select-gugun>
+      </div>
+      <div class="mb-3">
+        <label for="address2">관광지 유형</label>
+        <select v-model="contentTypeId" class="custom-select">
+          <option value="null" disabled>선택하세요</option>
+          <option value="12">관광지</option>
+          <option value="14">문화시설</option>
+          <option value="15">축제공연행사</option>
+          <option value="25">여행코스</option>
+          <option value="28">레포츠</option>
+          <option value="32">숙박</option>
+          <option value="38">쇼핑</option>
+          <option value="39">음식점</option>
+        </select>
+      </div>
+      <button class="btn btn-outline-success w-50" @click="search" style="width: 200px">검색</button>
     </div>
 
     <div class="d-flex align-items-top result-spot w-75">
@@ -54,11 +54,13 @@
             </tr>
           </thead>
           <tbody id="trip-list">
-            <tr v-for="attraction in attractionList" :key="attraction.contentId" @click="moveCenter(attraction.latitude, attraction.longitude)">
+            <tr v-for="attraction in attractionList" :key="attraction.contentId"
+              @click="moveCenter(attraction.latitude, attraction.longitude)">
               <td><b-img :src="attraction.imgPath" style="width: 100px; height: 100px"></b-img></td>
               <td>{{ attraction.title }}</td>
               <td>{{ attraction.address1 }} {{ attraction.address2 }}</td>
-              <td><input type='button' @click = "increaseLikeCount(attraction.contentId)" id="hotplaceBtn" style="background-color: #00DE38;" value='핫플 등록!'/></td>
+              <td><input type='button' @click="increaseLikeCount(attraction.contentId)" id="hotplaceBtn"
+                  style="background-color: #00DE38;" value='핫플 등록!' /></td>
             </tr>
           </tbody>
         </table>
@@ -73,8 +75,9 @@ import SelectSido from "@/components/item/SelectSido.vue";
 import SelectGugun from "@/components/item/SelectGugun.vue";
 import AttractionModal from "@/components/item/AttractionModal.vue";
 import http from "@/api/http";
+import { mapState } from "vuex";
 const itemStore = "itemStore";
-
+const memberStore = "memberStore";
 export default {
   name: "KakaoMap",
   components: {
@@ -96,6 +99,9 @@ export default {
 
       selectAttraction: null,
     };
+  },
+  computed: {
+    ...mapState(memberStore, ["userInfo"]),
   },
   mounted() {
     if (window.kakao && window.kakao.maps) {
@@ -185,7 +191,7 @@ export default {
       }
     },
     moveCenter(lat, lng) {
-        this.map.setCenter(new kakao.maps.LatLng(lat, lng));
+      this.map.setCenter(new kakao.maps.LatLng(lat, lng));
     },
 
     ...mapActions(itemStore, ["getGugun"]),
@@ -206,7 +212,7 @@ export default {
         gugunCode: this.gugunCode,
         contentTypeId: this.contentTypeId
       };
-      http.get(`trip/search`, {params: params})
+      http.get(`trip/search`, { params: params })
         .then(({ data }) => {
           this.attractionList = data.attractionList;
         })
@@ -215,14 +221,18 @@ export default {
         })
     },
     increaseLikeCount(id) {
-			console.log(id)
-            http.post(`/trip/hotRegist/${id}`).then(({ data }) => {
-                let msg = "문제가 발생했습니다.";
-                if (data === "success") {
-                    msg = "추천되었습니다.";
-                }
-                alert(msg);
-            })
+      console.log(id)
+      http.post(`/trip/hotRegist`, {
+        contentId: id,
+        userId: this.userInfo.id,
+      })
+        .then(({ data }) => {
+          let msg = "문제가 발생했습니다.";
+          if (data === "success") {
+            msg = "추천되었습니다.";
+          }
+          alert(msg);
+        })
     },
 
     // Modal method
@@ -248,7 +258,7 @@ export default {
   line-height: 1.5;
   color: #495057;
   vertical-align: middle;
-  background: #fff ;
+  background: #fff;
   border: 1px solid #ced4da;
   border-radius: 0.25rem;
   -webkit-appearance: none;

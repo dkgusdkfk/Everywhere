@@ -1,5 +1,6 @@
 package com.ssafy.enjoytrip.trip.controller;
 
+import com.ssafy.enjoytrip.trip.model.dto.HotPlaceRequest;
 import com.ssafy.enjoytrip.trip.model.dto.SearchRequest;
 import com.ssafy.enjoytrip.trip.model.service.TripService;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +23,7 @@ public class TripRestController {
         log.debug(String.valueOf(request.getSidoCode()));
         return new ResponseEntity<>(tripService.getAttractionList(request), HttpStatus.OK);
     }
+
     @GetMapping("/sido")
     public ResponseEntity<?> sido() {
         return new ResponseEntity<>(tripService.getSidoList(), HttpStatus.OK);
@@ -42,9 +44,9 @@ public class TripRestController {
         return new ResponseEntity<>(tripService.getHotPlaces(), HttpStatus.OK);
     }
 
-    @PostMapping("/hotRegist/{id}")
-    public ResponseEntity<?> hotRegist(@PathVariable String id) {
-        tripService.hotRegist(Integer.parseInt(id));
+    @PostMapping("/hotRegist")
+    public ResponseEntity<?> hotRegist(@RequestBody HotPlaceRequest request) {
+        tripService.hotRegist(request);
         return new ResponseEntity<>(SUCCESS, HttpStatus.OK);
     }
 

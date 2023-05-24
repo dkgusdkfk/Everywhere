@@ -4,11 +4,28 @@
 
 <mapper namespace="com.ssafy.enjoytrip.trip.model.dao.TripDao">
     <select id="getAttractionList" parameterType="int" resultType="AttractionInfo">
-        select content_id as contentId, content_type_id as contentTypeId, title, addr1 as address1, addr2 as address2, zipcode, tel, first_image as firstImage, first_image2 as firstImage2, readcount, sido_code as sidoCode ,gugun_code as gugunCode, latitude, longitude, mlevel, overview
+        select content_id      as contentId,
+               content_type_id as contentTypeId,
+               title,
+               addr1           as address1,
+               addr2           as address2,
+               zipcode,
+               tel,
+               first_image     as firstImage,
+               first_image2    as firstImage2,
+               readcount,
+               sido_code       as sidoCode,
+               gugun_code      as gugunCode,
+               latitude,
+               longitude,
+               mlevel,
+               overview
         from attraction_info
-        left join attraction_description
-        using(content_id)
-        where sido_code = #{sidoCode} and gugun_code = #{gugunCode} and content_type_id = #{contentTypeId}
+                 left join attraction_description
+                           using (content_id)
+        where sido_code = #{sidoCode}
+          and gugun_code = #{gugunCode}
+          and content_type_id = #{contentTypeId}
     </select>
 
     <select id="getSidoList" resultType="Sido">
@@ -23,17 +40,33 @@
     </select>
 
     <select id="getDetailInfo" parameterType="int" resultType="AttractionInfo">
-        select content_id as contentId, content_type_id as contentTypeId, title, addr1 as address1, addr2 as address2, zipcode, tel, first_image as firstImage, first_image2 as firstImage2, readcount, sido_code as sidoCode ,gugun_code as gugunCode, latitude, longitude, mlevel, overview
+        select content_id      as contentId,
+               content_type_id as contentTypeId,
+               title,
+               addr1           as address1,
+               addr2           as address2,
+               zipcode,
+               tel,
+               first_image     as firstImage,
+               first_image2    as firstImage2,
+               readcount,
+               sido_code       as sidoCode,
+               gugun_code      as gugunCode,
+               latitude,
+               longitude,
+               mlevel,
+               overview
         from attraction_info
-        left join attraction_description
-        using(content_id)
+                 left join attraction_description
+                           using (content_id)
         where content_id = #{contentId}
     </select>
-    
+
     <select id="getHotPlaces" resultType="HotPlaceResponse">
         select h.content_id as contentId, title, addr1 as address1, addr2 as address2, first_image as imgPath, h.count
-        from hotplace as h left join attraction_info as a
-        on h.content_id = a.content_id
+        from hotplace as h
+                 left join attraction_info as a
+                           on h.content_id = a.content_id
         order by count desc
     </select>
 
@@ -44,28 +77,72 @@
     </select>
 
     <insert id="hotRegist" parameterType="int">
-        insert into hotplace (content_id) values (#{contentId})
+        insert into hotplace (content_id)
+        values (#{contentId})
     </insert>
 
-    <update id="hotUpdate" parameterType="int">
-        update hotplace set count = count + 1 where content_id = #{id}
+    <update id="hotUpdatePlus" parameterType="int">
+        update hotplace
+        set count = count + 1
+        where content_id = #{id}
+    </update>
+    <update id="hotUpdateMinus" parameterType="int">
+        update hotplace
+        set count = count - 1
+        where content_id = #{id}
     </update>
 
     <select id="getAddress" parameterType="int" resultType="AddressResponse">
         select sido_name as sidoName, gugun_name as gugunName
         from sido
-        left join gugun
-        using(sido_code)
-        where sido_code = #{sidoCode} and gugun_code = #{gugunCode}
+                 left join gugun
+                           using (sido_code)
+        where sido_code = #{sidoCode}
+          and gugun_code = #{gugunCode}
     </select>
 
     <select id="recommendAttractionList" parameterType="int" resultType="AttractionInfo">
-        select content_id as contentId, content_type_id as contentTypeId, title, addr1 as address1, addr2 as address2, zipcode, tel, first_image as firstImage, first_image2 as firstImage2, readcount, sido_code as sidoCode ,gugun_code as gugunCode, latitude, longitude, mlevel, overview
+        select content_id      as contentId,
+               content_type_id as contentTypeId,
+               title,
+               addr1           as address1,
+               addr2           as address2,
+               zipcode,
+               tel,
+               first_image     as firstImage,
+               first_image2    as firstImage2,
+               readcount,
+               sido_code       as sidoCode,
+               gugun_code      as gugunCode,
+               latitude,
+               longitude,
+               mlevel,
+               overview
         from attraction_info
-        left join attraction_description
-        using(content_id)
-        where sido_code = #{sidoCode} and gugun_code = #{gugunCode} and content_type_id in (12,14,15,25,28)
-        order by rand()
-        limit 10
+                 left join attraction_description
+                           using (content_id)
+        where sido_code = #{sidoCode}
+          and gugun_code = #{gugunCode}
+          and content_type_id in (12, 14, 15, 25, 28)
+        order by rand() limit 10
     </select>
+
+    <select id="checkRecommend" parameterType="HotPlaceRequest" resultType="int">
+        select count(*)
+        from likelist
+        where content_id = #{contentId}
+          and user_id = #{userId}
+    </select>
+
+    <insert id="addRecommendedUser" parameterType="HotPlaceRequest">
+        insert into likelist
+        values (#{contentId}, #{userId})
+    </insert>
+
+    <delete id="deleteRecommendUser" parameterType="HotPlaceRequest">
+        delete
+        from likelist
+        where content_id = #{contentId}
+          and user_id = #{userId}
+    </delete>
 </mapper>
