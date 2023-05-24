@@ -112,3 +112,63 @@ CREATE TABLE `user` (
   `token` varchar(1000) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE `qna` (
+  `qna_id` int NOT NULL AUTO_INCREMENT,
+  `user_id` varchar(45) NOT NULL,
+  `title` varchar(45) NOT NULL,
+  `content` varchar(10000) NOT NULL,
+  `hit` int DEFAULT '0',
+  `register_time` datetime DEFAULT CURRENT_TIMESTAMP,
+  `qnacol` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`qna_id`),
+  KEY `user_id_pk_idx` (`user_id`),
+  CONSTRAINT `user_id_pk` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE `enjoytrip`.`like` (
+  `content_id` INT NOT NULL,
+  `user_id` VARCHAR(45) NOT NULL,
+  INDEX `content_id_fk_idx` (`content_id` ASC) VISIBLE,
+  INDEX `user_id_fk_idx` (`user_id` ASC) VISIBLE,
+  CONSTRAINT `user_id_fk`
+    FOREIGN KEY (`user_id`)
+    REFERENCES `enjoytrip`.`user` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `content_id_fk`
+    FOREIGN KEY (`content_id`)
+    REFERENCES `enjoytrip`.`attraction_info` (`content_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
+    
+    CREATE TABLE `enjoytrip`.`qna_comment` (
+  `qna_id` INT NOT NULL,
+  `comment_id` INT NOT NULL AUTO_INCREMENT,
+  `user_id` VARCHAR(45) NOT NULL,
+  `content` VARCHAR(100) NOT NULL,
+  `register_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`comment_id`),
+  INDEX `qna_id_pk_idx` (`qna_id` ASC) VISIBLE,
+  CONSTRAINT `qna_id_pk`
+    FOREIGN KEY (`qna_id`)
+    REFERENCES `enjoytrip`.`qna` (`qna_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
+
+CREATE TABLE `plan_list` (
+  `plan_id` int NOT NULL,
+  `content_id` int NOT NULL,
+  `order` int NOT NULL,
+  `distance` int NOT NULL,
+  `cycle_time` int NOT NULL,
+  `walk_time` int NOT NULL,
+  PRIMARY KEY (`plan_id`),
+  CONSTRAINT `plan_id_fk` FOREIGN KEY (`plan_id`) REFERENCES `trip_plan` (`plan_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE `trip_plan` (
+  `plan_id` int NOT NULL AUTO_INCREMENT,
+  `user_id` varchar(45) NOT NULL,
+  PRIMARY KEY (`plan_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
