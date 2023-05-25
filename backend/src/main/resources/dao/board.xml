@@ -21,6 +21,11 @@
         values (#{userId}, #{title}, #{content}, #{planId})
     </insert>
 
+    <insert id="writeArticleWithNull" parameterType="Board">
+        insert into board(user_id, title, content, plan_id)
+        values (#{userId}, #{title}, #{content}, null)
+    </insert>
+
     <select id="listArticle" parameterType="QnaPageBean" resultType="Board">
         select board_id as boardId, user_id as userId, title, content, hit, register_time as registerTime, plan_id as planId
         from board

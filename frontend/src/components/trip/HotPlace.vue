@@ -1,6 +1,6 @@
 <template>
     <div>
-        <section class="intro-single">
+        <section class="intro-single" id="main">
             <div class="container">
                 <div class="row">
                     <div class="col-md-12 col-lg-8">
@@ -14,7 +14,7 @@
                             <ol class="breadcrumb">
                                 <li class="breadcrumb-item"><a href="/">Home</a></li>
                                 <li class="breadcrumb-item active" aria-current="page"><a href="">Hot
-                                    Place</a></li>
+                                        Place</a></li>
                             </ol>
                         </nav>
                     </div>
@@ -37,7 +37,8 @@
                                         <div class="card-header-d">
                                             <div class="card-title-d align-self-center">
                                                 <h3 class="title-d">
-                                                    <a href="#" class="link-two" @click="openModal(place.contentId)"> {{ place.title }} </a>
+                                                    <a href="#" class="link-two" @click="openModal(place.contentId)"> {{
+                                                        place.title }} </a>
                                                 </h3>
                                             </div>
                                         </div>
@@ -100,14 +101,22 @@ export default {
     },
     methods: {
         increaseLikeCount(id) {
+            let msg = "추천되었습니다.";
+            http.post(`/trip/checkRecommend`, {
+                contentId: id,
+                userId: this.userInfo.id,
+            }).then(({ data }) => {
+                if (data > 0) {
+                    msg = "추천 취소되었습니다."
+                }
+            })
             http.post(`/trip/hotRegist`, {
                 contentId: id,
                 userId: this.userInfo.id,
             })
                 .then(({ data }) => {
-                    let msg = "문제가 발생했습니다.";
-                    if (data === "success") {
-                        msg = "추천되었습니다.";
+                    if (data !== "success") {
+                        msg = "문제가 발생했습니다.";
                     }
                     alert(msg);
                 })
@@ -129,4 +138,8 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+#main {
+    text-align: left;
+}
+</style>

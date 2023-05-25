@@ -51,6 +51,11 @@ public class TripRestController {
         return new ResponseEntity<>(SUCCESS, HttpStatus.OK);
     }
 
+    @PostMapping("/checkRecommend")
+    public ResponseEntity<?> checkRecommend(@RequestBody HotPlaceRequest request) {
+        return new ResponseEntity<>(tripService.checkRecommend(request), HttpStatus.OK);
+    }
+
     @GetMapping("/recommend/{sidoCode}/{gugunCode}")
     public ResponseEntity<?> recommend(@PathVariable int sidoCode, @PathVariable int gugunCode) {
         return new ResponseEntity<>(tripService.recommendAttractionList(sidoCode, gugunCode), HttpStatus.OK);
@@ -67,9 +72,9 @@ public class TripRestController {
     }
 
     //모든 여행 계획 조회
-    @GetMapping("/plan/all")
-    public ResponseEntity<?> getPlanAll(){
-        return new ResponseEntity<>(tripService.getPlanAll(),HttpStatus.OK);
+    @GetMapping("/plan/all/{userId}")
+    public ResponseEntity<?> getPlanAll(@PathVariable String userId){
+        return new ResponseEntity<>(tripService.getPlanAll(userId),HttpStatus.OK);
     }
 
     //plan id 입력하면 해당 계획의 여행지 리스트 조회

@@ -7,6 +7,7 @@ import com.ssafy.enjoytrip.board.model.dto.Comment;
 import com.ssafy.enjoytrip.board.model.dto.BoardPageBean;
 import com.ssafy.enjoytrip.util.PageUtility;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,6 +16,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class BoardServiceImpl implements BoardService {
     private final BoardDao boardDao;
 
@@ -22,7 +24,9 @@ public class BoardServiceImpl implements BoardService {
     @Override
     public void writeArticle(Board boardDto) {
         try {
-            boardDao.writeArticle(boardDto);
+            log.debug("planId ------------------------------------------------- :{}",boardDto.getPlanId());
+            if(boardDto.getPlanId()==0) boardDao.writeArticleWithNull(boardDto);
+            else boardDao.writeArticle(boardDto);
         } catch (SQLException e) {
             throw new BoardException("게시글 등록 중 오류 발생");
         }

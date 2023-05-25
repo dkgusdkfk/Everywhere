@@ -23,7 +23,7 @@
     <section class="news-single nav-arrow-b">
       <div class="container">
 
-        <div class="d-flex justify-content-end align-content-center p-2 m-auto">
+        <div class="d-flex justify-content-end align-content-center p-2 m-auto" v-if="userInfo && userInfo.id == 'admin'">
           <b-button type="submit" variant="secondary" class="m-1" @click="writeNotice">작성하기</b-button>
         </div>
         <div class="d-flex flex-column justify-content-end align-content-center p-2 m-auto">
@@ -48,6 +48,9 @@
               </tr>
             </table>
           </div>
+          <div @click="movePage">
+            <div class="row" v-html="pageLink"></div>
+          </div>
         </div>
       </div>
     </section>
@@ -55,7 +58,10 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 import http from "@/api/http"
+
+const memberStore = "memberStore";
 
 export default {
   name: "NoticeList",
@@ -70,6 +76,7 @@ export default {
         { value: 'adminId', text: '작성자' },
       ],
       pageNo: '1',
+      pageLink: null,
       fields: [
         { key: "noticeId", label: "글번호", tdClass: "tdClass" },
         { key: "title", label: "제목", tdClass: "tdTitle" },
@@ -82,7 +89,11 @@ export default {
   created() {
     http.get(`/notice/all`).then(({ data }) => {
       this.notices = data.notices;
+      this.pageLink = data.pageLink;
     });
+  },
+  computed: {
+    ...mapState(memberStore, ["userInfo"]),
   },
   watch: {
     pageNo: function () {
@@ -107,11 +118,18 @@ export default {
         .then(({ data }) => {
           console.log(data);
           this.notices = data.notices;
+          this.pageLink = data.pageLink;
         })
         .catch(({ response }) => {
           alert('오류 메세지: ' + response.data);
         })
-    }
+    },
+    movePage(event) {
+      if (event.target.classList.contains('page-link')) {
+        this.pageNo = event.target.getAttribute('data-pg');
+        this.searchList();
+      }
+    },
   },
 };
 </script>

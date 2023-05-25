@@ -53,7 +53,7 @@ public interface TripDao {
 
     void deleteHotPlace(int contentId) throws SQLException;
 
-    List<TripPlanResponse> getPlanAll() throws SQLException;
+    List<TripPlanResponse> getPlanAll(String userId) throws SQLException;
 
     List<Integer> getPlanAttractionList(int planId) throws SQLException;
 }

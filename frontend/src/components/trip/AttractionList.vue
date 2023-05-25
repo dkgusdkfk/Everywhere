@@ -1,6 +1,6 @@
 <template>
   <div>
-    <section class="intro-single">
+    <section class="intro-single" id="main">
       <div class="container">
         <div class="row">
           <div class="col-md-12 col-lg-8">
@@ -222,18 +222,25 @@ export default {
         })
     },
     increaseLikeCount(id) {
-
-      http.post(`/trip/hotRegist`, {
-        contentId: id,
-        userId: this.userInfo.id,
-      })
-        .then(({ data }) => {
-          let msg = "문제가 발생했습니다.";
-          if (data === "success") {
-            msg = "추천되었습니다.";
-          }
-          alert(msg);
+        let msg = "추천되었습니다.";
+        http.post(`/trip/checkRecommend`, {
+            contentId: id,
+            userId: this.userInfo.id,
+        }).then(({ data }) => {
+            if (data > 0) {
+                msg = "추천 취소되었습니다."
+            }
         })
+        http.post(`/trip/hotRegist`, {
+            contentId: id,
+            userId: this.userInfo.id,
+        })
+            .then(({ data }) => {
+                if (data !== "success") {
+                    msg = "문제가 발생했습니다.";
+                }
+                alert(msg);
+            })
     },
 
     // Modal method
@@ -265,5 +272,8 @@ export default {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
+}
+#main {
+  text-align: left;
 }
 </style>

@@ -71,7 +71,7 @@
     </select>
 
     <select id="hotSearch" parameterType="int" resultType="HotPlace">
-        select conten_id as contentId, count
+        select content_id as contentId, count
         from hotplace
         where content_id = #{contentId}
     </select>
@@ -174,10 +174,11 @@
         where plan_id = #{planId}
     </select>
 
-    <select id="getPlanAll" resultType="TripPlanResponse">
+    <select id="getPlanAll" parameterType="string" resultType="TripPlanResponse">
         select
             plan_id as planId, user_id as userId, distance, cycle_time as cycleTime, walk_time as walkTime, title
         from trip_plan
+        where user_id = #{userId}
     </select>
 <!--해당 planId의 plan에 있는 contentId가져오기-->
     <select id="getPlanAttractionList" parameterType="int" resultType="Integer">

@@ -121,7 +121,7 @@
                                                     <h4 class="card-info-title">도보</h4> <span>{{ plan.walkTime }}분</span>
                                                 </li>
                                                 <li>
-                                                    <h4 class="card-info-title">자전거</h4> <span>{{ plan.cycleTime }}</span>
+                                                    <h4 class="card-info-title">자전거</h4> <span>{{ plan.cycleTime }}분</span>
                                                 </li>
                                             </ul>
                                         </div>
@@ -169,7 +169,7 @@ export default {
             this.address.sidoName = data.sidoName;
             this.address.gugunName = data.gugunName;
         });
-        http.get(`/trip/plan/all`).then(({ data }) => {
+        http.get(`/trip/plan/all/${this.userInfo.id}`).then(({ data }) => {
             this.plans = data;
         })
     },
