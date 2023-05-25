@@ -48,7 +48,7 @@
           </b-button>
           <b-sidebar id="signInBar" right no-header>
             <template #default="{ hide }">
-              <span class="close-box-collapse right-boxed"><b-button class="bi bi-x" @click="hide"></b-button></span>
+              <span class="close-box-collapse right-boxed"><b-button class="bi bi-x" style="background-color: none; color: none;" @click="hide"></b-button></span>
               <sign-in-view></sign-in-view>
             </template>
           </b-sidebar>

@@ -19,7 +19,7 @@
                   <h2 class="title-a">우리 지역 여행지 추천</h2>
                 </div>
                 <div class="title-link">
-                  <a href="${root}/trip/recommend">더 보기 <span class="bi bi-chevron-right"></span>
+                  <a href="/trip/triplist">더 보기 <span class="bi bi-chevron-right"></span>
                   </a>
                 </div>
               </div>
@@ -87,7 +87,7 @@
                 <h2 class="title-a">Hot Place</h2>
               </div>
               <div class="title-link">
-                <a href="${root}/trip/hotPlace">더보기 <span class="bi bi-chevron-right"></span>
+                <a href="/trip/hotPlace">더보기 <span class="bi bi-chevron-right"></span>
                 </a>
               </div>
             </div>

@@ -12,11 +12,9 @@
                     <div class="col-md-12 col-lg-4">
                         <nav aria-label="breadcrumb" class="breadcrumb-box d-flex justify-content-lg-end">
                             <ol class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="${root}/index.jsp">Home</a></li>
-                                <li class="breadcrumb-item active" aria-current="page">커뮤니티
-                                </li>
-                                <li class="breadcrumb-item active" aria-current="page">Hot
-                                    Place</li>
+                                <li class="breadcrumb-item"><a href="/">Home</a></li>
+                                <li class="breadcrumb-item active" aria-current="page"><a href="">Hot
+                                    Place</a></li>
                             </ol>
                         </nav>
                     </div>

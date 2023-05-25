@@ -11,9 +11,9 @@
           <div class="col-md-12 col-lg-4">
             <nav aria-label="breadcrumb" class="breadcrumb-box d-flex justify-content-lg-end">
               <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="${root}/index.jsp">Home</a></li>
-                <li class="breadcrumb-item"><a href="#">커뮤니티</a></li>
-                <li class="breadcrumb-item"><a href="#">공지사항</a></li>
+                <li class="breadcrumb-item"><a href="/">Home</a></li>
+                <li class="breadcrumb-item"><a href="/">커뮤니티</a></li>
+                <li class="breadcrumb-item"><a href="">공지사항</a></li>
               </ol>
             </nav>
           </div>
