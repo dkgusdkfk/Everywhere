@@ -150,14 +150,18 @@
         values (#{planId}, #{userId}, #{distance}, #{cycleTime}, #{walkTime})
     </insert>
     <insert id="addPlanList" parameterType="TripPlanListDto">
-        insert into plan_list
-        values (#{planId}, #{contentId}, #{order})
+        insert into trip_plan(user_id, distance, cycle_time, walk_time)
+        values (#{userId}, #{distance}, #{cycleTime}, #{walkTime})
     </insert>
     <delete id="deletePlan" parameterType="int">
         delete
         from trip_plan
         where plan_id = #{planId}
     </delete>
+
+    <select id="getPlanId" resultType="int">
+        select last_insert_id()
+    </select>
 
     <select id="getPlanListByPlanId" parameterType="int" resultType="TripPlanListDto">
         select *
