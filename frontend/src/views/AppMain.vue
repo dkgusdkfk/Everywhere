@@ -1,107 +1,12 @@
 <template>
   <div>
-    <div class="intro intro-carousel swiper position-relative">
-      <b-carousel
-      id="carousel-1"
-      v-model="slide"
-      :interval="4000"
-      controls
-      indicators
-      background="#ababab"
-      img-width="1024"
-      img-height="480"
-      style="text-shadow: 1px 1px 2px #333;"
-      @sliding-start="onSlideStart"
-      @sliding-end="onSlideEnd"
-    >
-      <!-- Text slides with image -->
-      <b-carousel-slide
-        caption="First slide"
-        text="Nulla vitae elit libero, a pharetra augue mollis interdum."
-        img-src="@/assets/img/logo2.png"
-      ></b-carousel-slide>
-    </b-carousel>
-
-
-      <div class="swiper-wrapper">
-        <div class="swiper-slide carousel-item-a intro-item bg-image"
-          style="background-image: url(require(@/assets/img/logo2.png))">
-          <div class="overlay overlay-a"></div>
-          <div class="intro-content display-table">
-            <div class="table-cell">
-              <div class="container">
-                <div class="row">
-                  <div class="col-lg-8">
-                    <div class="intro-body">
-                      <p class="intro-title-top">
-                        Jong-ro, Seoul
-                        <!-- <br> 78345 -->
-                      </p>
-                      <h1 class="intro-title mb-4 ">
-                        <span class="color-b">03045 </span> <br> Gwanghwamun
-                      </h1>
-                      <p class="intro-subtitle intro-price">
-                        <a href="#"><span class="price-a">view more</span></a>
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="swiper-slide carousel-item-a intro-item bg-image"
-          style="background-image: url(${root}/assets/img/jamsil-tower.jpg)">
-          <div class="overlay overlay-a"></div>
-          <div class="intro-content display-table">
-            <div class="table-cell">
-              <div class="container">
-                <div class="row">
-                  <div class="col-lg-8">
-                    <div class="intro-body">
-                      <p class="intro-title-top">
-                        Song-pa, Seoul <br> 05556
-                      </p>
-                      <h1 class="intro-title mb-4">
-                        <span class="color-b">300 </span> <br> Olympic-ro
-                      </h1>
-                      <p class="intro-subtitle intro-price">
-                        <a href="#"><span class="price-a">view more</span></a>
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="swiper-slide carousel-item-a intro-item bg-image"
-          style="background-image: url(${root}/assets/img/Suwon-Hwaseong.jpg)">
-          <div class="overlay overlay-a"></div>
-          <div class="intro-content display-table">
-            <div class="table-cell">
-              <div class="container">
-                <div class="row">
-                  <div class="col-lg-8">
-                    <div class="intro-body">
-                      <p class="intro-title-top">
-                        Suwon, Gyeonggi <br> 16255
-                      </p>
-                      <h1 class="intro-title mb-4">
-                        <span class="color-b">21 </span> <br> Changnyong-daero
-                      </h1>
-                      <p class="intro-subtitle intro-price">
-                        <a href="#"><span class="price-a">view more</span></a>
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="swiper-pagination"></div>
+    <div>
+      <b-carousel id="carousel-fade" style="text-shadow: 0px 0px 2px #000" fade indicators img-width="1024"
+        img-height="480">
+        <b-carousel-slide caption="First Slide" img-src="https://picsum.photos/1024/480/?image=10"></b-carousel-slide>
+        <b-carousel-slide caption="Second Slide" img-src="https://picsum.photos/1024/480/?image=12"></b-carousel-slide>
+        <b-carousel-slide caption="Third Slide" img-src="https://picsum.photos/1024/480/?image=22"></b-carousel-slide>
+      </b-carousel>
     </div>
     <!-- End Intro Section -->
     <div v-if="userInfo">
@@ -191,25 +96,25 @@
 
         <div>
           <b-card-group deck>
-            <div v-for="place in hotPlaces.slice(0,6)" :key="place.contentId">
+            <div v-for="place in hotPlaces.slice(0, 6)" :key="place.contentId">
               <b-col cols="3">
                 <b-card class="card-box-b card-shadow news-box" :img-src="place.imgPath" style="width:300px; height:200px"
                   @click="openModal(place.contentId)">
                   <div class="card-overlay">
-                <div class="card-header-b">
-                  <div class="card-category-b">
-                    <a class="category-b">♥ {{ place.count }}</a>
+                    <div class="card-header-b">
+                      <div class="card-category-b">
+                        <a class="category-b">♥ {{ place.count }}</a>
+                      </div>
+                      <div class="card-title-b">
+                        <h2 class="title-2">
+                          <a>{{ place.title }}</a>
+                        </h2>
+                      </div>
+                      <div class="card-date">
+                        <span class="date-b">{{ place.address1 }} {{ place.address2 }}</span>
+                      </div>
+                    </div>
                   </div>
-                  <div class="card-title-b">
-                    <h2 class="title-2">
-                      <a>{{ place.title }}</a>
-                    </h2>
-                  </div>
-                  <div class="card-date">
-                    <span class="date-b">{{ place.address1 }} {{ place.address2 }}</span>
-                  </div>
-                </div>
-              </div>
                 </b-card>
               </b-col>
             </div>
@@ -255,11 +160,11 @@ export default {
   },
   methods: {
     onSlideStart() {
-        this.sliding = true
-      },
-      onSlideEnd() {
-        this.sliding = false
-      }
+      this.sliding = true
+    },
+    onSlideEnd() {
+      this.sliding = false
+    }
   }
 };
 </script>

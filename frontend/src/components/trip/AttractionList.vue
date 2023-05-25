@@ -39,7 +39,7 @@
           <option value="39">음식점</option>
         </select>
       </div>
-      <button class="btn btn-outline-danger w-50" @click="search" style="width: 200px">검색</button>
+      <button class="btn btn-outline-danger" @click="search" style="width: 100px; height:40px; margin-top:30px; margin-left:10px; ">검색</button>
     </div>
 
     <div class="d-flex align-items-top result-spot w-75">
