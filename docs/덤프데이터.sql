@@ -6,9 +6,9 @@ insert into user values('admin','1','admin','admin@ssafy.com','1','1',null);
 insert into user values('dkgusdkfk','1234','백아현','ss@ssafy.com','1','4',null);
 insert into user values('1','1','1','1@1.com','1','2',null);
 
-insert into board values(1,'admin','게시판 테스트','test content',default,default);
-insert into board values(2,'ssafy','안녕하세요','안녕하세요',default,default);
-insert into board values(3,'dkgusdkfk','첫 글','처음',default,default);
+insert into board values(1,'admin','게시판 테스트','test content',default,default,default);
+insert into board values(2,'ssafy','안녕하세요','안녕하세요',default,default,default);
+insert into board values(3,'dkgusdkfk','첫 글','처음',default,default,default);
 
 insert into comment values(1,1,'ssafy','test',default);
 insert into comment values(1,2,'admin','댓글',default);

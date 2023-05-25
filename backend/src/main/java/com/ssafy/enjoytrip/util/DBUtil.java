@@ -7,7 +7,7 @@ import java.sql.SQLException;
 public class DBUtil {
 	
 	private static final String DRIVER = "com.mysql.cj.jdbc.Driver";
-	private static final String URL = "jdbc:mysql://localhost:3306/enjoytrip?serverTimezone=UTC";
+	private static final String URL = "jdbc:mysql://localhost:3306/everywhere?serverTimezone=UTC";
 	private static final String DB_ID = "ssafy";
 	private static final String DB_PWD = "ssafy";
 	

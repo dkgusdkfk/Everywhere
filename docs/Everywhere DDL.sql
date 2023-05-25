@@ -1,23 +1,5 @@
-
-create database everywhere;
-use everywhere;
-
-CREATE TABLE `sido` (
-  `sido_code` int(11) NOT NULL,
-  `sido_name` varchar(30) DEFAULT NULL,
-  PRIMARY KEY (`sido_code`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
-
-CREATE TABLE `gugun` (
-  `gugun_code` int NOT NULL,
-  `gugun_name` varchar(30) DEFAULT NULL,
-  `sido_code` int NOT NULL,
-  PRIMARY KEY (`gugun_code`,`sido_code`),
-  KEY `gugun_to_sido_sido_code_fk_idx` (`sido_code`),
-  CONSTRAINT `gugun_to_sido_sido_code_fk` FOREIGN KEY (`sido_code`) REFERENCES `sido` (`sido_code`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
+-- create database everywhere;
+-- use everywhere;
 
 CREATE TABLE `user` (
   `id` varchar(20) NOT NULL,
@@ -30,6 +12,24 @@ CREATE TABLE `user` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+CREATE TABLE `trip_plan` (
+  `plan_id` int NOT NULL AUTO_INCREMENT,
+  `user_id` varchar(45) NOT NULL,
+  `title` varchar(100) NOT NULL,
+  `distance` int NOT NULL,
+  `cycle_time` int NOT NULL,
+  `walk_time` int NOT NULL,
+  PRIMARY KEY (`plan_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE `plan_list` (
+  `plan_id` int NOT NULL,
+  `content_id` int NOT NULL,
+  `sequence` int NOT NULL,
+  PRIMARY KEY (`plan_id`,`sequence`),
+  CONSTRAINT `plan_id_fk` FOREIGN KEY (`plan_id`) REFERENCES `trip_plan` (`plan_id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 CREATE TABLE `board` (
   `board_id` int NOT NULL AUTO_INCREMENT,
   `user_id` varchar(16) NOT NULL,
@@ -37,9 +37,12 @@ CREATE TABLE `board` (
   `content` varchar(10000) DEFAULT NULL,
   `hit` int DEFAULT '0',
   `register_time` datetime DEFAULT CURRENT_TIMESTAMP,
+  `plan_id` int DEFAULT NULL,
   PRIMARY KEY (`board_id`),
   KEY `board_ibfk_1` (`user_id`),
-  CONSTRAINT `board_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `board_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  KEY `board_idfk_1` (`plan_id`),
+  CONSTRAINT `board_idfk_1` FOREIGN KEY (`plan_id`) REFERENCES `trip_plan` (`plan_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `comment` (
@@ -80,24 +83,6 @@ CREATE TABLE `notice` (
   PRIMARY KEY (`notice_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE `trip_plan` (
-  `plan_id` int NOT NULL AUTO_INCREMENT,
-  `user_id` varchar(45) NOT NULL,
-  `title` varchar(100) NOT NULL,
-  `distance` int NOT NULL,
-  `cycle_time` int NOT NULL,
-  `walk_time` int NOT NULL,
-  PRIMARY KEY (`plan_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
-
-CREATE TABLE `plan_list` (
-  `plan_id` int NOT NULL,
-  `content_id` int NOT NULL,
-  `sequence` int NOT NULL,
-  PRIMARY KEY (`plan_id`,`sequence`),
-  CONSTRAINT `plan_id_fk` FOREIGN KEY (`plan_id`) REFERENCES `trip_plan` (`plan_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
 CREATE TABLE `qna` (
   `qna_id` int NOT NULL AUTO_INCREMENT,
   `user_id` varchar(45) NOT NULL,
@@ -105,7 +90,6 @@ CREATE TABLE `qna` (
   `content` varchar(10000) NOT NULL,
   `hit` int DEFAULT 0,
   `register_time` datetime DEFAULT current_timestamp(),
-  `qnacol` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`qna_id`),
   KEY `user_id_pk_idx` (`user_id`),
   CONSTRAINT `user_id_pk` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
