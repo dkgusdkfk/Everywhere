@@ -11,13 +11,13 @@
                     <nav aria-label="breadcrumb" class="breadcrumb-box d-flex justify-content-lg-end">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item">
-                                <a href="index.html">Home</a>
+                                <a href="">Home</a>
                             </li>
                             <li class="breadcrumb-item">
-                                <a href="#">커뮤니티</a>
+                                <a href="/">커뮤니티</a>
                             </li>
                             <li class="breadcrumb-item">
-                                <a href="#">여행 정보 게시판</a>
+                                <a href="qna/list">Q&A 게시판</a>
                             </li>
                         </ol>
                     </nav>
