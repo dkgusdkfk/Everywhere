@@ -74,6 +74,9 @@ export default {
     if (this.type === "modify") {
       http.get(`/board/${this.$route.params.boardId}`).then(({ data }) => {
         this.board = data;
+        http.get(`/trip/plan/${this.board.planId}`).then(({ data }) => {
+          this.selectTitle = data.title;
+        })
       });
     }
     http.get(`/trip/plan/all`).then(({ data }) => {
@@ -97,10 +100,10 @@ export default {
     },
     onReset(event) {
       event.preventDefault();
-      // this.board.boardId = 0;
       this.board.title = "";
       this.board.content = "";
-      // this.moveList();
+      this.board.planId = "";
+      this.selectTitle = null;
     },
     registBoard() {
       console.log(this.userInfo);
@@ -109,6 +112,7 @@ export default {
           userId: this.userInfo.id,          // ------------------------------수정 필수--------------------------------
           title: this.board.title,
           content: this.board.content,
+          planId: this.board.planId,
         })
         .then(({ data }) => {
           let msg = "등록 처리시 문제가 발생했습니다.";
@@ -127,6 +131,7 @@ export default {
           title: this.board.title,
           content: this.board.content,
           registerTime: this.board.registerTime,
+          planId: this.board.planId,
         })
         .then(({ data }) => {
           let msg = "수정 처리시 문제가 발생했습니다.";

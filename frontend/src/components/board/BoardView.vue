@@ -46,11 +46,33 @@
         <div class="container">
             <div class="row d-flex ">
                 <div class="col-sm-12 d-flex flex-column align-content-center justify-content-center w-75">
+                    <div style="height:460px; overflow:auto; border: 1px solid; margin-bottom: 50px;">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr style="color: #ff4400; font-weight: bolder;">
+                                <th>대표이미지</th>
+                                <th>관광지명</th>
+                                <th>주소</th>
+                                </tr>
+                            </thead>
+                            <tbody id="trip-list">
+                                <tr v-for="(attraction, index) in plan" :key="index">
+                                    <td><b-img :src="attraction.imgPath"
+                                            style="width: 100px; height: 70px" v-if="attraction.imgPath"></b-img>
+                                        <b-img :src="attraction.firstImage"
+                                            style="width: 100px; height: 70px" v-if="attraction.firstImage"></b-img>
+                                    </td>
+                                    <td>{{ attraction.title }}</td>
+                                    <td>{{ attraction.address1 }} {{ attraction.address2 }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
                     <div class="post-content color-text-a">
                         <pre class="mt-3">
                         {{ board.content }}
-
-                    </pre>
+                        </pre>
                     </div>
                     <div class="d-flex justify-content-end">
                         <b-button variant="outline-info" size="sm" @click="moveList" class="mr-2">목록</b-button>
@@ -188,11 +210,15 @@ export default {
             board: {},
             comments: {},
             comment: "",
+            plan: [],
         };
     },
     created() {
         http.get(`/board/${this.$route.params.boardId}`).then(({ data }) => {
             this.board = data;
+            http.get(`/trip/plan/get/${this.board.planId}`).then(({ data }) => {
+                this.plan = data;
+            })
         });
         http.get(`/board/comment/${this.$route.params.boardId}`).then(({ data }) => {
             this.comments = data;

@@ -56,11 +56,6 @@ const routes = [
         component: () => import(/* webpackChunkName: "user" */ "@/components/user/UserRegister"),
       },
       {
-        path: "login",
-        name: "login",
-        component: () => import(/* webpackChunkName: "user" */ "@/components/user/UserLogin"),
-      },
-      {
         path: "findPW",
         name: "findPW",
         component: () => import(/* webpackChunkName: "user" */ "@/components/user/FindPassword"),

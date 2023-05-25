@@ -105,6 +105,7 @@ CREATE TABLE `qna` (
   `content` varchar(10000) NOT NULL,
   `hit` int DEFAULT 0,
   `register_time` datetime DEFAULT current_timestamp(),
+  `qnacol` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`qna_id`),
   KEY `user_id_pk_idx` (`user_id`),
   CONSTRAINT `user_id_pk` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)

@@ -14,4 +14,5 @@ public class Board {
 	private String content;
 	private int hit;
 	private String registerTime;
+	private int planId;
 }

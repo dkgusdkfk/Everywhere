@@ -99,6 +99,8 @@ export default {
             if (this.isLogin) {
                 await this.getUserInfo(token);
                 this.$router.go();
+            } else {
+                alert("아이디 또는 비밀번호를 확인해주세요.")
             }
         },
         moveRegistPage() {
