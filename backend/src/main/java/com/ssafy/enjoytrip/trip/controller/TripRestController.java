@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/trip")
 @RequiredArgsConstructor
+@CrossOrigin(origins = {"*"}, maxAge = 6000)
 public class TripRestController {
     private final TripService tripService;
     private static final String SUCCESS = "success";
