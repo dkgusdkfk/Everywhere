@@ -81,7 +81,7 @@ export default {
         }
       });
     }
-    http.get(`/trip/plan/all`).then(({ data }) => {
+    http.get(`/trip/plan/all/${this.userInfo.id}`).then(({ data }) => {
         this.plans = data;
     })
   },
