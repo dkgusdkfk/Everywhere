@@ -2,6 +2,27 @@
   <div class="row justify-content-center" style="margin-top:200px" id="main">
     <div class="col-lg-8 col-md-10 col-sm-12">
         <b-form @submit="onSubmit" @reset="onReset">
+          <table class="table table-hover">
+            <thead>
+              <tr style="color: #ff4400; font-weight: bolder;">
+                <th>제목</th>
+                <th>거리</th>
+                <th>도보</th>
+                <th>자전거</th>
+              </tr>
+            </thead>
+            <tbody id="trip-list">
+              <tr v-for="plan in plans" :key="plan.planId" @click="selectPlan(plan.planId, plan.title)">
+                <td>{{ plan.title }}</td>
+                <td>{{ plan.distance }}</td>
+                <td>{{ plan.walkTime }}</td>
+                <td>{{ plan.cycleTime }}</td>
+              </tr>
+            </tbody>
+          </table>
+          <div style="text-align: right; padding-bottom: 30px;">
+            선택된 여행 계획 <input id="selectTitle" v-model="selectTitle" readonly/>
+          </div>
             <div class="mb-3">
                 <label for="title" class="form-label">제목 : </label>
                 <b-form-input type="text" class="form-control" id="title" v-model="board.title" required/>
@@ -40,7 +61,10 @@ export default {
         title: "",
         content: "",
         registerTime: "",
+        planId: null,
       },
+      selectTitle: null,
+      plans: []
     };
   },
   props: {
@@ -52,6 +76,9 @@ export default {
         this.board = data;
       });
     }
+    http.get(`/trip/plan/all`).then(({ data }) => {
+        this.plans = data;
+    })
   },
   computed: {
     ...mapState(memberStore, ["userInfo"]),
@@ -114,6 +141,10 @@ export default {
     moveList() {
       this.$router.push({ name: "boardlist" });
     },
+    selectPlan(planId, title) {
+      this.board.planId = planId;
+      this.selectTitle = title;
+    }
   },
 };
 </script>
@@ -122,5 +153,10 @@ export default {
   #main {
     flex: 0 0 100%;
     max-width: 100%;
+  }
+
+  #selectTitle {
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
   }
 </style>
