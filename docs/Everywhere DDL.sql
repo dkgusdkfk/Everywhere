@@ -1,5 +1,5 @@
--- create database everywhere;
--- use everywhere;
+create database everywhere;
+use everywhere;
 
 CREATE TABLE `user` (
   `id` varchar(20) NOT NULL,

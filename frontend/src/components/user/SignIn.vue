@@ -2,8 +2,8 @@
     <div>
         <div v-if="userInfo == null">
             <div>
-                <div class="title-box-d">
-                    <h3 class="title-d">Sign In</h3>
+                <div class="title-box-d" style="top: 2rem;">
+                    <h3 class="title-d" style="text-align: left;">Sign In</h3>
                 </div>
                 <div>
                     <b-form>
@@ -30,9 +30,9 @@
                             </div>
                         </div>
                         <div class="d-flex align-content-center justify-content-center">
-                            <b-button class="ms-5 me-5 mt-3 md-3 text-black-50" @click="findPW">
-                                ID/Password 찾기</b-button>
-                            <b-button class="ms-5 me-5 mt-3 md-3 text-black-50" @click="moveRegistPage">회원가입</b-button>
+                            <a class="ms-3 me-3 mt-3 md-3 text-black-50" @click="findPW">
+                                Password 찾기</a>
+                            <a class="ms-3 me-3 mt-3 md-3 text-black-50" @click="moveRegistPage">회원가입</a>
                         </div>
                     </b-form>
                 </div>
@@ -41,8 +41,8 @@
         <div v-else>
             <div>
                 <b-form>
-                    <div class="title-box-d">
-                        <h3 class="title-d">내 정보</h3>
+                    <div class="title-box-d" style="top: 2rem;">
+                        <h3 class="title-d" style="text-align: left;">내 정보</h3>
                     </div>
                     <div>
                         <div class="row border border-1 p-4 rounded-4">

@@ -50,7 +50,7 @@
           </div>
           <div @click="movePage">
             <div class="row" v-html="pageLink"></div>
-        </div>
+          </div>
         </div>
       </div>
     </section>

@@ -79,7 +79,7 @@ export default {
       console.log(this.userInfo);
       http
         .post(`/notice/write`, {
-          adminId: this.userInfo.id,          // ------------------------------수정 필수--------------------------------
+          adminId: this.userInfo.id,
           title: this.notice.title,
           content: this.notice.content,
         })

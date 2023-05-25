@@ -1,6 +1,6 @@
 <template>
   <div>
-    <section class="intro-single">
+    <section class="intro-single" id="main">
       <div class="container">
         <div class="row">
           <div class="col-md-12 col-lg-8">
@@ -14,7 +14,7 @@
 
     <b-modal ref="planModal" centered hide-footer hide-header size="lg">
       <plan-modal :plans="plans" :result="result" @close="closeModal" v-if="plans"></plan-modal>
-      <button @click="send" class="btn btn-danger" data-bs-dismiss="modal" style="align-content: center;">
+      <button @click="send" class="btn btn-danger" data-bs-dismiss="modal" style="float: right;">
           완료
       </button>
     </b-modal>
@@ -436,6 +436,9 @@ export default {
           msg = "완료되었습니다.";
         }
         alert(msg);
+        this.$router.replace({
+                name: "mypage",
+            })
       })
     },
 
@@ -632,5 +635,9 @@ export default {
 
 div label {
   font-weight: bold;
+}
+
+#main {
+  text-align: left;
 }
 </style>

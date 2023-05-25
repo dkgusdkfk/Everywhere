@@ -137,7 +137,7 @@ const routes = [
     children: [
       {
         path: "list",
-        name: "notice",
+        name: "noticelist",
         component: () => import(/* webpackChunkName: "board" */ "@/components/notice/NoticeList"),
       },
       {
@@ -165,7 +165,7 @@ const routes = [
   },
   {
     path: "/qna",
-    name: "qna",
+    name: "qnalist",
     component: () => import(/* webpackChunkName: "board" */ "@/views/AppBoard"),
     redirect: "/qna/list",
     children: [
@@ -177,7 +177,7 @@ const routes = [
       {
         path: "write",
         name: "qnawrite",
-        beforeEnter: onlyAdmin,
+        beforeEnter: onlyAuthUser,
         component: () => import(/* webpackChunkName: "board" */ "@/components/qna/QnaWrite"),
       },
       {

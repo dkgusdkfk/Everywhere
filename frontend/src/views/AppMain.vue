@@ -1,6 +1,11 @@
 <template>
   <div>
     <div class="intro-single">
+
+      <b-modal ref="attractionModal" centered hide-footer hide-header size="lg">
+            <attraction-modal :attraction="selectAttraction" @close="closeModal" v-if="selectAttraction"></attraction-modal>
+        </b-modal>
+
       <b-carousel id="carousel-fade" :interval="4000" style="text-shadow: 0px 0px 2px #000" fade indicators img-width="1024"
         img-height="480">
         <b-carousel-slide :img-src="require('@/assets/img/001.png')"></b-carousel-slide>
@@ -103,6 +108,7 @@
 <script>
 import { mapState } from "vuex";
 import http from "@/api/http";
+import AttractionModal from "@/components/item/AttractionModal.vue";
 
 const memberStore = "memberStore";
 
@@ -111,12 +117,16 @@ export default {
   props: {
     msg: String,
   },
+  components: {
+    AttractionModal
+  },
   data() {
     return {
       attractions: [],
       hotPlaces: [],
       slide: 0,
       sliding: null,
+      selectAttraction: null,
     }
   },
   created() {
@@ -138,7 +148,19 @@ export default {
     },
     onSlideEnd() {
       this.sliding = false
-    }
+    },
+
+    // Modal method
+    openModal(contentId) {
+        http.get(`/trip/${contentId}`).then(({ data }) => {
+            console.log(data)
+            this.selectAttraction = data;
+        })
+        this.$refs['attractionModal'].show()
+    },
+    closeModal() {
+        this.$refs['attractionModal'].hide()
+    },
   }
 };
 </script>
