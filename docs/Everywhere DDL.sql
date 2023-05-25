@@ -135,12 +135,11 @@ CREATE TABLE `trip_plan` (
   PRIMARY KEY (`plan_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
 
-
 CREATE TABLE `plan_list` (
   `plan_id` int NOT NULL,
   `content_id` int NOT NULL,
-  `order` int NOT NULL,
-  PRIMARY KEY (`plan_id`,`order`),
+  `sequence` int NOT NULL,
+  PRIMARY KEY (`plan_id`,`sequence`),
   CONSTRAINT `plan_id_fk` FOREIGN KEY (`plan_id`) REFERENCES `trip_plan` (`plan_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 

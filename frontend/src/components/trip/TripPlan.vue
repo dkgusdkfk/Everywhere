@@ -13,7 +13,10 @@
     </section>
 
     <b-modal ref="planModal" centered hide-footer hide-header size="lg">
-      <plan-modal :plans="plans" :result="result" @close="closeModal" @complete="send" v-if="plans"></plan-modal>
+      <plan-modal :plans="plans" :result="result" @close="closeModal" v-if="plans"></plan-modal>
+      <button @click="send" class="btn btn-danger" data-bs-dismiss="modal" style="align-content: center;">
+          완료
+      </button>
     </b-modal>
 
     <b-row style="margin: auto">

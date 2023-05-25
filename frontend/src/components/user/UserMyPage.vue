@@ -19,7 +19,11 @@
                 </div>
             </div>
         </section>
-        <!-- End Intro Single --> <!-- ======= Agent Single ======= -->
+
+        <b-modal ref="planModal" centered hide-footer hide-header size="lg">
+            <plan-modal :plans="selectPlan" :result="result" @close="closeModal" v-if="plans"></plan-modal>
+        </b-modal>
+
         <section class="agent-single">
             <div class="container">
                 <div class="row">
@@ -95,7 +99,7 @@
                                     <div class="card-overlay-a-content">
                                         <div class="card-header-a">
                                             <h2 class="card-title-a">
-                                                <a href="#">{{ plan.title }}
+                                                <a href="#" style="color: black; font-weight: bolder;" @click="openModal(plan.planId)">{{ plan.title }}
                                                 </a>
                                             </h2>
                                         </div>
@@ -125,152 +129,6 @@
                                 </div>
                             </div>
                         </div>
-
-                        <div class="col-md-12 section-t8 mt-1 d-flex p-1 mt-5">
-                            <div class="title-box-d">
-                                <h3 class="title-d">보관함</h3>
-                            </div>
-                        </div>
-                        <div class="row property-grid grid">
-                            <div class="col-sm-12 d-flex justify-content-end align-content-center p-1">
-                                <div class="grid-option">
-                                    <form>
-                                        <select class="custom-select">
-                                            <option selected>All</option>
-                                            <option value="1">지역별 여행지 추천</option>
-                                            <option value="2">정보 게시판</option>
-                                            <option value="3">후기 게시판</option>
-                                        </select>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="card-box-a card-shadow">
-                                <div class="img-box-a">
-                                    <img src="@/assets/img/logo.png" alt="" class="img-a img-fluid">
-                                </div>
-                                <div class="card-overlay">
-                                    <div class="card-overlay-a-content">
-                                        <div class="card-header-a">
-                                            <h2 class="card-title-a">
-                                                <a href="#">204 Mount <br /> Olive Road Two
-                                                </a>
-                                            </h2>
-                                        </div>
-                                        <div class="card-body-a">
-                                            <div class="price-box d-flex">
-                                                <span class="price-a">rent | $ 12.000</span>
-                                            </div>
-                                            <a href="#" class="link-a">Click here to view <span
-                                                    class="bi bi-chevron-right"></span>
-                                            </a>
-                                        </div>
-                                        <div class="card-footer-a">
-                                            <ul class="card-info d-flex justify-content-around">
-                                                <li>
-                                                    <h4 class="card-info-title">Area</h4> <span>340m <sup>2</sup>
-                                                    </span>
-                                                </li>
-                                                <li>
-                                                    <h4 class="card-info-title">Beds</h4> <span>2</span>
-                                                </li>
-                                                <li>
-                                                    <h4 class="card-info-title">Baths</h4> <span>4</span>
-                                                </li>
-                                                <li>
-                                                    <h4 class="card-info-title">Garages</h4> <span>1</span>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="card-box-a card-shadow">
-                                <div class="img-box-a">
-                                    <img src="@/assets/img/logo.png" alt="" class="img-a img-fluid">
-                                </div>
-                                <div class="card-overlay">
-                                    <div class="card-overlay-a-content">
-                                        <div class="card-header-a">
-                                            <h2 class="card-title-a">
-                                                <a href="#">204 Mount <br /> Olive Road Two
-                                                </a>
-                                            </h2>
-                                        </div>
-                                        <div class="card-body-a">
-                                            <div class="price-box d-flex">
-                                                <span class="price-a">rent | $ 12.000</span>
-                                            </div>
-                                            <a href="#" class="link-a">Click here to view <span
-                                                    class="bi bi-chevron-right"></span>
-                                            </a>
-                                        </div>
-                                        <div class="card-footer-a">
-                                            <ul class="card-info d-flex justify-content-around">
-                                                <li>
-                                                    <h4 class="card-info-title">Area</h4> <span>340m <sup>2</sup>
-                                                    </span>
-                                                </li>
-                                                <li>
-                                                    <h4 class="card-info-title">Beds</h4> <span>2</span>
-                                                </li>
-                                                <li>
-                                                    <h4 class="card-info-title">Baths</h4> <span>4</span>
-                                                </li>
-                                                <li>
-                                                    <h4 class="card-info-title">Garages</h4> <span>1</span>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="card-box-a card-shadow">
-                                <div class="img-box-a">
-                                    <img src="@/assets/img/logo.png" alt="" class="img-a img-fluid">
-                                </div>
-                                <div class="card-overlay">
-                                    <div class="card-overlay-a-content">
-                                        <div class="card-header-a">
-                                            <h2 class="card-title-a">
-                                                <a href="#">204 Mount <br /> Olive Road Two
-                                                </a>
-                                            </h2>
-                                        </div>
-                                        <div class="card-body-a">
-                                            <div class="price-box d-flex">
-                                                <span class="price-a">rent | $ 12.000</span>
-                                            </div>
-                                            <a href="#" class="link-a">Click here to view <span
-                                                    class="bi bi-chevron-right"></span>
-                                            </a>
-                                        </div>
-                                        <div class="card-footer-a">
-                                            <ul class="card-info d-flex justify-content-around">
-                                                <li>
-                                                    <h4 class="card-info-title">Area</h4> <span>340m <sup>2</sup>
-                                                    </span>
-                                                </li>
-                                                <li>
-                                                    <h4 class="card-info-title">Beds</h4> <span>2</span>
-                                                </li>
-                                                <li>
-                                                    <h4 class="card-info-title">Baths</h4> <span>4</span>
-                                                </li>
-                                                <li>
-                                                    <h4 class="card-info-title">Garages</h4> <span>1</span>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -281,21 +139,31 @@
 <script>
 import { mapState, mapActions } from "vuex";
 import http from "@/api/http"
+import PlanModal from "@/components/item/PlanModal.vue";
 
 const memberStore = "memberStore";
 
 export default {
     name: 'UserMyPage',
+    components: {
+        PlanModal,
+    },
     data() {
         return {
             address: {
                 sidoName: null,
                 gugunName: null,
             },
-            plans: []
+            plans: [],
+            selectPlan: [],
+            result: {
+                title: "",
+                totalDistance: 0,
+                walkTime: 0,
+                cycleTime: 0,
+            },
         }
     },
-    components: {},
     created() {
         http.get(`/trip/getAddress/${this.userInfo.address1}/${this.userInfo.address2}`).then(({ data }) => {
             this.address.sidoName = data.sidoName;
@@ -321,7 +189,25 @@ export default {
             sessionStorage.removeItem("access-token");
             sessionStorage.removeItem("refresh0token");
             if (this.$route.path != "/") this.$router.push({ name: "main" });
-        }
+        },
+
+        // Modal method
+        openModal(id) {
+            http.get(`/trip/plan/${id}`).then(({ data }) => {
+                this.result.title = data.title;
+                this.result.totalDistance = data.distance;
+                this.result.walkTime = data.walkTime;
+                this.result.cycleTime = data.cycleTime;
+            })
+            http.get(`/trip/plan/get/${id}`).then(({ data }) => {
+                this.selectPlan = data;
+                console.log(this.selectPlan)
+            })
+            this.$refs['planModal'].show()
+        },
+        closeModal() {
+            this.$refs['planModal'].hide()
+        },
     },
 };
 </script>

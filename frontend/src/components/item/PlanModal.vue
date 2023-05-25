@@ -16,7 +16,10 @@
                                         <tbody id="trip-list">
                                             <tr v-for="(attraction, index) in plans" :key="index">
                                                 <td><b-img :src="attraction.imgPath"
-                                                        style="width: 100px; height: 70px"></b-img></td>
+                                                        style="width: 100px; height: 70px" v-if="attraction.imgPath"></b-img>
+                                                    <b-img :src="attraction.firstImage"
+                                                        style="width: 100px; height: 70px" v-if="attraction.firstImage"></b-img>
+                                                </td>
                                                 <td>{{ attraction.title }}</td>
                                                 <td>{{ attraction.address1 }} {{ attraction.address2 }}</td>
                                             </tr>
@@ -32,10 +35,10 @@
                                 <p>
                                     자전거 : {{ result.cycleTime }}분
                                 </p>
-                                <button @click="$emit('complete')" class="btn btn-danger" data-bs-dismiss="modal">
+                                <!-- <button @click="$emit('complete')" class="btn btn-danger" data-bs-dismiss="modal">
                                     <i class="fas fa-xmark fa-fw"></i>
                                     완료
-                                </button>
+                                </button> -->
                             </div>
                         </div>
                     </div>

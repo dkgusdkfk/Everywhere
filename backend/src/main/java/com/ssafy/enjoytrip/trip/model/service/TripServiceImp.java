@@ -192,6 +192,8 @@ public class TripServiceImp implements TripService {
     @Override
     public TripPlan getPlan(int planId) {
         try {
+            TripPlan tp = new TripPlan(tripDao.getPlan(planId), tripDao.getPlanListByPlanId(planId));
+            log.debug("{}",tp.getTitle());
             return new TripPlan(tripDao.getPlan(planId), tripDao.getPlanListByPlanId(planId));
         } catch (Exception e) {
             e.printStackTrace();

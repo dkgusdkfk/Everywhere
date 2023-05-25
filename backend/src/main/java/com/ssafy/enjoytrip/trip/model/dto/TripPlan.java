@@ -21,6 +21,7 @@ public class TripPlan {
         this.planList=list;
         this.planId= trip.getPlanId();
         this.userId=trip.getUserId();
+        this.title=trip.getTitle();
         this.distance=trip.getDistance();
         this.cycleTime=trip.getCycleTime();
         this.walkTime=trip.getWalkTime();
