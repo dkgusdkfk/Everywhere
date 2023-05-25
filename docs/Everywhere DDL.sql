@@ -1,3 +1,6 @@
+create database everywhere;
+use everywhere;
+
 CREATE TABLE `sido` (
   `sido_code` int(11) NOT NULL,
   `sido_name` varchar(30) DEFAULT NULL,
