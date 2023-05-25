@@ -141,6 +141,9 @@ CREATE TABLE `sido` (
   PRIMARY KEY (`sido_code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
+drop table trip_plan;
+drop table plan_list;
+
 CREATE TABLE `trip_plan` (
   `plan_id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` varchar(45) NOT NULL,
