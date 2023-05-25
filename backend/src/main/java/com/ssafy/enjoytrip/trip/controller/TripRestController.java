@@ -18,7 +18,6 @@ public class TripRestController {
     private final TripService tripService;
     private static final String SUCCESS = "success";
 
-
     @GetMapping("/search")
     public ResponseEntity<?> search(SearchRequest request) {
         log.debug(String.valueOf(request.getSidoCode()));
@@ -75,7 +74,4 @@ public class TripRestController {
         tripService.deletePlan(planId);
         return new ResponseEntity<>(SUCCESS, HttpStatus.OK);
     }
-
-
-
 }

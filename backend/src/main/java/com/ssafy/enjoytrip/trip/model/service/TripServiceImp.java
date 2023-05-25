@@ -129,6 +129,9 @@ public class TripServiceImp implements TripService {
             if (tripDao.checkRecommend(request) > 0) { //user가 이미 추천을 누른 관광지라면
                 tripDao.hotUpdateMinus(request.getContentId()); //추천수 -1, 추천자 목록에서 삭제
                 tripDao.deleteRecommendUser(request);
+                if(tripDao.checkRecommendCount(request.getContentId())==0){
+                    tripDao.deleteHotPlace(request.getContentId());
+                }
             } else {
                 tripDao.hotUpdatePlus(request.getContentId()); //user가 아직 누르지 않았다면
                 tripDao.addRecommendedUser(request); //추천수 +1, 추천자 목록에 등록
