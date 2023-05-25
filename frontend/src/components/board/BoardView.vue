@@ -46,7 +46,7 @@
         <div class="container">
             <div class="row d-flex ">
                 <div class="col-sm-12 d-flex flex-column align-content-center justify-content-center w-75">
-                    <div style="height:460px; overflow:auto; border: 1px solid; margin-bottom: 50px;">
+                    <div style="height:460px; overflow:auto; border: 1px solid; margin-bottom: 50px;" v-if="plan">
                         <table class="table table-hover">
                             <thead>
                                 <tr style="color: #ff4400; font-weight: bolder;">
@@ -210,14 +210,15 @@ export default {
             board: {},
             comments: {},
             comment: "",
-            plan: [],
+            plan: null,
         };
     },
     created() {
         http.get(`/board/${this.$route.params.boardId}`).then(({ data }) => {
             this.board = data;
             http.get(`/trip/plan/get/${this.board.planId}`).then(({ data }) => {
-                this.plan = data;
+                if (data.length!=0)
+                    this.plan = data;
             })
         });
         http.get(`/board/comment/${this.$route.params.boardId}`).then(({ data }) => {

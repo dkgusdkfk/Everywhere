@@ -74,9 +74,11 @@ export default {
     if (this.type === "modify") {
       http.get(`/board/${this.$route.params.boardId}`).then(({ data }) => {
         this.board = data;
-        http.get(`/trip/plan/${this.board.planId}`).then(({ data }) => {
-          this.selectTitle = data.title;
-        })
+        if (this.board.planId != 0) {
+          http.get(`/trip/plan/${this.board.planId}`).then(({ data }) => {
+            this.selectTitle = data.title;
+          })
+        }
       });
     }
     http.get(`/trip/plan/all`).then(({ data }) => {
@@ -109,7 +111,7 @@ export default {
       console.log(this.userInfo);
       http
         .post(`/board/write`, {
-          userId: this.userInfo.id,          // ------------------------------수정 필수--------------------------------
+          userId: this.userInfo.id,
           title: this.board.title,
           content: this.board.content,
           planId: this.board.planId,
