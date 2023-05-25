@@ -24,7 +24,6 @@
                                         <td><b-img :src="attraction.imgPath" style="width: 100px; height: 70px"></b-img></td>
                                         <td>{{ attraction.title }}</td>
                                         <td>{{ attraction.address1 }} {{ attraction.address2 }}</td>
-                                        <td><i class="bi bi-x-lg" aria-hidden="true" @click="cancel(index)"></i></td>
                                     </tr>
                                     </tbody>
                                 </table>
@@ -38,7 +37,7 @@
                                 <p>
                                     자전거 : {{ result.cycleTime }}분
                                 </p>
-                                <button @click="complete" class="btn btn-danger" data-bs-dismiss="modal">
+                                <button @click="$emit('complete')" class="btn btn-danger" data-bs-dismiss="modal">
                                     <i class="fas fa-xmark fa-fw"></i>
                                     완료
                                 </button>
@@ -52,18 +51,13 @@
 </template>
 
 <script>
+
 export default {
     name: 'PlanModal',
     props: {
         plans: [],
         result: Object,
     },
-    methods: {
-        complete() {
-
-        }
-    }
-    
 };
 </script>
 

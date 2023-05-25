@@ -13,7 +13,7 @@
     </section>
 
     <b-modal ref="planModal" centered hide-footer hide-header size="lg">
-      <plan-modal :plans="plans" :result="result" @close="closeModal" v-if="plans"></plan-modal>
+      <plan-modal :plans="plans" :result="result" @close="closeModal" @complete="send" v-if="plans"></plan-modal>
     </b-modal>
 
     <b-row style="margin: auto">
@@ -48,7 +48,8 @@
             </div>
 
             <ul id="placesList">
-              <li class="item" v-for="attraction in attractionList" :key="attraction.contentId" @click="moveCenter(attraction.latitude, attraction.longitude)">
+              <li class="item" v-for="attraction in attractionList" :key="attraction.contentId"
+                @click="moveCenter(attraction.latitude, attraction.longitude)">
                 <span><b-img :src="attraction.imgPath"
                     style="float:left;width:70px; height:50px;margin:10px 0 0 10px;"></b-img></span>
                 <div class="info">
@@ -92,7 +93,7 @@
 </template>
 
 <script>
-import { mapActions, mapMutations } from "vuex";
+import { mapActions, mapMutations, mapState } from "vuex";
 import SelectSido from "@/components/item/SelectSido.vue";
 import SelectGugun from "@/components/item/SelectGugun.vue";
 import PlanModal from "@/components/item/PlanModal.vue";
@@ -100,6 +101,7 @@ import PlanModal from "@/components/item/PlanModal.vue";
 import http from "@/api/http";
 
 const itemStore = "itemStore";
+const memberStore = "memberStore";
 
 export default {
   name: "KakaoMap",
@@ -137,6 +139,9 @@ export default {
         cycleTime: 0,
       },
     };
+  },
+  computed: {
+    ...mapState(memberStore, ["userInfo"])
   },
   mounted() {
     if (window.kakao && window.kakao.maps) {
@@ -289,7 +294,7 @@ export default {
 
       this.finish();
       for (var i = 0; i < this.plans.length; i++) {
-        this.clickMarker(new kakao.maps.LatLng(this.plans[i].latitude,this.plans[i].longitude))
+        this.clickMarker(new kakao.maps.LatLng(this.plans[i].latitude, this.plans[i].longitude))
       }
       this.search()
     },
@@ -315,8 +320,8 @@ export default {
     },
 
     reset() {
-        this.finish();
-        this.plans = [];
+      this.finish();
+      this.plans = [];
     },
 
     deleteClickLine() {
@@ -403,6 +408,23 @@ export default {
       var distance = Math.round(this.clickLine.getLength());
       this.getTime(distance);
       this.openModal();
+    },
+
+    send() {
+      console.log(this.userInfo.id)
+      http.post(`trip/plan`, {
+        userId: this.userInfo.id,
+        distance: this.result.totalDistance,
+        cycleTime: this.result.cycleTime,
+        walkTime: this.result.walkTime,
+        planList: this.plans,
+      }).then(({ data }) => {
+        let msg = "계획 완료 중 오류 발생"
+        if (data === "success") {
+          msg = "완료되었습니다.";
+        }
+        alert(msg);
+      })
     },
 
     // Modal method

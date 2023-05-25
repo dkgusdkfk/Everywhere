@@ -145,10 +145,16 @@
         where content_id = #{contentId}
           and user_id = #{userId}
     </delete>
+
     <insert id="addPlan" parameterType="TripPlan">
-        insert into trip_plan
-        values (#{planId}, #{userId}, #{distance}, #{cycleTime}, #{walkTime})
+        insert into trip_plan(user_id, distance, cycle_time, walk_time)
+        values (#{userId}, #{distance}, #{cycleTime}, #{walkTime})
     </insert>
+
+    <select id="getPlanId" resultType="int">
+        select last_insert_id()
+    </select>
+
     <insert id="addPlanList" parameterType="TripPlanListDto">
         insert into plan_list
         values (#{planId}, #{contentId}, #{order})

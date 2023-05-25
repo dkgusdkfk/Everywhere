@@ -41,6 +41,8 @@ public interface TripDao {
 
     void addPlan(TripPlan request) throws SQLException;
 
+    int getPlanId() throws SQLException;
+
     void addPlanList(TripPlanListDto request) throws SQLException;
 
     void deletePlan(int planId) throws SQLException;
