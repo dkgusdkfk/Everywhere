@@ -82,6 +82,7 @@ export default {
   created() {
     http.get(`/board/all`).then(({ data }) => {
       this.boards = data.boards;
+      console.log(this.boards);
     });
   },
   watch: {
