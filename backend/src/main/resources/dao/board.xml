@@ -17,12 +17,12 @@
     </sql>
 
     <insert id="writeArticle" parameterType="Board">
-        insert into board(user_id, title, content)
-        values (#{userId}, #{title}, #{content})
+        insert into board(user_id, title, content, plan_id)
+        values (#{userId}, #{title}, #{content}, #{planId})
     </insert>
 
     <select id="listArticle" parameterType="QnaPageBean" resultType="Board">
-        select board_id as boardId, user_id as userId, title, content, hit, register_time as registerTime
+        select board_id as boardId, user_id as userId, title, content, hit, register_time as registerTime, plan_id as planId
         from board
         <where>
             <include refid="searchCon"/>
@@ -40,7 +40,7 @@
     </select>
 
     <select id="getArticle" parameterType="int" resultType="Board">
-        select board_id as boardId, user_id as userId, title, content, hit, register_time as registerTime
+        select board_id as boardId, user_id as userId, title, content, hit, register_time as registerTime, plan_id as planId
         from board
         where board_id = #{boardId}
     </select>
@@ -58,7 +58,8 @@
             title=#{title},
             content=#{content},
             hit=#{hit},
-            register_time=#{registerTime}
+            register_time=#{registerTime},
+            plan_id=#{planId}
         where board_id = #{boardId}
     </update>
 

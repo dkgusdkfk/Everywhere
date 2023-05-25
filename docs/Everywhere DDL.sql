@@ -63,7 +63,6 @@ CREATE TABLE `attraction_detail` (
   CONSTRAINT `attraction_detail_to_basic_content_id_fk` FOREIGN KEY (`content_id`) REFERENCES `attraction_info` (`content_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-
 CREATE TABLE `user` (
   `id` varchar(20) NOT NULL,
   `password` varchar(100) NOT NULL,
@@ -74,6 +73,9 @@ CREATE TABLE `user` (
   `token` varchar(1000) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+drop table comment;
+drop table board;
 
 CREATE TABLE `board` (
   `board_id` int NOT NULL AUTO_INCREMENT,
