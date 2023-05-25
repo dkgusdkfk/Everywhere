@@ -12,5 +12,5 @@ import lombok.ToString;
 public class TripPlanListDto {
     private int planId;
     private int contentId;
-    private int order;
+    private int sequence;
 }

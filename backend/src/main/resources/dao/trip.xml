@@ -153,7 +153,7 @@
 
     <insert id="addPlanList" parameterType="TripPlanListDto">
         insert into plan_list
-        values (#{planId}, #{contentId}, #{order})
+        values (#{planId}, #{contentId}, #{sequence})
     </insert>
 
 <!--     제일 최근에 삽입한 plan의 id가져오기-->
@@ -163,7 +163,7 @@
 
 <!--PlanId에 해당하는 여행 계획에 있는 리스트 정보 가져오기-->
     <select id="getPlanListByPlanId" parameterType="int" resultType="TripPlanListDto">
-        select plan_id as planId, content_id as contentId, order
+        select plan_id as planId, content_id as contentId, sequence
         from plan_list
         where plan_id = #{planId}
     </select>
