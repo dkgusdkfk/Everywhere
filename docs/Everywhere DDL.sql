@@ -82,11 +82,11 @@ CREATE TABLE `board` (
   `user_id` varchar(16) NOT NULL,
   `title` varchar(200) DEFAULT NULL,
   `content` varchar(10000) DEFAULT NULL,
-  `hit` int DEFAULT 0,
-  `register_time` datetime DEFAULT current_timestamp(),
+  `hit` int DEFAULT '0',
+  `register_time` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`board_id`),
-  KEY `user_id` (`user_id`),
-  CONSTRAINT `board_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
+  KEY `board_ibfk_1` (`user_id`),
+  CONSTRAINT `board_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `comment` (
@@ -94,18 +94,18 @@ CREATE TABLE `comment` (
   `comment_id` int NOT NULL AUTO_INCREMENT,
   `user_id` varchar(45) NOT NULL,
   `content` varchar(200) NOT NULL,
-  `register_time` datetime NOT NULL DEFAULT current_timestamp(),
+  `register_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`comment_id`),
   UNIQUE KEY `comment_id_UNIQUE` (`comment_id`),
   KEY `board_id_idx` (`board_id`),
-  CONSTRAINT `board_id` FOREIGN KEY (`board_id`) REFERENCES `board` (`board_id`) ON DELETE CASCADE
+  CONSTRAINT `board_id` FOREIGN KEY (`board_id`) REFERENCES `board` (`board_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `hotplace` (
   `content_id` int NOT NULL,
   `count` int DEFAULT 1,
   PRIMARY KEY (`content_id`),
-  CONSTRAINT `hotplace_ibfk_1` FOREIGN KEY (`content_id`) REFERENCES `attraction_info` (`content_id`)
+  CONSTRAINT `hotplace_ibfk_1` FOREIGN KEY (`content_id`) REFERENCES `attraction_info` (`content_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `likelist` (
@@ -113,8 +113,8 @@ CREATE TABLE `likelist` (
   `user_id` varchar(20) NOT NULL,
   KEY `content_id_fk_idx` (`content_id`),
   KEY `user_id_fk_idx` (`user_id`),
-  CONSTRAINT `content_id_fk` FOREIGN KEY (`content_id`) REFERENCES `attraction_info` (`content_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `user_id_fk` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  CONSTRAINT `content_id_fk` FOREIGN KEY (`content_id`) REFERENCES `attraction_info` (`content_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `user_id_fk` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `notice` (
@@ -166,5 +166,5 @@ CREATE TABLE `qna_comment` (
   `register_time` datetime NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`comment_id`),
   KEY `qna_id_pk_idx` (`qna_id`),
-  CONSTRAINT `qna_id_pk` FOREIGN KEY (`qna_id`) REFERENCES `qna` (`qna_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  CONSTRAINT `qna_id_pk` FOREIGN KEY (`qna_id`) REFERENCES `qna` (`qna_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
