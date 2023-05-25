@@ -142,6 +142,16 @@ public class TripServiceImp implements TripService {
             throw new TripException("핫플레이스 등록 실패");
         }
     }
+    
+    @Override
+    public int checkRecommend(HotPlaceRequest request) {
+        try {
+            return tripDao.checkRecommend(request);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new TripException("추천 확인 실패");
+        }
+    }
 
     @Override
     public AddressResponse getAddress(int sidoCode, int gugunCode) {
@@ -167,7 +177,6 @@ public class TripServiceImp implements TripService {
         try {
             tripDao.addPlan(request);
             int planId = tripDao.getPlanId();
-            log.debug("planId=============================================================================={}", planId);
             List<TripPlanListDto> list = request.getPlanList();
             for (int i = 0; i < list.size(); i++) {
                 tripDao.addPlanList(new TripPlanListDto(planId, list.get(i).getContentId(), i + 1));
@@ -202,9 +211,9 @@ public class TripServiceImp implements TripService {
     }
 
     @Override
-    public List<TripPlanResponse> getPlanAll() {
+    public List<TripPlanResponse> getPlanAll(String userId) {
         try {
-            return tripDao.getPlanAll();
+            return tripDao.getPlanAll(userId);
         } catch (Exception e) {
             e.printStackTrace();
             throw new TripException("Plan 전체 가져오기 실패");

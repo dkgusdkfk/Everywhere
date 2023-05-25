@@ -19,6 +19,8 @@ public interface TripService {
 
     void hotRegist(HotPlaceRequest request);
 
+    int checkRecommend(HotPlaceRequest request);
+
     AddressResponse getAddress(int sidoCode, int gugunCode);
 
     List<AttractionInfo> recommendAttractionList(int sidoCode, int gugunCode);
@@ -30,6 +32,6 @@ public interface TripService {
     TripPlan getPlan(int planId);
     AttractionInfo getDetail(int contentId);
 
-    List<TripPlanResponse> getPlanAll();
+    List<TripPlanResponse> getPlanAll(String userId);
     List<AttractionInfo> getPlanAttractionList(int planId);
 }

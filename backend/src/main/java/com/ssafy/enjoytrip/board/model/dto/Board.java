@@ -1,6 +1,7 @@
 package com.ssafy.enjoytrip.board.model.dto;
 
 import lombok.*;
+import reactor.util.annotation.Nullable;
 
 @Getter
 @Setter

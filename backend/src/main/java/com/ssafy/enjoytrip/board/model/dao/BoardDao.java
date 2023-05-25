@@ -13,6 +13,7 @@ import java.util.List;
 public interface BoardDao {
 
     void writeArticle(Board boardDto) throws SQLException;
+    void writeArticleWithNull(Board boardDto) throws SQLException;
 
     List<Board> listArticle(BoardPageBean bean) throws SQLException;
 
