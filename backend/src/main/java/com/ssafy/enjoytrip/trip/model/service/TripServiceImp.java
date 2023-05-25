@@ -165,10 +165,9 @@ public class TripServiceImp implements TripService {
     public void addPlan(TripPlan request) {
         try {
             tripDao.addPlan(request);
-            int planId = tripDao.getPlanId();
             List<TripPlanListDto> list = request.getPlanList();
             for (int i = 0; i < list.size(); i++) {
-                tripDao.addPlanList(new TripPlanListDto(planId, list.get(i).getContentId(), i + 1));
+                tripDao.addPlanList(new TripPlanListDto(request.getPlanId(), list.get(i).getContentId(), i + 1));
             }
         } catch (Exception e) {
             e.printStackTrace();

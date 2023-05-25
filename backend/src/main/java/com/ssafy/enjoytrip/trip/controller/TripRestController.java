@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RestController
 @RequestMapping("/trip")
-@CrossOrigin(origins = {"*"}, maxAge = 6000)
 @RequiredArgsConstructor
 public class TripRestController {
     private final TripService tripService;
