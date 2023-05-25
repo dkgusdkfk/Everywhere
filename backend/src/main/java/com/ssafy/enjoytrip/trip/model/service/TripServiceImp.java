@@ -98,7 +98,8 @@ public class TripServiceImp implements TripService {
             throw new TripException("attraction info 가져오기 실패");
         }
     }
-   public AttractionInfo getDetail(int contentId) {
+
+    public AttractionInfo getDetail(int contentId) {
         try {
             return tripDao.getDetailInfo(contentId);
         } catch (Exception e) {
@@ -129,7 +130,7 @@ public class TripServiceImp implements TripService {
             if (tripDao.checkRecommend(request) > 0) { //user가 이미 추천을 누른 관광지라면
                 tripDao.hotUpdateMinus(request.getContentId()); //추천수 -1, 추천자 목록에서 삭제
                 tripDao.deleteRecommendUser(request);
-                if(tripDao.checkRecommendCount(request.getContentId())==0){
+                if (tripDao.checkRecommendCount(request.getContentId()) == 0) {
                     tripDao.deleteHotPlace(request.getContentId());
                 }
             } else {
@@ -164,7 +165,6 @@ public class TripServiceImp implements TripService {
 
     public void addPlan(TripPlan request) {
         try {
-//            int planId = tripDao.addPlan(request);
             tripDao.addPlan(request);
             int planId = tripDao.getPlanId();
             log.debug("planId=============================================================================={}", planId);
@@ -197,21 +197,37 @@ public class TripServiceImp implements TripService {
             for (TripPlanListDto dto : list) {
                 attractionInfos.add(getDetail(dto.getContentId()));
             }
-            log.debug("================planId:{}",planId);
-            log.debug("==============tripDao.getPlan{}",tripDao.getPlan(planId));
+            log.debug("================planId:{}", planId);
+            log.debug("==============tripDao.getPlan{}", tripDao.getPlan(planId));
             return new TripPlan(tripDao.getPlan(planId), tripDao.getPlanListByPlanId(planId));
         } catch (Exception e) {
             e.printStackTrace();
             throw new TripException("Plan 불러오기 실패");
         }
     }
+
     @Override
-    public List<TripPlanResponse> getPlanAll(){
-        try{
+    public List<TripPlanResponse> getPlanAll() {
+        try {
             return tripDao.getPlanAll();
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-            throw  new TripException("Plan 전체 가져오기 실패");
+            throw new TripException("Plan 전체 가져오기 실패");
+        }
+    }
+
+    @Override
+    public List<AttractionInfo> getPlanAttractionList(int planId) {
+        try {
+            List<Integer> contentIdList = tripDao.getPlanAttractionList(planId);
+            List<AttractionInfo> attractionInfoList = new ArrayList<>();
+            for (int id : contentIdList) {
+                attractionInfoList.add(tripDao.getDetailInfo(id));
+            }
+            return attractionInfoList;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new TripException("Plan 관광지 리스트 가져오기 실패");
         }
     }
 

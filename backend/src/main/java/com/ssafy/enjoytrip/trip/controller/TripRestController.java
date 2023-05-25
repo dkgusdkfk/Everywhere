@@ -60,14 +60,22 @@ public class TripRestController {
     public ResponseEntity<?> getAddress(@PathVariable int sidoCode, @PathVariable int gugunCode) {
         return new ResponseEntity<>(tripService.getAddress(sidoCode, gugunCode), HttpStatus.OK);
     }
+    //planId번의 여행계획 조회
     @GetMapping("/plan/{planId}")
     public ResponseEntity<?> getPlan(@PathVariable int planId){
         return new ResponseEntity<>(tripService.getPlan(planId),HttpStatus.OK);
     }
 
+    //모든 여행 계획 조회
     @GetMapping("/plan/all")
     public ResponseEntity<?> getPlanAll(){
         return new ResponseEntity<>(tripService.getPlanAll(),HttpStatus.OK);
+    }
+
+    //plan id 입력하면 해당 계획의 여행지 리스트 조회
+    @GetMapping("/plan/get/{planId}")
+    public ResponseEntity<?> getAttractionListByPlanId(@PathVariable int planId){
+        return new ResponseEntity<>(tripService.getPlanAttractionList(planId),HttpStatus.OK);
     }
     @PostMapping("/plan")
     public ResponseEntity<?> addPlan(@RequestBody TripPlan request){
