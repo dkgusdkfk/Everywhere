@@ -71,7 +71,7 @@
     </select>
 
     <select id="hotSearch" parameterType="int" resultType="HotPlace">
-        select conten_id as contentId, count
+        select content_id as contentId, count
         from hotplace
         where content_id = #{contentId}
     </select>
