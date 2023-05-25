@@ -83,7 +83,14 @@
             </tbody>
           </table>
         </b-row>
-        <b-row><b-button @click="complete" style="background-color: #fa3939;">계획 완료</b-button></b-row>
+        <b-row>
+          <b-col cols="8">
+            <input type="text" class="form-control" id="title" v-model="result.title" placeholder="여행 계획 제목을 입력해주세요" value="" required>
+          </b-col>
+          <b-col cols="4">
+            <b-button @click="complete" style="background-color: #fa3939; width:100%">계획 완료</b-button>
+          </b-col>
+        </b-row>
       </b-col>
     </b-row>
 
@@ -134,6 +141,7 @@ export default {
       // 계획
       plans: [],
       result: {
+        title: "",
         totalDistance: 0,
         walkTime: 0,
         cycleTime: 0,
@@ -414,6 +422,7 @@ export default {
       console.log(this.userInfo.id)
       http.post(`trip/plan`, {
         userId: this.userInfo.id,
+        title: this.result.title,
         distance: this.result.totalDistance,
         cycleTime: this.result.cycleTime,
         walkTime: this.result.walkTime,

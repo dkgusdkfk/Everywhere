@@ -125,10 +125,10 @@ CREATE TABLE `notice` (
   PRIMARY KEY (`notice_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
 
-
 CREATE TABLE `trip_plan` (
   `plan_id` int NOT NULL AUTO_INCREMENT,
   `user_id` varchar(45) NOT NULL,
+  `title` varchar(100) NOT NULL,
   `distance` int NOT NULL,
   `cycle_time` int NOT NULL,
   `walk_time` int NOT NULL,

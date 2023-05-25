@@ -34,7 +34,7 @@
                     <b-card-group deck>
                         <div v-for="place in hotPlaces" :key="place.contentId">
                             <b-col cols="3">
-                                <b-card class="card-box-d" :img-src="place.imgPath" style="width:320px; height:215px">
+                                <b-card class="card-box-d" :img-src="place.imgPath" style="width:310px; height:205px">
                                     <div class=" card-overlay card-overlay-hover">
                                         <div class="card-header-d">
                                             <div class="card-title-d align-self-center">

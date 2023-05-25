@@ -147,8 +147,8 @@
     </delete>
 
     <insert id="addPlan" parameterType="TripPlan">
-        insert into trip_plan(user_id, distance, cycle_time, walk_time)
-        values (#{userId}, #{distance}, #{cycleTime}, #{walkTime})
+        insert into trip_plan(user_id, title, distance, cycle_time, walk_time)
+        values (#{userId}, #{title}, #{distance}, #{cycleTime}, #{walkTime})
     </insert>
 
     <insert id="addPlanList" parameterType="TripPlanListDto">
