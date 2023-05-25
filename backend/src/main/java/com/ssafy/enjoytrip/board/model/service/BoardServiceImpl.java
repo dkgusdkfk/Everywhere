@@ -32,10 +32,11 @@ public class BoardServiceImpl implements BoardService {
     @Transactional
     public List<Board> listArticle(BoardPageBean bean) {
         try {
+            List<Board> first = boardDao.listArticle(bean);
             int total = boardDao.getTotalArticleCount(bean);
             PageUtility page = new PageUtility(bean.getInterval(), total, bean.getPageNo(), "");
             bean.setPageLink(page.getPageBar());
-            return boardDao.listArticle(bean);
+            return first;
         } catch (SQLException e) {
             throw new BoardException("게시글 목록 조회 중 오류");
         }
