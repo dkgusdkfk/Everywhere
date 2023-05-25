@@ -33,6 +33,8 @@ public interface TripDao {
 
     int checkRecommend(HotPlaceRequest request) throws SQLException;
 
+    int checkRecommendCount(int contentId) throws SQLException;
+
     void addRecommendedUser(HotPlaceRequest request) throws SQLException;
 
     void deleteRecommendUser(HotPlaceRequest request) throws SQLException;
@@ -46,4 +48,5 @@ public interface TripDao {
     List<TripPlanListDto> getPlanListByPlanId(int planId) throws SQLException;
 
     TripPlanResponse getPlan(int planId) throws SQLException;
+    void deleteHotPlace(int contentId)throws SQLException;
 }

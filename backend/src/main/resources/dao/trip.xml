@@ -170,6 +170,15 @@
         from trip_plan
         where plan_id = #{planId}
     </select>
+    <select id="checkRecommendCount" parameterType="int" resultType="int">
+        select count(*)
+        from likelist
+        where content_id = #{contentId}
+    </select>
 
+    <delete id="deleteHotPlace" parameterType="int">
+        delete from hotplace
+        where content_id = #{contentId}
+    </delete>
 
 </mapper>
