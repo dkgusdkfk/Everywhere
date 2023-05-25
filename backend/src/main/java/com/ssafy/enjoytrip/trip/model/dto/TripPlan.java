@@ -16,6 +16,7 @@ public class TripPlan {
     private int distance;
     private int cycleTime;
     private int walkTime;
+    private String title;
     public TripPlan(TripPlanResponse trip, List<TripPlanListDto> list){
         this.planList=list;
         this.planId= trip.getPlanId();

@@ -81,7 +81,7 @@
     </insert>
 
     <select id="getComment" parameterType="int" resultType="Comment">
-        select *
+        select board_id as boardId, comment_id as commentId, user_id as userId, content, register_time as registTime
         from comment
         where comment_id =#{commentId}
     </select>

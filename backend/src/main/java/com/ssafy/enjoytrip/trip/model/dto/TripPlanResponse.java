@@ -13,4 +13,5 @@ public class TripPlanResponse {
     private int distance;
     private int cycleTime;
     private int walkTime;
+    private String title;
 }

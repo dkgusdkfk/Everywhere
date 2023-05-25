@@ -81,7 +81,7 @@
     </insert>
 
     <select id="getComment" parameterType="int" resultType="QnaComment">
-        select *
+        select qna_id as qnaId, comment_id as commentId, user_id as userId, content, register_time as registerTime
         from qna_comment
         where comment_id =#{commentId}
     </select>

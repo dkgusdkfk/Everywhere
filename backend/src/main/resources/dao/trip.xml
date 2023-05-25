@@ -71,7 +71,7 @@
     </select>
 
     <select id="hotSearch" parameterType="int" resultType="HotPlace">
-        select *
+        select conten_id as contentId, count
         from hotplace
         where content_id = #{contentId}
     </select>
@@ -151,31 +151,48 @@
         values (#{userId}, #{distance}, #{cycleTime}, #{walkTime})
     </insert>
 
-    <select id="getPlanId" resultType="int">
-        select last_insert_id()
-    </select>
-
     <insert id="addPlanList" parameterType="TripPlanListDto">
         insert into plan_list
         values (#{planId}, #{contentId}, #{order})
     </insert>
+
+<!--     제일 최근에 삽입한 plan의 id가져오기-->
+    <select id="getPlanId" resultType="int">
+        select last_insert_id()
+    </select>
+
+<!--PlanId에 해당하는 여행 계획에 있는 리스트 정보 가져오기-->
+    <select id="getPlanListByPlanId" parameterType="int" resultType="TripPlanListDto">
+        select plan_id as planId, content_id as contentId, order
+        from plan_list
+        where plan_id = #{planId}
+    </select>
+
+    <select id="getPlan" parameterType="int" resultType="TripPlanResponse">
+        select plan_id as planId, user_id as userId, distance, cycle_time as cycleTime, walk_time as walkTime, title
+        from trip_plan
+        where plan_id = #{planId}
+    </select>
+
+    <select id="getPlanAll" resultType="TripPlanResponse">
+        select
+            plan_id as planId, user_id as userId, distance, cycle_time as cycleTime, walk_time as walkTime, title
+        from trip_plan
+    </select>
+<!--해당 planId의 plan에 있는 contentId가져오기-->
+    <select id="getPlanAttractionList" parameterType="int" resultType="Integer">
+        select
+            content_id as contentId
+        from plan_list
+        where plan_id = #{planId}
+    </select>
+
     <delete id="deletePlan" parameterType="int">
         delete
         from trip_plan
         where plan_id = #{planId}
     </delete>
 
-    <select id="getPlanListByPlanId" parameterType="int" resultType="TripPlanListDto">
-        select *
-        from plan_list
-        where plan_id = #{planId}
-    </select>
-
-    <select id="getPlan" parameterType="int" resultType="TripPlanResponse">
-        select plan_id as planId, user_id as userId, distance, cycle_time as cycleTime, walk_time as walkTime
-        from trip_plan
-        where plan_id = #{planId}
-    </select>
     <select id="checkRecommendCount" parameterType="int" resultType="int">
         select count(*)
         from likelist
@@ -186,18 +203,4 @@
         delete from hotplace
         where content_id = #{contentId}
     </delete>
-
-    <select id="getPlanAll" resultType="TripPlanResponse">
-        select
-            plan_id as planId, user_id as userId, distance, cycle_time as cycleTime, walk_time as walkTime
-        from trip_plan
-    </select>
-
-    <select id="getPlanAttractionList" parameterType="int" resultType="Integer">
-        select
-            content_id as contentId
-        from plan_list
-        where plan_id = #{planId}
-    </select>
-
 </mapper>

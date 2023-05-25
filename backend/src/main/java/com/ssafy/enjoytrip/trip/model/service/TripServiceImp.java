@@ -9,8 +9,8 @@ import org.json.simple.JSONObject;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -192,13 +192,6 @@ public class TripServiceImp implements TripService {
     @Override
     public TripPlan getPlan(int planId) {
         try {
-            List<TripPlanListDto> list = tripDao.getPlanListByPlanId(planId);
-            List<AttractionInfo> attractionInfos = new ArrayList<>();
-            for (TripPlanListDto dto : list) {
-                attractionInfos.add(getDetail(dto.getContentId()));
-            }
-            log.debug("================planId:{}", planId);
-            log.debug("==============tripDao.getPlan{}", tripDao.getPlan(planId));
             return new TripPlan(tripDao.getPlan(planId), tripDao.getPlanListByPlanId(planId));
         } catch (Exception e) {
             e.printStackTrace();
@@ -220,11 +213,15 @@ public class TripServiceImp implements TripService {
     public List<AttractionInfo> getPlanAttractionList(int planId) {
         try {
             List<Integer> contentIdList = tripDao.getPlanAttractionList(planId);
-            List<AttractionInfo> attractionInfoList = new ArrayList<>();
-            for (int id : contentIdList) {
-                attractionInfoList.add(tripDao.getDetailInfo(id));
-            }
-            return attractionInfoList;
+            return contentIdList.stream()
+                    .map(id -> {
+                        try {
+                            return tripDao.getDetailInfo(id);
+                        } catch (SQLException e) {
+                            throw new TripException("attraction List 조회중 오류 발생");
+                        }
+                    })
+                    .collect(Collectors.toList());
         } catch (Exception e) {
             e.printStackTrace();
             throw new TripException("Plan 관광지 리스트 가져오기 실패");
