@@ -27,7 +27,7 @@ public class UserServiceImp implements UserService {
             log.debug("request.getPassword(){}",request.getPassword() );
             User user = userDao.search(request.getId());
             if (user == null)
-                throw new UserException("등록되지 않은 아이디입니다.");
+                return null;
 
             if (!user.getPassword().equals(request.getPassword()))
                 throw new UserException("비밀번호가 일치하지 않습니다");

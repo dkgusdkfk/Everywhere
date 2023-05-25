@@ -99,15 +99,15 @@
                                     <div class="card-overlay-a-content">
                                         <div class="card-header-a">
                                             <h2 class="card-title-a">
-                                                <a href="#" style="color: black; font-weight: bolder;" @click="openModal(plan.planId)">{{ plan.title }}
+                                                <a style="color: black; font-weight: bolder;">{{ plan.title }}
                                                 </a>
                                             </h2>
                                         </div>
                                         <div class="card-body-a">
-                                            <div class="price-box d-flex">
+                                            <!-- <div class="price-box d-flex">
                                                 <span class="price-a">rent | $ 12.000</span>
-                                            </div>
-                                            <a href="#" class="link-a">Click here to view <span
+                                            </div> -->
+                                            <a href="#" class="link-a"  @click="openModal(plan.planId)">Click here to view <span
                                                     class="bi bi-chevron-right"></span>
                                             </a>
                                         </div>
