@@ -614,6 +614,11 @@ a:hover {
     color: #ff4400;
 }
 
+#loginBackground{
+    border: none;
+    background-color: white;
+}
+
 .navbar-toggle-box {
     display: inline-flex;
     align-items: center;

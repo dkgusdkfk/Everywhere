@@ -43,7 +43,7 @@
         </ul>
 
         <div>
-          <b-button v-b-toggle.signInBar>
+          <b-button id="loginBackground" v-b-toggle.signInBar>
             <i class="bi bi-person-circle"></i>
           </b-button>
           <b-sidebar id="signInBar" right no-header>
