@@ -48,6 +48,9 @@
               </tr>
             </table>
           </div>
+          <div @click="movePage">
+            <div class="row" v-html="pageLink"></div>
+        </div>
         </div>
       </div>
     </section>
@@ -70,6 +73,7 @@ export default {
         { value: 'userId', text: '작성자' },
       ],
       pageNo: '1',
+      pageLink: null,
       fields: [
         { key: "boardId", label: "글번호", tdClass: "tdClass" },
         { key: "title", label: "제목", tdClass: "tdTitle" },
@@ -82,6 +86,7 @@ export default {
   created() {
     http.get(`/board/all`).then(({ data }) => {
       this.boards = data.boards;
+      this.pageLink = data.pageLink;
       console.log(this.boards);
     });
   },
@@ -108,11 +113,18 @@ export default {
         .then(({ data }) => {
           console.log(data);
           this.boards = data.boards;
+          this.pageLink = data.pageLink;
         })
         .catch(({ response }) => {
           alert('오류 메세지: ' + response.data);
         })
-    }
+    },
+    movePage(event) {
+      if (event.target.classList.contains('page-link')) {
+        this.pageNo = event.target.getAttribute('data-pg');
+        this.searchList();
+      }
+    },
   },
 };
 </script>
