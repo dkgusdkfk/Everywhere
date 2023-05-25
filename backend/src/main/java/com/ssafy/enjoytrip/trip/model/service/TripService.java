@@ -29,4 +29,6 @@ public interface TripService {
 
     TripPlan getPlan(int planId);
     AttractionInfo getDetail(int contentId);
+
+    List<TripPlanResponse> getPlanAll();
 }

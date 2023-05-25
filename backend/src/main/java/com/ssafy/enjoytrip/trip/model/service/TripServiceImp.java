@@ -205,6 +205,14 @@ public class TripServiceImp implements TripService {
             throw new TripException("Plan 불러오기 실패");
         }
     }
-
+    @Override
+    public List<TripPlanResponse> getPlanAll(){
+        try{
+            return tripDao.getPlanAll();
+        }catch (Exception e){
+            e.printStackTrace();
+            throw  new TripException("Plan 전체 가져오기 실패");
+        }
+    }
 
 }

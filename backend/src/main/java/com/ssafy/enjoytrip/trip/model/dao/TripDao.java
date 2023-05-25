@@ -51,4 +51,6 @@ public interface TripDao {
 
     TripPlanResponse getPlan(int planId) throws SQLException;
     void deleteHotPlace(int contentId)throws SQLException;
+
+    List<TripPlanResponse> getPlanAll() throws SQLException;
 }

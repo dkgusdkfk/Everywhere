@@ -64,6 +64,11 @@ public class TripRestController {
     public ResponseEntity<?> getPlan(@PathVariable int planId){
         return new ResponseEntity<>(tripService.getPlan(planId),HttpStatus.OK);
     }
+
+    @GetMapping("/plan/all")
+    public ResponseEntity<?> getPlanAll(){
+        return new ResponseEntity<>(tripService.getPlanAll(),HttpStatus.OK);
+    }
     @PostMapping("/plan")
     public ResponseEntity<?> addPlan(@RequestBody TripPlan request){
         tripService.addPlan(request);

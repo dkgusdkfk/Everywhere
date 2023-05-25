@@ -187,4 +187,9 @@
         where content_id = #{contentId}
     </delete>
 
+    <select id="getPlanAll" resultType="TripPlanResponse">
+        select *
+        from trip_plan
+    </select>
+
 </mapper>
