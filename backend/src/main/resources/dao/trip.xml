@@ -188,8 +188,16 @@
     </delete>
 
     <select id="getPlanAll" resultType="TripPlanResponse">
-        select *
+        select
+            plan_id as planId, user_id as userId, distance, cycle_time as cycleTime, walk_time as walkTime
         from trip_plan
+    </select>
+
+    <select id="getPlanAttractionList" parameterType="int" resultType="Integer">
+        select
+            content_id as contentId
+        from plan_list
+        where plan_id = #{planId}
     </select>
 
 </mapper>
