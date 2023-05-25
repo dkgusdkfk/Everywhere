@@ -59,7 +59,7 @@
               <td><b-img :src="attraction.imgPath" style="width: 100px; height: 100px"></b-img></td>
               <td>{{ attraction.title }}</td>
               <td>{{ attraction.address1 }} {{ attraction.address2 }}</td>
-              <td v-if="userInfo"><input type='button' @click="increaseLikeCount(attraction.contentId)" id="hotplaceBtn"
+              <td><input type='button' @click="increaseLikeCount(attraction.contentId)" id="hotplaceBtn"
                   style="background-color: #ff2bc6;" value='핫플 등록!' /></td>
             </tr>
           </tbody>
@@ -70,15 +70,14 @@
 </template>
 
 <script>
-import { mapActions, mapMutations, mapState } from "vuex";
+import { mapActions, mapMutations } from "vuex";
 import SelectSido from "@/components/item/SelectSido.vue";
 import SelectGugun from "@/components/item/SelectGugun.vue";
 import AttractionModal from "@/components/item/AttractionModal.vue";
 import http from "@/api/http";
-
+import { mapState } from "vuex";
 const itemStore = "itemStore";
 const memberStore = "memberStore";
-
 export default {
   name: "KakaoMap",
   components: {
@@ -222,7 +221,7 @@ export default {
         })
     },
     increaseLikeCount(id) {
-
+      console.log(id)
       http.post(`/trip/hotRegist`, {
         contentId: id,
         userId: this.userInfo.id,

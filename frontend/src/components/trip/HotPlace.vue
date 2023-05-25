@@ -34,12 +34,12 @@
                     <b-card-group deck>
                         <div v-for="place in hotPlaces" :key="place.contentId">
                             <b-col cols="3">
-                                <b-card class="card-box-d" :img-src="place.imgPath" style="width:320px; height:215px">
+                                <b-card class="card-box-d" :img-src="place.imgPath" style="width:300px; height:200px" @click="openModal(place.contentId)">
                                     <div class=" card-overlay card-overlay-hover">
                                         <div class="card-header-d">
                                             <div class="card-title-d align-self-center">
                                                 <h3 class="title-d">
-                                                    <a href="#" class="link-two" @click="openModal(place.contentId)"> {{ place.title }} </a>
+                                                    <a href="#" class="link-two"> {{ place.title }} </a>
                                                 </h3>
                                             </div>
                                         </div>
@@ -68,6 +68,24 @@
                             </b-col>
                         </div>
                     </b-card-group>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <nav class="pagination-a">
+                                <ul class="pagination justify-content-end">
+                                    <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1"> <span
+                                                class="bi bi-chevron-left"></span>
+                                        </a></li>
+                                    <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                    <li class="page-item active"><a class="page-link" href="#">2</a>
+                                    </li>
+                                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                    <li class="page-item next"><a class="page-link" href="#">
+                                            <span class="bi bi-chevron-right"></span>
+                                        </a></li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
                 </b-row>
             </b-container>
         </section>
@@ -75,11 +93,8 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
 import http from "@/api/http";
 import AttractionModal from "@/components/item/AttractionModal.vue";
-
-const memberStore = "memberStore";
 
 export default {
     name: 'HotPlace',
@@ -97,28 +112,22 @@ export default {
             this.hotPlaces = data;
         })
     },
-    computed: {
-        ...mapState(memberStore, ["userInfo"])
-    },
     methods: {
         increaseLikeCount(id) {
-            http.post(`/trip/hotRegist`, {
-                contentId: id,
-                userId: this.userInfo.id,
+			console.log(id)
+            http.post(`/trip/hotRegist/${id}`).then(({ data }) => {
+                let msg = "문제가 발생했습니다.";
+                if (data === "success") {
+                    msg = "추천되었습니다.";
+                }
+                alert(msg);
+                this.$router.go();
             })
-                .then(({ data }) => {
-                    let msg = "문제가 발생했습니다.";
-                    if (data === "success") {
-                        msg = "추천되었습니다.";
-                    }
-                    alert(msg);
-                })
-            this.$router.go();
         },
 
         // Modal method
         openModal(contentId) {
-            http.get(`/trip/${contentId}`).then(({ data }) => {
+            http.get(`/trip/${contentId}`).then(({ data })  => {
                 console.log(data)
                 this.selectAttraction = data;
             })

@@ -142,7 +142,7 @@ public class UserRestController {
             resultMap.put("message", FAIL);
             status = HttpStatus.UNAUTHORIZED;
         }
-        return new ResponseEntity<Map<String, Object>>(resultMap, status);
+        return new ResponseEntity<>(resultMap, status);
     }
 
     @GetMapping("/idCheck/{userId}")

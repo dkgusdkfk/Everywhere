@@ -164,13 +164,10 @@ public class TripServiceImp implements TripService {
 
     public void addPlan(TripPlan request) {
         try {
-//            int planId = tripDao.addPlan(request);
             tripDao.addPlan(request);
-            int planId = tripDao.getPlanId();
-            log.debug("planId=============================================================================={}", planId);
             List<TripPlanListDto> list = request.getPlanList();
             for (int i = 0; i < list.size(); i++) {
-                tripDao.addPlanList(new TripPlanListDto(planId, list.get(i).getContentId(), i + 1));
+                tripDao.addPlanList(new TripPlanListDto(request.getPlanId(), list.get(i).getContentId(), i + 1));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -197,8 +194,6 @@ public class TripServiceImp implements TripService {
             for (TripPlanListDto dto : list) {
                 attractionInfos.add(getDetail(dto.getContentId()));
             }
-            log.debug("================planId:{}",planId);
-            log.debug("==============tripDao.getPlan{}",tripDao.getPlan(planId));
             return new TripPlan(tripDao.getPlan(planId), tripDao.getPlanListByPlanId(planId));
         } catch (Exception e) {
             e.printStackTrace();
